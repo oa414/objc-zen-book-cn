@@ -263,7 +263,7 @@ BOOL isCurrentYear      = [sessionDateCompontents year] == 2014;
 BOOL isSwiftSession     = nameContainsSwift && isCurrentYear;
 
 if (isSwiftSession) {
-    // Do someting very cool
+    // Do something very cool
 }
 ```
 
@@ -281,7 +281,7 @@ result = a > b ? x : y;
 result = a > b ? x = c > d ? c : d : y;
 ```
 
-When the second argument of the ternary operator (the if branch) returns the same object that was checked for existance in the condition, the following syntax is neat:
+When the second argument of the ternary operator (the if branch) returns the same object that was checked for existence in the condition, the following syntax is neat:
 
 **Preferred:**
 ```objc
@@ -652,7 +652,7 @@ Here the header relative to the implementation of the previous example (note the
 
 ```
 
-A corollary of what described above is that you should never call a secondary initializer from within the designated one (if the secondary initializer respects the contract, it will call the designated one). Doing so, the call is very likely to invoke one of the subclass's overriden init methos and it will result in infinite recursion.
+A corollary of what described above is that you should never call a secondary initializer from within the designated one (if the secondary initializer respects the contract, it will call the designated one). Doing so, the call is very likely to invoke one of the subclass's overridden init methods and it will result in infinite recursion.
 
 There is however an exception to all the rules laid out before that is whether an object conforms to the `NSCoding` protocol and it is initialized through the method `initWithCoder:`.
 We should distinguish between the case where the superclass is adopting `NSCoding` and when not. 
@@ -1305,11 +1305,11 @@ self.productsRequest = [[SKProductsRequest alloc]
 
 ### Brackets
 
-Use egyptian brackets for:
+Use Egyptian brackets for:
 
 * control structures (if-else, for, switch)
 
-Non-egyptian brackets are accepted for:
+Non-Egyptian brackets are accepted for:
 
 * class implementations (if any)
 * method implementations
@@ -1394,7 +1394,7 @@ We suggest to use `#pragma mark -`to separate:
 ```
 
 The above marks will help to visually separate and organize the code. One of the pros is that you can cmd+click on the mark to jump to the symbol definition.
-Be aware that even though the use of pragma mark is a sign of craftmanship, it's not a good reason to make grow the number of methods in your class in a unbounded fashion: having too many of them should be a warning sign that your class has too many responsibilities and a good opportunity for refactoring.
+Be aware that even though the use of pragma mark is a sign of craftsmanship, it's not a good reason to make grow the number of methods in your class in a unbounded fashion: having too many of them should be a warning sign that your class has too many responsibilities and a good opportunity for refactoring.
 
 
 ### Notes about pragma
@@ -2261,7 +2261,7 @@ Here are some of the documents from Apple that informed the style guide:
 Others:
 
 * [Objcetive-Clean](http://objclean.com): an attempt to write a standard for writing Objective-C code with Xcode integration;
-* [Uncrustify](http://uncrustify.sourceforge.net/): source code beutifier.
+* [Uncrustify](http://uncrustify.sourceforge.net/): source code beautifier.
 
 ### Other Objective-C Style Guides
 
