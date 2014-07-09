@@ -526,7 +526,7 @@ To conclude the two step creation the first method sent to a newly allocated ins
 There is another important part of the contract with `init`: the method can (and should) signal to the caller that it wasn't able to successfully finish the initialization by returning `nil`; the initialization can fail for various reasons such as an input passed in the wrong format or the failure in successfully initialize a needed object.
 This is lead us to understand why you should always call `self = [super init]`, if your superclass is stating that it wasn't able to successfully initialize itself, you must assume that you are in an inconsistent state and therefore do not proceed with your own initialization and return `nil` as well in your implementation. If you fail to do so you might end up dealing with an object that is not usable, that will not behave as expected and that might eventually lead to crash your app.
 
-The ability to re-assign `self` can also be exploited to return a different instance than the one they have been called on. Examples of this behavior are [Class cluster](#class-cluster) or some Cocoa classes that returns the same instance for identical (immutable) objects.
+The ability to re-assign `self` can also be exploited by the `init` methods to return a different instance than the one they have been called on. Examples of this behavior are [Class cluster](#class-cluster) or some Cocoa classes that returns the same instance for identical (immutable) objects.
 
 ### Designated and Secondary Initializers
 
