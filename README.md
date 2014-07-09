@@ -76,7 +76,7 @@
 
 
 
-    
+
 # Preface
 
 We started writing this book on November 2013. The initial goal was to provide guidelines to write the most clean Objective-C code possible: there are too many guidelines out there and all of them are debatable. We didn't aim introducing hard rules but, instead, a way for writing code to be more uniform as possible across different developers.
@@ -494,7 +494,7 @@ Some developers don't follow this practice for model objects (we observed this p
 As you may already have noticed, in this book the class (but not only) prefix is `ZOC`.
 
 There is another good practice that you might want to follow while choosing while naming you class that is, when you're creating a subclass, you should put the specifying name part between the class prefix and the superclass name. This is better explained with an example: if you have a class named `ZOCNetworkClient`, example of subclass name will be `ZOCTwitterNetworkClient` (note "Twitter" between "ZOC" and "NetworkClient"); or following the same rule a subclass of `UIViewController` is `ZOCTimelineViewController`.
- 
+
 
 ## Initializer and dealloc
 
@@ -515,12 +515,17 @@ In these days with ARC, it is less likely that you will implement the dealloc me
 ```
 
 It's interesting to understand why do we need to set the value of `self` with the return value of `[super init]` and what happens if we don't do that.
-Let's do a step back, we are so used to type expressions like  `[[NSObject alloc] init]` that the difference between between `alloc` and `init` fades away. A peculiarity of Objective-C  is the so called *two stage creation*. This means that the allocation and the initialization are two separate steps, and therefore two different methods need to be called: `alloc` and `init`.
-- `alloc` is responsible for the object allocation. This process involve the allocation of enough memory to hold the object from the application virtual memory, writing the `isa` pointer, initializes the retain count, and zeroing all the instance varibales. This method will return a valid instance of an uninitialized object;
+
+Let's do a step back: we are so used to type expressions like `[[NSObject alloc] init]` that the difference between `alloc` and `init` fades away. A peculiarity of Objective-C  is the so called *two stage creation*. This means that the allocation and the initialization are two separate steps, and therefore two different methods need to be called: `alloc` and `init`.
+- `alloc` is responsible for the object allocation. This process involve the allocation of enough memory to hold the object from the application virtual memory, writing the `isa` pointer, initializes the retain count, and zeroing all the instance variables. 
 - `init` is responsible for initializing the object, that means brings the object in an usable state. This typically means set the instance variable of an object to reasonable and useful initial values.
 
-The interesting part is that the `init` implementation of NSObject is simply returning `self`, this is because the variable `self` is written after the `alloc` method where all the initialization logic is done. This is also needed to allow the `NSObject'`s subclass to follow the previously exposed pattern. There is another important part of the contract with `init`: the method can (and should) signal to the caller that it wasn't able to successfully finish the initialization by returning `nil`; the initialization can fail for various reasons such as an input passed in the wrong format or the failure in successfully initialize a needed object.
+The `alloc` method will return a valid instance of an uninitialized object. Every message sent to this instance will be translated into an `objc_msgSend()` call where the parameter named `self` will be the pointer returned by `alloc`; in this way `self` is implicitly available in the scope of every methods. 
+To conclude the two step creation the first method sent to a newly allocated instance should, by convention, be an `init` method. Notably the `init` implementation of `NSObject` is not doing more than simply return `self`. 
+
+There is another important part of the contract with `init`: the method can (and should) signal to the caller that it wasn't able to successfully finish the initialization by returning `nil`; the initialization can fail for various reasons such as an input passed in the wrong format or the failure in successfully initialize a needed object.
 This is lead us to understand why you should always call `self = [super init]`, if your superclass is stating that it wasn't able to successfully initialize itself, you must assume that you are in an inconsistent state and therefore do not proceed with your own initialization and return `nil` as well in your implementation. If you fail to do so you might end up dealing with an object that is not usable, that will not behave as expected and that might eventually lead to crash your app.
+The ability to re-assign `self` can also be exploited to return a different instance than the one they have been called on. Examples of this behavior are [Class cluster](#class-cluster) or some Cocoa classes that returns the same instance for identical (immutable) objects.
 
 ### Designated and Secondary Initializers
 
@@ -582,7 +587,7 @@ A typical example is whether you create a `UIViewController` subclass overriding
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
-	// call to the superclass designated initializer
+    // call to the superclass designated initializer
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     if (self) {
         // Custom initialization
@@ -594,13 +599,13 @@ A typical example is whether you create a `UIViewController` subclass overriding
 ```
 
 In case of `UIViewController` subclass it would be an error to override `init` as, in the case that the caller will try to initialize your class by calling `initWithNib:bundle`, your implementation will not be called. This also contradicts the rule that states that it should be valid to call any designated initializer.
- 
+
 In case you want to provide your own designated initializer there are three steps that you need to follow in order to guarantee the correct behavior:
 
 1. Declare your designated initializer, being sure to call your immediate superclass's designated initializer.
 2. Override the immediate superclass's designated initializer calling your new designated initializer.
 3. Document the new designated initializer. 
- 
+
 Lots of developers often miss the last two steps, this is not only a sign of little care, but in the case of the step two is clearly against the contract with the framework and can lead to very non-deterministic behaviors and bugs.
 Let's see an example of the correct way to implement this:
 
@@ -723,10 +728,10 @@ The generic view controller will check the current device idiom and depending on
 
 - (id)initWithPhotos:(NSArray *)photos
 {
-    
+
     if ([self isMemberOfClass:ZOCKintsugiPhotoViewController.class]) {
         self = nil;
-        
+
         if ([UIDevice isPad]) {
             self = [[ZOCKintsugiPhotoViewController_iPad alloc] initWithPhotos:photos];
         } else {
@@ -1137,9 +1142,9 @@ and the final creation code is like so:
 
 ```objective-c
 NSURL *feedURL = [NSURL URLWithString:@"http://bbc.co.uk/feed.rss"];
-    
+
 ZOCFeedParser *feedParser = [[ZOCFeedParser alloc] initWithURL:feedURL];
-    
+
 ZOCTableViewController *tableViewController = [[ZOCTableViewController alloc] initWithFeedParser:feedParser];
 feedParser.delegate = tableViewController;
 ```
@@ -1344,7 +1349,7 @@ We suggest to use `#pragma mark -`to separate:
 - methods in functional groupings 
 - protocols implementations.
 - methods overridden from a superclass
- 
+
 
 ```objc
 
@@ -1405,9 +1410,9 @@ If you know your code won't leak, you can suppress the warning for just this ins
 ```objc
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Warc-performSelector-leaks"
- 
+
 [myObj performSelector:mySelector withObject:name];
- 
+
 #pragma clang diagnostic pop
 ```
 
@@ -1424,7 +1429,7 @@ It's useful to be told that a variable you've defined is going unused. In most c
 {
     NSString *foo;
     #pragma unused (foo)
- 
+
     return 5;
 }
 ```
@@ -1621,7 +1626,7 @@ __weak __typeof(self) weakSelf = self;
 __weak __typeof(self)weakSelf = self;
 [self executeBlock:^(NSData *data, NSError *error) {
   __strong __typeof(weakSelf)strongSelf = weakSelf;
-  
+
   [strongSelf doSomethingWithData:data];
   [strongSelf doSomethingWithData:data];
 }];
@@ -1750,7 +1755,7 @@ If the block is retained by a property, a retain cycle is created between self a
 
 There is no retain cycle and no matter if the block is retained or not by a property. If the block is passed around and copied by others, when executed, weakSelf can have been turned nil.
 The execution of the block can be preempted and different subsequent evaluations of the weakSelf pointer can lead to different values (i.e. weakSelf can become nil at a certain evaluation).
-  
+
 ```objc
 __weak typeof(self) weakSelf = self;
 dispatch_block_t block =  ^{
@@ -1763,7 +1768,7 @@ dispatch_block_t block =  ^{
 **Case 3: declaring a `__weak` reference to self outside the block and use a `__strong` reference inside the block**
 
 There is no retain cycle and, again, no matter if the block is retained or not by a property. If the block is passed around and copied by others, when executed, `weakSelf` can have been turned nil. When the strong reference is assigned and it is not nil, we are sure that the object is retained for the entire execution of the block if preemption occurs and therefore subsequent evaluations of strongSelf will be consistent and will lead to the same value since the object is now retained. If strongSelf evaluates to nil usually the execution is returned since the block cannot execute properly.
-  
+
 ```objc
 __weak typeof(self) weakSelf = self;
 myObj.myBlock =  ^{
@@ -2002,11 +2007,11 @@ A basic implementation is given here to unfold the concept. Even if in Cocoa the
     if (self == object) {
         return YES;
     }
-    
+
     if (![object isKindOfClass:[object class]]) {
         return NO;
     }
-    
+
     return [self isEqualToWeakObject:(ZOCWeakObject *)object];
 }
 
@@ -2014,7 +2019,7 @@ A basic implementation is given here to unfold the concept. Even if in Cocoa the
     if (!object) {
         return NO;
     }
-    
+
     BOOL objectsMatch = [self.object isEqual:object.object];
     return objectsMatch;
 }
@@ -2144,7 +2149,7 @@ The code above sends an event with context information whenever a button is tapp
 ```objc
 - (void)viewDidAppear:(BOOL)animated {
     [super viewDidAppear:animated];
- 
+
     id<GAITracker> tracker = [[GAI sharedInstance] defaultTracker];
     [tracker set:kGAIScreenName value:@"Stopwatch"];
     [tracker send:[[GAIDictionaryBuilder createAppView] build]];
@@ -2220,14 +2225,14 @@ The architecture proposed is hosted on GitHub on the [EF Education First](https:
                 [tracker trackScreenHitWithName:viewName];
             });
         }];
-        
+
     }
-    
+
     // events tracking
     for (NSDictionary *trackedEvents in configuration[@"trackedEvents"]) {
         Class clazz = NSClassFromString(trackedEvents[@"class"]);
         SEL selektor = NSSelectorFromString(trackedEvents[@"selector"]);
-        
+
         [clazz aspect_hookSelector:selektor
                        withOptions:AspectPositionAfter
                         usingBlock:^(id<AspectInfo> aspectInfo) {
@@ -2236,7 +2241,7 @@ The architecture proposed is hosted on GitHub on the [EF Education First](https:
                 [tracker trackEvent:buttonPressEvent];
             });
         }];
-        
+
     }
 }
 ```
