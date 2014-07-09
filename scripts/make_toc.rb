@@ -1,6 +1,6 @@
 #!/usr/bin/env ruby
 
-File.open("../objc-zen-book.md", 'r') do |f|
+File.open("../README.md", 'r') do |f|
   f.each_line do |line|
     forbidden_words = [
       'Table of contents', 
