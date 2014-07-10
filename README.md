@@ -805,9 +805,7 @@ NSString *text;
 NSString* text;
 NSString * text;
 ```
-
-`` not `NSString* text` or `NSString * text`, except in the case of constants.
-This is actually a matter of common sense and readability: C++ developers often prefer to separate the type from the name of the variable, and as the type in its pure form would be `NSString*` (for objects allocated on the heap, as in C++ it'd be possible to allocate objects on the stack) the first not suggested choice above is used.
+(Note: this preference is different for constants. This is actually a matter of common sense and readability: C++ developers often prefer to separate the type from the name of the variable, and as the type in its pure form would be `NSString*` (for objects allocated on the heap, as in C++ it'd be possible to allocate objects on the stack) the format `NSString* text;` is used.)
 
 Use auto-synthesize for properties rather than manual `@synthesize` statements unless your properties are part of a protocol rather than a concrete class. If Xcode can automatically synthesize the variable, then let it do so; moreover it'd be a part of the code that is just redundant and that you have to maintain without a real benefit.
 
