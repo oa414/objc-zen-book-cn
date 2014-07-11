@@ -1202,14 +1202,13 @@ At this point the view controller can accept any object conforming to the new pr
 
 ```
 
-This might seems as a little change, but indeed is a huge improvement because now the view controller is working against a contract, not a concrete implementation this lead to many advantages:
+This might seems as a minor change, but actually it is a huge improvement as the view controller would work against a contract rather than a concrete implementation. This leads to many advantages:
 
 - the view controller can now accept any object that provide some information via the delegate property: this can be a RSS remote feed parser, a local one, a service that read other types of data remotely or even a service that fetch data from the local database;
 - the feed parser object can be totally reused (as it was before after the first refactoring step);
 - ZOCFeedParser and ZOCFeedParserDelegate can be reused by other components;
-- ZOCViewController (UI logic apart) can be reused.
-- it is very easy to test the code because it is very easy to inject a test double conforming to the expected protocol
-
+- ZOCViewController (UI logic apart) can be reused;
+- it is easier to test as it'd be possible to use a mock object conforming to the expected protocol.
 
 Everything that is designed to be reused in future is implicitly better code and should be always the programmer's goal. Code designed this way is what makes the difference between an experienced programmer and a newbie.
 
