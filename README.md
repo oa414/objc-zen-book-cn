@@ -729,7 +729,6 @@ The generic view controller will check the current device idiom and depending on
 
 - (id)initWithPhotos:(NSArray *)photos
 {
-
     if ([self isMemberOfClass:ZOCKintsugiPhotoViewController.class]) {
         self = nil;
 
@@ -964,11 +963,11 @@ This contracts boils down to how the lookup of those objects is done when are st
 
 - (BOOL)isEqual:(id)object {
     if (self == object) {
-      return YES;
+        return YES;
     }
 
     if (![object isKindOfClass:[ZOCPerson class]]) {
-      return NO;
+        return NO;
     }
 
     // check objects properties (name and birthday) for equality
