@@ -734,7 +734,8 @@ The generic view controller will check the current device idiom and depending on
 
         if ([UIDevice isPad]) {
             self = [[ZOCKintsugiPhotoViewController_iPad alloc] initWithPhotos:photos];
-        } else {
+        }
+        else {
             self = [[ZOCKintsugiPhotoViewController_iPhone alloc] initWithPhotos:photos];
         }
         return self;
@@ -1453,7 +1454,8 @@ You can signal warnings similarly:
     #warning Dude, don't compare floating point numbers like this!
     if (divisor != 0.0) {
         return (dividend / divisor);
-    } else {
+    }
+    else {
         return NAN;
     }
 }
