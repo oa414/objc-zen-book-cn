@@ -792,7 +792,7 @@ Trying to use a Singleton as a container for objects to share across the code or
 
 ## Properties
 
-Properties should be named as much descriptively as possible, avoiding abbreviation, and camel-case with the leading word being lowercase. Luckily our tool of choice is able to autocomplete everything we type (well... almost everything. Yes, I'm looking at you Xcode's Derived Data) so there is no reason to save a couple of chars, but is better to convey more information as possible in your source code.
+Properties should be named as descriptively as possible, avoiding abbreviation, and camel-case with the leading word being lowercase. Luckily our tool of choice is able to autocomplete everything we type (well... almost everything. Yes, I'm looking at you Xcode's Derived Data) so there is no reason to save a couple of chars, but is better to convey more information as possible in your source code.
 property should be named as descriptively as possible, avoiding abbreviation, and camel-case with the leading word being lowercase. Luckily our tool of choice is able to autocomplete everything we type (well...almost always. Yes, I'm looking at you Xcode's Derived Data) so there is no reason to save a couple of characters, but is better to convey more information as possible in your source code.
 
 **For example:**
