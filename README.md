@@ -1214,7 +1214,7 @@ Everything that is designed to be reused in future is implicitly better code and
 
 The final code proposed here can be found [here](http://github.com/albertodebortoli/ADBFeedReader).
 
-When implementing a protocol you should always strive to adhere to the Liskov Substitution Principle meaning that you should be able to replace one implementation of an interface with another without breaking either the client or the implementation. 
+When implementing a protocol you should always strive to adhere to the [Liskov Substitution Principle](http://en.wikipedia.org/wiki/Liskov_substitution_principle) that states that, is S is a subtype of T, objects of type T may be replaced with objects of type S without breaking either the client or the implementation.
 In other words this means that your protocol should not leak the detail of the implementing classes; be even more careful when designing the abstraction expressed by you protocol and alway keep in mind that the underlay implementation is irrelevant, what really matters is the contract that the abstraction expose to the consumer.
 
 # NSNotification
