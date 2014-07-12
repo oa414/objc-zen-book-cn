@@ -119,7 +119,7 @@ Conditional bodies should always use braces even when a conditional body could b
 
 **Preferred:**
 
-```objc
+```objective-c
 if (!error) {
     return success;
 }
@@ -127,14 +127,14 @@ if (!error) {
 
 **Not preferred:**
 
-```objc
+```objective-c
 if (!error)
     return success;
 ```
 
 or
 
-```objc
+```objective-c
 if (!error) return success;
 ```
 
@@ -143,7 +143,7 @@ The bug was due to a repeated `goto` statement after an `if` condition, wrapping
 
 The code extract:
 
-```objc
+```objective-c
 static OSStatus
 SSLVerifySignedServerKeyExchange(SSLContext *ctx, bool isRsa, SSLBuffer signedParams,
                                  uint8_t *signature, UInt16 signatureLen)
@@ -179,12 +179,12 @@ Always avoid Yoda conditions. A Yoda condition is when comparing a constant to a
 ![Yoda](./images/yoda.png)
 
 **Preferred:**
-```objc
+```objective-c
 if ([myValue isEqual:@42]) { ...
 ```
 
 **Not preferred:**
-```objc
+```objective-c
 if ([@42 isEqual:myValue]) { ...
 ```
 
@@ -192,19 +192,19 @@ if ([@42 isEqual:myValue]) { ...
 
 On a similar note of the Yoda conditions, also the nil check has been at the centre of debates. Some notous libraries out there use to check for an object to be or not to be nil as so:
 
-```objc
+```objective-c
 if (nil == myValue) { ...
 ```
 
 One could argue that this is amiss or similar to a Yoda condition as nil is kind of a constant. The reason why sometimes programmers use this approach to prevent error that are difficult to debug. Consider the following code:
 
-```objc
+```objective-c
 if (myValue == nil) { ...
 ```
 
 If a typo occurs and the programmer actually types:
 
-```objc
+```objective-c
 if (myValue = nil) { ...
 ```
 
@@ -213,14 +213,14 @@ it would be a valid assignment, indeed hard to debug if you are an experienced p
 More on this, to avoid all this fuss the approach that leave no space to doubt is to use the exclamation mark. Since `nil` resolves to `NO` it is unnecessary to compare it in conditions. Also, never compare something directly to `YES`, because `YES` is defined to 1 and a `BOOL` can be up to 8 bits as it is a char underneath.
 
 **Preferred:**
-```objc
+```objective-c
 if (someObject) { ...
 if (![someObject boolValue]) { ...
 if (!someObject) { ...
 ```
 
 **Not Preferred:**
-```objc
+```objective-c
 if (someObject == YES) { ... // Wrong
 if (myRawValue == YES) { ... // Never do this.
 if ([someObject boolValue] == NO) { ...
@@ -234,7 +234,7 @@ When coding with conditionals, the left hand margin of the code should be the "g
 
 **Preferred:**
 
-```objc
+```objective-c
 - (void)someMethod {
   if (![someOther boolValue]) {
       return;
@@ -246,7 +246,7 @@ When coding with conditionals, the left hand margin of the code should be the "g
 
 **Not preferred:**
 
-```objc
+```objective-c
 - (void)someMethod {
   if ([someOther boolValue]) {
     //Do something important
@@ -257,7 +257,7 @@ When coding with conditionals, the left hand margin of the code should be the "g
 
 When you have complex condition in the `if` clause you should always extract them and assign to a `BOOL` variable to make more clear the logic and the meaning of every single conditions.
 
-```objc
+```objective-c
 BOOL nameContainsSwift  = [sessionName containsString:@"Swift"];
 BOOL isCurrentYear      = [sessionDateCompontents year] == 2014;
 BOOL isSwiftSession     = nameContainsSwift && isCurrentYear;
@@ -272,24 +272,24 @@ if (isSwiftSession) {
 The Ternary operator, `?` , should only be used when it increases clarity or code neatness. A single condition is usually all that should be evaluated. Evaluating multiple conditions is usually more understandable as an if statement, or refactored into instance variables.
 
 **Preferred:**
-```objc
+```objective-c
 result = a > b ? x : y;
 ```
 
 **Not preferred:**
-```objc
+```objective-c
 result = a > b ? x = c > d ? c : d : y;
 ```
 
 When the second argument of the ternary operator (the if branch) returns the same object that was checked for existence in the condition, the following syntax is neat:
 
 **Preferred:**
-```objc
+```objective-c
 result = object ? : [self createObject];
 ```
 
 **Not preferred:**
-```objc
+```objective-c
 result = object ? object : [self createObject];
 ```
 
@@ -298,7 +298,7 @@ result = object ? object : [self createObject];
 When methods return an error parameter by reference, check the returned value, not the error variable.
 
 **Preferred:**
-```objc
+```objective-c
 NSError *error = nil;
 if (![self trySomethingWithError:&error]) {
     // Handle Error
@@ -313,7 +313,7 @@ Moreover, some of Apple's APIs write garbage values to the error parameter (if n
 Braces are not required for case statements, unless enforced by the complier.  
 When a case contains more than one line, braces should be added.
 
-```objc
+```objective-c
 switch (condition) {
     case 1:
         // ...
@@ -334,7 +334,7 @@ switch (condition) {
 
 There are times when the same code can be used for multiple cases, and a fall-through should be used.  A fall-through is the removal of the 'break' statement for a case thus allowing the flow of execution to pass to the next case value.
 
-```objc
+```objective-c
 switch (condition) {
     case 1:
     case 2:
@@ -348,7 +348,7 @@ switch (condition) {
 
 When using an enumerated type for a switch, `default` is not needed. For example:
 
-```objc
+```objective-c
 switch (menuType) {
     case ZOCEnumNone:
         // ...
@@ -372,7 +372,7 @@ When using `enum`s, it is recommended to use the new fixed underlying type speci
 
 **Example:**
 
-```objc
+```objective-c
 typedef NS_ENUM(NSUInteger, ZOCMachineState) {
     ZOCMachineStateNone,
     ZOCMachineStateIdle,
@@ -391,12 +391,12 @@ Long, descriptive method and variable names are good.
 
 **Preferred:**
 
-```objc
+```objective-c
 UIButton *settingsButton;
 ```
 
 **Not Preferred:**
-```objc
+```objective-c
 UIButton *setBut;
 ```
 
@@ -405,33 +405,33 @@ UIButton *setBut;
 Constants should be camel-case with all words capitalized and prefixed by the related class name for clarity.
 
 **Preferred:**
-```objc
+```objective-c
 static const NSTimeInterval ZOCSignInViewControllerFadeOutAnimationDuration = 0.4;
 ```
 
 **Not Preferred:**
-```objc
+```objective-c
 static const NSTimeInterval fadeOutTime = 0.4;
 ```
 
 Constants are preferred over in-line string literals or numbers, as they allow for easy reproduction of commonly used variables and can be quickly changed without the need for find and replace. Constants should be declared as `static` constants and not `#define`s unless explicitly being used as a macro.
 
 **Preferred:**
-```objc
+```objective-c
 static NSString * const ZOCCacheControllerDidClearCacheNotification = @"ZOCCacheControllerDidClearCacheNotification";
 static const CGFloat ZOCImageThumbnailHeight = 50.0f;
 ```
 
 **Not Preferred:**
 
-```objc
+```objective-c
 #define CompanyName @"Apple Inc."
 #define magicNumber 42
 ```
 
 Constants exposed externally should use this pattern in the interface file:
 
-```objc
+```objective-c
 extern NSString *const ZOCCacheControllerDidClearCacheNotification;
 ```
 and the previously defined assignment should be in the implementation file.
@@ -446,7 +446,7 @@ In method signatures, there should be a space after the method type (`-`/`+` sym
 The usage of the word "and" is reserved.  It should not be used for multiple parameters as illustrated in the `initWithWidth:height:` example below.
 
 **Preferred:**
-```objc
+```objective-c
 - (void)setExampleText:(NSString *)text image:(UIImage *)image;
 - (void)sendAction:(SEL)aSelector to:(id)anObject forAllCells:(BOOL)flag;
 - (id)viewWithTag:(NSInteger)tag;
@@ -455,8 +455,8 @@ The usage of the word "and" is reserved.  It should not be used for multiple par
 
 **Not Preferred:**
 
-```objc
--(void)setT:(NSString *)text i:(UIImage *)image;
+```objective-c
+- (void)setT:(NSString *)text i:(UIImage *)image;
 - (void)sendAction:(SEL)aSelector :(id)anObject :(BOOL)flag;
 - (id)taggedView:(NSInteger)tag;
 - (instancetype)initWithWidth:(CGFloat)width andHeight:(CGFloat)height;
@@ -469,7 +469,7 @@ The usage of the word "and" is reserved.  It should not be used for multiple par
 
 **For example:**
 
-```objc
+```objective-c
 NSArray *names = @[@"Brian", @"Matt", @"Chris", @"Alex", @"Steve", @"Paul"];
 NSDictionary *productManagers = @{@"iPhone" : @"Kate", @"iPad" : @"Kamal", @"Mobile Web" : @"Bill"};
 NSNumber *shouldUseLiterals = @YES;
@@ -478,7 +478,7 @@ NSNumber *buildingZIPCode = @10018;
 
 **Not:**
 
-```objc
+```objective-c
 NSArray *names = [NSArray arrayWithObjects:@"Brian", @"Matt", @"Chris", @"Alex", @"Steve", @"Paul", nil];
 NSDictionary *productManagers = [NSDictionary dictionaryWithObjectsAndKeys: @"Kate", @"iPhone", @"Kamal", @"iPad", @"Bill", @"Mobile Web", nil];
 NSNumber *shouldUseLiterals = [NSNumber numberWithBool:YES];
@@ -503,7 +503,7 @@ In these days with ARC, it is less likely that you will implement the dealloc me
 
 `init` methods should be structured like this:
 
-```objc
+```objective-c
 - (instancetype)init
 {
     self = [super init]; // call the designated initializer
@@ -533,7 +533,7 @@ The ability to re-assign `self` can also be exploited by the `init` methods to r
 Objective-C have the concept of designated and secondary initializers. 
 The designated initializer is the initializer that takes the full complement of initialization parameters, the secondary initializers are one or more initializer methods that calls the designated initializer providing one or more default values for the initialization parameter.
 
-```objc
+```objective-c
 @implementation ZOCEvent
 
 - (instancetype)initWithTitle:(NSString *)title
@@ -583,7 +583,7 @@ The first case is the most trivial: we you don't need to add any specific logic 
 When you want to provide additional initialization logic you can decide to override the designated initializer. You should only override your immediate superclass's designated initializer and be sure that your implementation calls the super of the method you're overriding.  
 A typical example is whether you create a `UIViewController` subclass overriding `initWithNibName:bundle:`:
 
-```objc
+```objective-c
 @implementation ZOCViewController
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
@@ -610,7 +610,7 @@ In case you want to provide your own designated initializer there are three step
 Lots of developers often miss the last two steps, this is not only a sign of little care, but in the case of the step two is clearly against the contract with the framework and can lead to very non-deterministic behaviors and bugs.
 Let's see an example of the correct way to implement this:
 
-```objc
+```objective-c
 @implementation ZOCNewsViewController
 
 - (id)initWithNews:(ZOCNews *)news
@@ -641,7 +641,7 @@ There are, though, cases in which not calling the class designated initializer (
 
 Here the header relative to the implementation of the previous example (note the use of macros to don't repeat the code and being less verbose).
 
-```objc
+```objective-c
 
 @interface ZOCNewsViewController : UIViewController
 
@@ -688,7 +688,7 @@ One often doesn't realize that Cocoa is full of conventions, and they can help t
 To have more information about the convention that allow to automatically identify the related result type please refer to the [appropriate section]((http://clang.llvm.org/docs/LanguageExtensions.html#related-result-types)) in the Clang Language Extensions guide.
 A related result type can be explicitly stated using the `instancetype` keyword as return type and this can be very helpful in situation where a factory method or convenience constructor is used. This will hint the compiler with the correct type checking and, probably more important, will behave correctly also when subclassing.
 
-```objc
+```objective-c
 @interface ZOCPerson
 + (instancetype)personWithName:(NSString *)name;
 @end
@@ -719,12 +719,12 @@ The beauty of this pattern is that the caller can be completely unaware of the c
 
 In our experience the use of a Class Cluster can very helpful in removing a lot of conditional code.
 A typical example of this is when you have  the same UIViewController subclass for both iPhone and iPad, but the behavior is slightly different depending on the the device.
-The naïve implementation is to put some conditional code checking the device in the methods where the different logic si needed, even thought initially the place where this conditional logic is applied may be quite few they naturally tend to grow producing and explosion of code paths.
+The naïve implementation is to put some conditional code checking the device in the methods where the different logic is needed, even thought initially the place where this conditional logic is applied may be quite few they naturally tend to grow producing and explosion of code paths.
 A better design can be achieved by creating an abstract and generic view controller that will contain all the shared logic and then two specializing subclass for every device. 
 The generic view controller will check the current device idiom and depending on that it will return the appropriate subclass.
 
 
-```
+```objective-c
 @implementation ZOCKintsugiPhotoViewController
 
 - (id)initWithPhotos:(NSArray *)photos
@@ -755,7 +755,7 @@ Let's assume that we are running this code on an iPhone and that `ZOCKintsugiPho
 Generally avoid using them if possible, use dependency injection instead.
 Nevertheless, unavoidable singleton objects should use a thread-safe pattern for creating their shared instance. As of GCD, it is possible to use the `dispatch_once()` function to
 
-```objc
+```objective-c
 + (instancetype)sharedInstance
 {
    static id sharedInstance = nil;
@@ -769,7 +769,7 @@ Nevertheless, unavoidable singleton objects should use a thread-safe pattern for
 
 The use of dispatch_once(), which is synchronous, replaces the following, yet obsolete, idiom:
 
-```objc
+```objective-c
 + (instancetype)sharedInstance
 {
     static id sharedInstance;
@@ -796,12 +796,12 @@ Properties should be named as descriptively as possible, avoiding abbreviation, 
 property should be named as descriptively as possible, avoiding abbreviation, and camel-case with the leading word being lowercase. Luckily our tool of choice is able to autocomplete everything we type (well...almost always. Yes, I'm looking at you Xcode's Derived Data) so there is no reason to save a couple of characters, but is better to convey more information as possible in your source code.
 
 **For example:**
-```objc
+```objective-c
 NSString *text;
 ```
 
 **Not:**
-```objc
+```objective-c
 NSString* text;
 NSString * text;
 ```
@@ -843,13 +843,13 @@ When using the setter/getter always prefer the dot notation.
 Dot-notation should *always* be used for accessing and mutating properties.
 
 **For example:**
-```objc
+```objective-c
 view.backgroundColor = [UIColor orangeColor];
 [UIApplication sharedApplication].delegate;
 ```
 
 **Not:**
-```objc
+```objective-c
 [view setBackgroundColor:[UIColor orangeColor]];
 UIApplication.sharedApplication.delegate;
 ```
@@ -859,7 +859,7 @@ Using the dot notation will ensure a visual clue to help distinguish between a p
 
 The preferred way to declare a property is the following format
 
-```objc
+```objective-c
 @property (nonatomic, readwrite, copy) NSString *name;
 ```
 
@@ -871,7 +871,7 @@ Properties that stores a block, in order to keep it alive after the end of the d
 
 In order to achieve a public getter and a private setter, you can declare the public property as `readonly` and re-declare the same property in the the class extension as `readwrite`:
 
-```objc
+```objective-c
 @interface MyClass : NSObject
 @property (nonatomic, readonly) NSObject *object
 @end
@@ -883,7 +883,7 @@ In order to achieve a public getter and a private setter, you can declare the pu
 
 If the name of a `BOOL` property is expressed as an adjective, the property can omit the "is" prefix but specifies the conventional name for the get accessor, for example:
 
-```objc
+```objective-c
 @property (assign, getter=isEditable) BOOL editable;
 ```
 Text and example taken from the [Cocoa Naming Guidelines](https://developer.apple.com/library/mac/#documentation/Cocoa/Conceptual/CodingGuidelines/Articles/NamingIvarsAndTypes.html#//apple_ref/doc/uid/20001284-BAJGIIJE).
@@ -896,7 +896,7 @@ Private properties should be declared in class extensions (anonymous categories)
 
 **For example:**
 
-```objc
+```objective-c
 @interface ZOCViewController ()
 @property (nonatomic, strong) UIView *bannerView;
 @end
@@ -908,7 +908,7 @@ Any property that potentially can be set with a mutable object (e.g. `NSString`,
 
 You should also avoid to expose mutable object in the public interface, because this allows clients of your class to change your own internal representation and break the encapsulation. You can provide a read-only property that returns an immutable copy of your object:
 
-```
+```objective-c
 /* .h */
 @property (nonatomic, readonly) NSArray *elements
 
@@ -924,7 +924,7 @@ There are cases when instantiate an object can be expensive and/or needs to be c
 
 In this case, instead of allocating the object in the init method one could opt for overriding the property getter for lazy instantiation. Usually the template for this kind of operation is the following:
 
-```objc
+```objective-c
 - (NSDateFormatter *)dateFormatter {
   if (!_dateFormatter) {
     _dateFormatter = [[NSDateFormatter alloc] init];
@@ -959,7 +959,7 @@ In case you need to implement equality remember the contract: you need to implem
 
 This contracts boils down to how the lookup of those objects is done when are stored in collections (i.e. `NSDictionary` and `NSSet` use hash table data structure underneath).
 
-```objc
+```objective-c
 @implementation ZOCPerson
 
 - (BOOL)isEqual:(id)object {
@@ -990,7 +990,7 @@ If you can, it's always preferable to call the typed equal method in order to av
 
 A complete pattern for the isEqual* method should be as so:
 
-```objc
+```objective-c
 - (BOOL)isEqual:(id)object {
     if (self == object) {
       return YES;
@@ -1033,7 +1033,7 @@ A good practice is to use prefix also for category names.
 
 **Example:**
 
-```objc
+```objective-c
 @interface NSDate (ZOCTimeExtensions)
 - (NSString *)zoc_timeAgoShort;
 @end
@@ -1041,7 +1041,7 @@ A good practice is to use prefix also for category names.
 
 **Not:**
 
-```objc
+```objective-c
 @interface NSDate (ZOCTimeExtensions)
 - (NSString *)timeAgoShort;
 @end
@@ -1050,7 +1050,7 @@ A good practice is to use prefix also for category names.
 Category can be used to group related method in a header file. This is a very common practice in Apple's framework (nearby is proposed an extract from `NSDate` header) and we strongly encourage to do the same in your code. 
 In our experience creating this groups can be helpful in further refactoring: when the interface of a class starts growing can be a signal that your class is doing to much and therefor violating the Single Responsibility Principle, the previously created groups be used to better understand the different responsibilities and help in breaking down the class in more self-contained components.
 
-```objc
+```objective-c
 
 @interface NSDate : NSObject <NSCopying, NSSecureCoding>
 
@@ -1222,7 +1222,7 @@ In other words this means that your protocol should not leak the detail of the i
 
 When you define you own `NSNotification` you should define your notification's name as a string constant. Like any string constant, it should be declared as extern in the public interface, and defined privately in the corresponding implementation. The value of the constant should be a reverse DNS identifier.
 
-```objc
+```objective-c
 // Foo.h
 extern NSString * const ZOCFooDidBarNotification
 
@@ -1238,7 +1238,7 @@ NSString * const ZOCFooDidBarNotification = @"com.zenobjective-c.ZOCFooDidBarNot
 * Method braces and other braces (`if`/`else`/`switch`/`while` etc.) always open on the same line as the statement but close on a new line.
 
 **Preferred:**
-```objc
+```objective-c
 if (user.isHappy) {
     //Do something
 }
@@ -1248,7 +1248,7 @@ else {
 ```
 
 **Not Preferred:**
-```objc
+```objective-c
 if (user.isHappy)
 {
   //Do something
@@ -1263,7 +1263,7 @@ if (user.isHappy)
 
 **Preferred:**
 
-```objc
+```objective-c
 [UIView animateWithDuration:1.0
                  animations:^{
                      // something
@@ -1276,7 +1276,7 @@ if (user.isHappy)
 
 **Not Preferred:**
 
-```objc
+```objective-c
 [UIView animateWithDuration:1.0 animations:^{
     // something 
 } completion:^(BOOL finished) {
@@ -1290,13 +1290,13 @@ If auto indentation falls into bad readability, declare blocks in variables befo
 Line breaks are an important topic since this style guide is focused for print and online readability.
 
 For example:
-```objc
+```objective-c
 self.productsRequest = [[SKProductsRequest alloc] initWithProductIdentifiers:productIdentifiers];
 ```
 
 A long line of code like the one above should be carried on to the second line adhering to this style guide's Spacing section (two spaces).
 
-```objc
+```objective-c
 self.productsRequest = [[SKProductsRequest alloc] 
   initWithProductIdentifiers:productIdentifiers];
 ```
@@ -1327,7 +1327,7 @@ We could not agree more. Having you code clearly organized in a clean and define
 
 A very obscure GCC behavior that it is also supported by Clang is the ability of a code block to return the value of the latest statement if enclosing in round bracket.
 
-```objc
+```objective-c
 NSURL *url = ({
     NSString *urlString = [NSString stringWithFormat:@"%@/%@", baseURLString, endpoint];
     [NSURL URLWithString:urlString];
@@ -1349,7 +1349,7 @@ We suggest to use `#pragma mark -`to separate:
 - methods overridden from a superclass
 
 
-```objc
+```objective-c
 
 - (void)dealloc { /* ... */ }
 - (instancetype)init { /* ... */ }
@@ -1405,7 +1405,7 @@ When you use ARC, the compiler inserts memory-management calls for you. There ar
 
 If you know your code won't leak, you can suppress the warning for just this instance by wrapping it like this:
 
-```objc
+```objective-c
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Warc-performSelector-leaks"
 
@@ -1422,7 +1422,7 @@ Suppressing warnings for unused variables
 
 It's useful to be told that a variable you've defined is going unused. In most cases, you want to remove these references to improve performance (however slightly), but sometimes you want to keep them. Why? Perhaps they have a future usage or the functionality is only temporarily removed. Either way, a smarter way to suppress the warning without brutally commenting out the relevant lines, is to use the `#pragma unused()`:
 
-```objc
+```objective-c
 - (void)giveMeFive
 {
     NSString *foo;
@@ -1438,7 +1438,7 @@ Now you can keep your code in place without the compiler complaining about it. A
 
 The compiler is a robot: it will mark what's wrong with your code using a set of rules that've been defined by Clang. But, every so often you're smarter than it. Often, you might find some offending code that you know will lead to problems but, for whatever reason, can't fix yourself at the moment. You can explicitly signal errors like this:
 
-```objc
+```objective-c
 - (NSInteger)divide:(NSInteger)dividend by:(NSInteger)divisor
 {
     #error Whoa, buddy, you need to check for zero here!
@@ -1448,7 +1448,7 @@ The compiler is a robot: it will mark what's wrong with your code using a set of
 
 You can signal warnings similarly:
 
-```objc
+```objective-c
 - (float)divide:(float)dividend by:(float)divisor
 {
     #warning Dude, don't compare floating point numbers like this!
@@ -1507,7 +1507,7 @@ The documentation of class should be done using the Doxygen/AppleDoc syntax only
 
 **For example:**
 
-```objc
+```objective-c
 /**
  *  Designated initializer.
  *
@@ -1533,7 +1533,7 @@ Blocks are the Objective-C version of well-knows constructs called lambdas or cl
 
 They are a great way to design asynchronous APIs as so:
 
-```objc
+```objective-c
 - (void)downloadObjectsAtPath:(NSString *)path
                    completion:(void(^)(NSArray *objects, NSError *error))completion;
 ```
@@ -1604,7 +1604,7 @@ It's important not to get into retain cycles when using blocks and asynchronous 
 
 **Example:**
 
-```objc
+```objective-c
 __weak __typeof(self) weakSelf = self;
 [self executeBlock:^(NSData *data, NSError *error) {
     [weakSelf doSomethingWithData:data];
@@ -1613,7 +1613,7 @@ __weak __typeof(self) weakSelf = self;
 
 **Not:**
 
-```objc
+```objective-c
 [self executeBlock:^(NSData *data, NSError *error) {
   [self doSomethingWithData:data];
 }];
@@ -1621,7 +1621,7 @@ __weak __typeof(self) weakSelf = self;
 
 **Example with multiple statements:**
 
-```objc
+```objective-c
 __weak __typeof(self)weakSelf = self;
 [self executeBlock:^(NSData *data, NSError *error) {
   __strong __typeof(weakSelf)strongSelf = weakSelf;
@@ -1633,7 +1633,7 @@ __weak __typeof(self)weakSelf = self;
 
 **Not:**
 
-```objc
+```objective-c
 __weak __typeof(self)weakSelf = self;
 [self executeBlock:^(NSData *data, NSError *error) {
   [weakSelf doSomethingWithData:data];
@@ -1643,7 +1643,7 @@ __weak __typeof(self)weakSelf = self;
 
 You should add these two lines as snippets to Xcode and always use them exactly like this:
 
-```objc
+```objective-c
 __weak __typeof(self)weakSelf = self;
 __strong __typeof(weakSelf)strongSelf = weakSelf;
 ```
@@ -1658,7 +1658,7 @@ Here we dig further about the subtle things to consider about the `__weak` and t
 
 If we use directly the keyword `self` inside a block, the object is retained at block declaration time within the block (actually when the block is [copied][blocks_caveat13] but for sake of simplicity we can forget about it) . A const reference to self has its place inside the block and this affects the reference counting of the object. If the block is used by other classes and/or passed around we may want to retain self as well as all the other objects used by the block since they are *needed* for the execution of the block. 
 
-```objc
+```objective-c
 dispatch_block_t completionBlock = ^{
     NSLog(@"%@", self);
 }
@@ -1671,7 +1671,7 @@ MyViewController *myController = [[MyViewController alloc] init...];
 
 No big deal. But... what if the block is retained by self in a property (as the following example) and therefore the object (self) retains the block?
 
-```objc
+```objective-c
 self.completionHandler = ^{
     NSLog(@"%@", self);
 }
@@ -1684,7 +1684,7 @@ MyViewController *myController = [[MyViewController alloc] init...];
 
 This is what is well known as a retain cycle and retain cycles usually should be avoided. The warning we receive from CLANG is:
 
-```objc
+```objective-c
 Capturing 'self' strongly in this block is likely to lead to a retain cycle
 ```
 
@@ -1694,7 +1694,7 @@ Here comes in the `__weak` qualifier.
 
 Declaring a `__weak` reference to self outside the block and referring to it via this weak reference inside the block avoids retain cycles. This is what we usually want to do if the block is already retained by self in a property.
 
-```objc
+```objective-c
 __weak typeof(self) weakSelf = self;
 self.completionHandler = ^{
     NSLog(@"%@", weakSelf);
@@ -1718,7 +1718,7 @@ You may think, at first, this is a trick to use self inside the block avoiding t
 
 [Apple documentation][blocks_caveat1] reports that "For non-trivial cycles, however, you should use" this approach: 
 
-```objc
+```objective-c
 MyViewController *myController = [[MyViewController alloc] init...];
 // ...
 MyViewController * __weak weakMyController = myController;
@@ -1755,7 +1755,7 @@ If the block is retained by a property, a retain cycle is created between self a
 There is no retain cycle and no matter if the block is retained or not by a property. If the block is passed around and copied by others, when executed, weakSelf can have been turned nil.
 The execution of the block can be preempted and different subsequent evaluations of the weakSelf pointer can lead to different values (i.e. weakSelf can become nil at a certain evaluation).
 
-```objc
+```objective-c
 __weak typeof(self) weakSelf = self;
 dispatch_block_t block =  ^{
     [weakSelf doSomething]; // weakSelf != nil
@@ -1768,7 +1768,7 @@ dispatch_block_t block =  ^{
 
 There is no retain cycle and, again, no matter if the block is retained or not by a property. If the block is passed around and copied by others, when executed, `weakSelf` can have been turned nil. When the strong reference is assigned and it is not nil, we are sure that the object is retained for the entire execution of the block if preemption occurs and therefore subsequent evaluations of strongSelf will be consistent and will lead to the same value since the object is now retained. If strongSelf evaluates to nil usually the execution is returned since the block cannot execute properly.
 
-```objc
+```objective-c
 __weak typeof(self) weakSelf = self;
 myObj.myBlock =  ^{
     __strong typeof(self) strongSelf = weakSelf;
@@ -1786,13 +1786,13 @@ myObj.myBlock =  ^{
 
 In an ARC-based environment, the compiler itself alerts us with an error if trying to access an instance variable using the `->` notation. The error is very clear:
 
-```objc
+```objective-c
 Dereferencing a __weak pointer is not allowed due to possible null value caused by race condition, assign it to a strong variable first.
 ```
 
 It can be shown with the following code:
 
-```obcs
+```objective-c
 __weak typeof(self) weakSelf = self;
 myObj.myBlock =  ^{
     id localVal = weakSelf->someIVar;
@@ -1886,7 +1886,7 @@ Here is a concrete example:
 
 Delegate methods should be always have the caller as first parameter as in the above example otherwise delegate objects could not be able to distinguish between different instances of delegants. In other words, if the caller is not passed to the delegate object, there would be no way for any delegate to deal with 2 delegant object. So, following is close to blasphemy:
 
-```objc
+```objective-c
 - (void)calculatorDidCalculateValue:(CGFloat)value;
 ```
 
@@ -2145,7 +2145,7 @@ On Ray Wenderlich's blog there is a long [article](http://www.raywenderlich.com/
 
 The code above sends an event with context information whenever a button is tapped. Things get worse when you want to track a screen view:
 
-```objc
+```objective-c
 - (void)viewDidAppear:(BOOL)animated {
     [super viewDidAppear:animated];
 
