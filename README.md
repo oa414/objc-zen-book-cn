@@ -1304,7 +1304,7 @@ self.productsRequest = [[SKProductsRequest alloc]
 
 ### Brackets
 
-Use Egyptian brackets for:
+Use [Egyptian brackets](https://en.wikipedia.org/wiki/Indent_style#K.26R_style) for:
 
 * control structures (if-else, for, switch)
 
