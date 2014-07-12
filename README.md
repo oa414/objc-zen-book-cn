@@ -493,7 +493,7 @@ You should always prefix your class with **three** capital-case letters (two let
 Some developers don't follow this practice for model objects (we observed this practice especially for Core Data objects), we advice to strictly follow this convention also in the case of Core Data objects because you might end up merging your Managed Object Model with other MOMs, maybe coming from third party library. 
 As you may already have noticed, in this book the class (but not only) prefix is `ZOC`.
 
-There is another good practice that you might want to follow while choosing while naming you class that is, when you're creating a subclass, you should put the specifying name part between the class prefix and the superclass name. This is better explained with an example: if you have a class named `ZOCNetworkClient`, example of subclass name will be `ZOCTwitterNetworkClient` (note "Twitter" between "ZOC" and "NetworkClient"); or following the same rule a subclass of `UIViewController` is `ZOCTimelineViewController`.
+There is another good practice that you might want to follow while choosing the name for your classes: when you're creating a subclass, you should put the specifying name part between the class prefix and the superclass name. This is better explained with an example: if you have a class named `ZOCNetworkClient`, example of subclass name will be `ZOCTwitterNetworkClient` (note "Twitter" between "ZOC" and "NetworkClient"); or, following the same rule, a `UIViewController` subclass would `ZOCTimelineViewController`.
 
 
 ## Initializer and dealloc
