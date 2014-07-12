@@ -1197,26 +1197,27 @@ At this point the view controller can accept any object conforming to the new pr
 
 @interface ZOCTableViewController : UITableViewController <ZOCFeedParserDelegate>
 
-- (instancetype)initWithFeedParser:(id<ZoCFeedParserProtocol>)feedParser;
+- (instancetype)initWithFeedParser:(id<ZOCFeedParserProtocol>)feedParser;
 
 @end
 
 ```
 
-This might seems as a minor change, but actually it is a huge improvement as the view controller would work against a contract rather than a concrete implementation. This leads to many advantages:
+The change in the above snippet of code might seem a minor change, but actually it is a huge improvement as the view controller would work against a contract rather than a concrete implementation. This leads to many advantages:
 
 - the view controller can now accept any object that provide some information via the delegate property: this can be a RSS remote feed parser, a local one, a service that read other types of data remotely or even a service that fetch data from the local database;
 - the feed parser object can be totally reused (as it was before after the first refactoring step);
-- ZOCFeedParser and ZOCFeedParserDelegate can be reused by other components;
-- ZOCViewController (UI logic apart) can be reused;
+- `ZOCFeedParser` and `ZOCFeedParserDelegate` can be reused by other components;
+- `ZOCViewController` (UI logic apart) can be reused;
 - it is easier to test as it'd be possible to use a mock object conforming to the expected protocol.
+
+When implementing a protocol you should always strive to adhere to the [Liskov Substitution Principle](http://en.wikipedia.org/wiki/Liskov_substitution_principle). This principle states that you should be able to replace one implementation of an interface ("protocol" in the Objective-C lingo) with another without breaking either the client or the implementation.
+
+In other words this means that your protocol should not leak the detail of the implementing classes; be even more careful when designing the abstraction expressed by you protocol and always keep in mind that the underlay implementation is irrelevant, what really matters is the contract that the abstraction expose to the consumer.
 
 Everything that is designed to be reused in future is implicitly better code and should be always the programmer's goal. Code designed this way is what makes the difference between an experienced programmer and a newbie.
 
 The final code proposed here can be found [here](http://github.com/albertodebortoli/ADBFeedReader).
-
-When implementing a protocol you should always strive to adhere to the [Liskov Substitution Principle](http://en.wikipedia.org/wiki/Liskov_substitution_principle) that states that, is S is a subtype of T, objects of type T may be replaced with objects of type S without breaking either the client or the implementation.
-In other words this means that your protocol should not leak the detail of the implementing classes; be even more careful when designing the abstraction expressed by you protocol and alway keep in mind that the underlay implementation is irrelevant, what really matters is the contract that the abstraction expose to the consumer.
 
 # NSNotification
 
