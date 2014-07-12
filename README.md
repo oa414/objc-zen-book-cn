@@ -2284,6 +2284,7 @@ From the community:
 * [CocoaDevCentral](http://cocoadevcentral.com/articles/000082.php)
 * [Luke Redpath](http://lukeredpath.co.uk/blog/my-objective-c-style-guide.html)
 * [Marcus Zarra](http://www.cimgf.com/zds-code-style-guide/)
+* [Ray Wenderlich](https://github.com/raywenderlich/objective-c-style-guide)
 
 
   [1]: https://github.com/NYTimes/objective-c-style-guide/issues/6)
