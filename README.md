@@ -1792,7 +1792,7 @@ Dereferencing a __weak pointer is not allowed due to possible null value caused 
 
 It can be shown with the following code:
 
-```obcs
+```objective-c
 __weak typeof(self) weakSelf = self;
 myObj.myBlock =  ^{
     id localVal = weakSelf->someIVar;
