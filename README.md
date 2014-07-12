@@ -499,7 +499,7 @@ There is another good practice that you might want to follow while choosing whil
 ## Initializer and dealloc
 
 The recommended way to organize the  code is to  have `dealloc` method placed at the top of the implementation (directly after the `@synthesize` and `@dynamic` statements) and the `init` should be placed directly below the `dealloc` methods of any class. In case of multiple initializer the designated initializer should be placed as first method, because is the one where most likely there is more logic, and the secondary initializers should follow.
-In these days with ARC, it is less likely that you will implement the dealloc method, but still the rationale is that by having the dealloc very close to your init methods your visually emphasizing the pairing between the methods,. Usually in the dealloc method you will undo things that you have done in the init methods.
+In these days with ARC, it is less likely that you will need to implement the dealloc method, but still the rationale is that by having the dealloc very close to your init methods, you are visually emphasizing the pairing between the methods. Usually in the dealloc method you will undo things that you have done in the init methods.
 
 `init` methods should be structured like this:
 
