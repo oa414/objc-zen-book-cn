@@ -2096,7 +2096,7 @@ In the world of Objective-C this means using the runtime features to add *aspect
 * add code to be performed instead of the original implementation of a specific method call on a specific class
 
 There are many ways to achieve this we are not digging into deep here, basically all of them leverage the power of the runtime. 
-[Peter Steinberger](twitter.com/steipete) wrote a library, [Aspects](github.com/steipete/Aspects) that fits the AOP approach perfectly. We found it reliable and well-designed and we are going to use it here for sake of simplicity.
+[Peter Steinberger](https://twitter.com/steipete) wrote a library, [Aspects](https://github.com/steipete/Aspects) that fits the AOP approach perfectly. We found it reliable and well-designed and we are going to use it here for sake of simplicity.
 As said for all the AOP-ish libraries, the library does some cool magic with the runtime, replacing and adding methods (further tricks over the method swizzling technique).
 The API of Aspect are interesting and powerful:
 
