@@ -1375,7 +1375,7 @@ We suggest to use `#pragma mark -`to separate:
 
 #pragma mark - Private
 
-- (void)_privateMethod { /* ... */ }
+- (void)zoc_privateMethod { /* ... */ }
 
 #pragma mark - UITableViewDataSource
 
