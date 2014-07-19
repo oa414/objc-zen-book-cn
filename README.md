@@ -485,6 +485,18 @@ NSNumber *shouldUseLiterals = [NSNumber numberWithBool:YES];
 NSNumber *buildingZIPCode = [NSNumber numberWithInteger:10018];
 ```
 
+For the mutable counterparts of these classes we recommend, instead, the use of the explicit classes such as `NSMutableArray`, `NSMutableString`, and so on. 
+
+The following **should be avoided**:
+
+```objective-c
+NSMutableArray *aMutableArray = [@[] mutableCopy];
+```
+
+The problems with the previous notation are both of efficiency and readability. 
+On the efficiency side, an unnecessarily immutable object is created and immediately thrown away; this unlikely will slow down your app (unless the method here is called frequently) but there is really no  reason to do this just to save some characters. 
+Regarding the readability  we can see two problem here: the first is that when scanning through the code and seeing `@[]` your mind is immediately connected to and instance of `NSArray`, but in this case you need to stop and check more thoughtfully. Another aspect to account for is the it'd very likely that someone with less experience than you will see your code, depending on his background he might not be very comfortable with the dichotomy between mutable e immutable objects and not be very familiar with the meaning of creating a mutable copy (obviously we are not suggesting that this knowledge is no necessary). Again, this is not something absolutely wrong but is more about code usability (that includes readability).
+
 # Class
 
 ## Class name
