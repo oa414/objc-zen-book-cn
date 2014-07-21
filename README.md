@@ -494,8 +494,8 @@ NSMutableArray *aMutableArray = [@[] mutableCopy];
 ```
 
 The problems with the previous notation are both of efficiency and readability. 
-On the efficiency side, an unnecessarily immutable object is created and immediately thrown away; this unlikely will slow down your app (unless the method here is called frequently) but there is really no  reason to do this just to save some characters. 
-Regarding the readability  we can see two problem here: the first is that when scanning through the code and seeing `@[]` your mind is immediately connected to and instance of `NSArray`, but in this case you need to stop and check more thoughtfully. Another aspect to account for is the it'd very likely that someone with less experience than you will see your code, depending on his background he might not be very comfortable with the dichotomy between mutable e immutable objects and not be very familiar with the meaning of creating a mutable copy (obviously we are not suggesting that this knowledge is no necessary). Again, this is not something absolutely wrong but is more about code usability (that includes readability).
+On the efficiency side, an unnecessarily immutable object is created and immediately thrown away; this unlikely will slow down your app (unless the method here is called frequently) but there is really no reason to do this just to save some characters. 
+Regarding the readability, we can see two problems here: the first is that when scanning through the code and seeing `@[]` your mind is immediately connected to and instance of `NSArray`, but in this case you need to stop and check more thoughtfully. Another aspect to take into account is that it would be very likely that someone with less experience will see your code and depending on his background he might not be very comfortable with the dichotomy between mutable and immutable objects. He or she could not be very familiar with the meaning of creating a mutable copy (obviously we are not suggesting that this knowledge is not necessary). Again, this is not something absolutely wrong but is more about code usability (that includes readability).
 
 # Class
 
