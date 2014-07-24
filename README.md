@@ -579,7 +579,7 @@ Given the above example `initWithTitle:date:location:` is the designated initial
 
 #### Designated Initializer
 
-A class should always have one and only one designated initializer, all other init methods should call the designated one (even thought there are an exception to this case).
+A class should always have one and only one designated initializer, all other init methods should call the designated one (even though there are an exception to this case).
 This dichotomy does not dictate any requirement about which initializer should be called.
 It should rather be valid to call any designated initializer in the class hierarchy, and it should be guaranteed that *all* the designated initializer in the class hierarchy are called starting from the furthest ancestor (typically `NSObject`) down to your class. 
 Practically speaking this means that the first initialization code executed is the furthest ancestor, and then going down to the class hierarchy; giving to all the classes in the hierarchy the chance to do their specific part of initialization. This totally make sense: you want that everything you inherit from your superclass is in an usable state before doing your actual work.
@@ -723,9 +723,9 @@ This is mostly to form the habit and to be consistent (and possibly having a mor
 Class cluster as described in the Apple's documentation is
 > an architecture that groups a number of private, concrete subclasses under a public, abstract superclass.
 
-If this descriptions sounds familiar probably your instinct is correct. Class cluster is the Apple lingo for the [Abstract Factory](http://en.wikipedia.org/wiki/Abstract_factory_pattern) design pattern.
-The idea with class cluster is very simple: you typically have an abstract class that during the initialization process use information, generally provided as parameter of the initializer method or available in the environment, to apply a logic and instantiate a concrete subclass. This "public facing" class should internally have a good knowledge of its subclass to be able to return the private subclass that best suited the task.
-This pattern is very useful because removes the complexity of this initialization logic from the caller that only knows about the interface to comunicate with the object without actually caring about the underlying  implementation.
+If this description sounds familiar probably your instinct is correct. Class cluster is the Apple lingo for the [Abstract Factory](http://en.wikipedia.org/wiki/Abstract_factory_pattern) design pattern.
+The idea with class cluster is very simple: you typically have an abstract class that during the initialization process uses information, generally provided as parameters of the initializer method or available in the environment, to apply a logic and instantiate a concrete subclass. This "public facing" class should internally have a good knowledge of its subclass to be able to return the private subclass that best suited the task.
+This pattern is very useful because it removes the complexity of this initialization logic from the caller that only knows about the interface to comunicate with the object, without actually caring about the underlying  implementation.
 Class clusters are widely used in the Apple's frameworks; some of the most notably examples are `NSNumber` that can return an appropriate subclass depending of the type of number provided (Integer, Float, etc...) or `NSArray` that will return a concrete subclass with the best storage policy.
 The beauty of this pattern is that the caller can be completely unaware of the concrete subclass; in fact it can be used when designing a library to be able to swap the underlaying returned class without leaking any implementation detail as long as is respectful of the contract established in the abstract class.
 
@@ -931,7 +931,7 @@ You should also avoid to expose mutable object in the public interface, because 
 
 ### Lazy Loading
 
-There are cases when instantiate an object can be expensive and/or needs to be configured once and has some configuration involved that you don't want to clutter the caller method.
+There are cases when instantiating an object can be expensive and/or needs to be configured once and has some configuration involved that you don't want to clutter the caller method.
 
 In this case, instead of allocating the object in the init method one could opt for overriding the property getter for lazy instantiation. Usually the template for this kind of operation is the following:
 
@@ -1059,7 +1059,7 @@ A good practice is to use prefix also for category names.
 ```
 
 Category can be used to group related method in a header file. This is a very common practice in Apple's framework (nearby is proposed an extract from `NSDate` header) and we strongly encourage to do the same in your code. 
-In our experience creating this groups can be helpful in further refactoring: when the interface of a class starts growing can be a signal that your class is doing to much and therefor violating the Single Responsibility Principle, the previously created groups be used to better understand the different responsibilities and help in breaking down the class in more self-contained components.
+In our experience creating this groups can be helpful in further refactoring: when the interface of a class starts growing can be a signal that your class is doing to much and therefore violating the Single Responsibility Principle, the previously created groups be used to better understand the different responsibilities and help in breaking down the class in more self-contained components.
 
 ```objective-c
 
@@ -1092,7 +1092,7 @@ The example presented is the implementation of a RSS feed reader (think of it as
 
 The requirement is straightforward: presenting a remote RSS feed in a table view.
 
-A very naïve approach would be to create a `UITableViewController` subclass and code the entire logic for the retrieving of the feed data, the parsing and the displaying in one place, which is, in other words, a MVC (Massive View Controller). This would work but it's very bad designed and unfortunately it'd suffice to pass the interview step in some not-so-demanding tech startups.
+A very naïve approach would be to create a `UITableViewController` subclass and code the entire logic for the retrieving of the feed data, the parsing and the displaying in one place, which is, in other words, a MVC (Massive View Controller). This would work but it's very poorly designed and unfortunately it'd suffice to pass the interview step in some not-so-demanding tech startups.
 
 A minimal step forward would be to follow the Single Responsibility Principle and create at least 2 components to do the different tasks:
 
@@ -1537,11 +1537,11 @@ The documentation of class should be done using the Doxygen/AppleDoc syntax only
 
 # Inter-Object Communication
 
-Every non-trivial software is based on objects that need to communicate with each other to meet complex goals. This chapter is about design concepts going first into deep explanations on how the armory to achieve great architectures works and how it should be used.
+Every non-trivial software is based on objects that need to communicate with each other to meet complex goals. This chapter is about design concepts going first into deep explanations on how the armory will achieve great architectures works and how it should be used.
 
 ## Blocks
 
-Blocks are the Objective-C version of well-knows constructs called lambdas or closures available in other languages many years now.
+Blocks are the Objective-C version of well-knows constructs called lambdas or closures available in other languages for many years now.
 
 They are a great way to design asynchronous APIs as so:
 
@@ -1550,7 +1550,7 @@ They are a great way to design asynchronous APIs as so:
                    completion:(void(^)(NSArray *objects, NSError *error))completion;
 ```
 
-When designing something like the above, try to declare functions and methods to take no more than one block and always make the blocks be the last arguments. It is a good approach trying to combine data and error in one block instead of two separate blocks (usually one for the success and one for the failure).
+When designing something like the above, try to declare functions and methods to take no more than one block and always make the blocks be the last arguments. It is a good approach to try to combine data and error in one block instead of two separate blocks (usually one for the success and one for the failure).
 
 You should do this because:
 
@@ -1836,7 +1836,7 @@ In the very end:
 
 ## Delegate and DataSource
 
-Delegation is a widespread pattern throughout Apple's frameworks and it is one of the most important pattern in the Gang of Four's book "Design Patterns". The delegation pattern is unidirectional, the message sender (the delegant) needs to know about the recipient (the delegate), but not the other way around. The coupling between the objects is loosen the sender only knows that its delegate conforms to a specific protocol.
+Delegation is a widespread pattern throughout Apple's frameworks and it is one of the most important patterns in the Gang of Four's book "Design Patterns". The delegation pattern is unidirectional, the message sender (the delegant) needs to know about the recipient (the delegate), but not the other way around. The coupling between the objects is loosen the sender only knows that its delegate conforms to a specific protocol.
 
 In its pure form, delegation is about providing callbacks to the delegate, which means that the delegate implements a set of methods with void return type.
 
@@ -1913,7 +1913,7 @@ By default, methods in protocols are required to be implemented by delegate obje
 @end
 ```
 
-For optional method, the delegant must check if the delegate actually implements a specific method before sending the message to it (otherwise a crash would occur) as so:
+For optional methods, the delegant must check if the delegate actually implements a specific method before sending the message to it (otherwise a crash would occur) as so:
 
 ```objective-c
 if ([self.delegate respondsToSelector:@selector(signUpViewControllerDidPressSignUpButton:)]) {
@@ -1981,7 +1981,7 @@ DataSource pattern is forced to be 1 to 1 as the information the sender asks for
 
 There are cases where at least 2 objects are interested in receiving the callbacks from a particular delegant and the latter wants to know all of its delegates. This approach maps better a distributed system and more generically how complex flows of information usually go in wide software.
 
-Multiple delegation can be achieved in many ways and the reader is dare to find a proper personal implementation. A very neat implementation of multiple delegation using the forward mechanism is given by Luca Bernardi in his [LBDelegateMatrioska](https://github.com/lukabernardi/LBDelegateMatrioska).
+Multiple delegation can be achieved in many ways and the reader is dared to find a proper personal implementation. A very neat implementation of multiple delegation using the forward mechanism is given by Luca Bernardi in his [LBDelegateMatrioska](https://github.com/lukabernardi/LBDelegateMatrioska).
 
 A basic implementation is given here to unfold the concept. Even if in Cocoa there are ways to store weak references in a data structure to avoid retain cycles, here we use a class to hold a weak reference to the delegate object as single delegation does.
 
