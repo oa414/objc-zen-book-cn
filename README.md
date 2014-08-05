@@ -1627,7 +1627,7 @@ __weak __typeof(self) weakSelf = self;
 
 ```objective-c
 [self executeBlock:^(NSData *data, NSError *error) {
-  [self doSomethingWithData:data];
+    [self doSomethingWithData:data];
 }];
 ```
 
@@ -1636,10 +1636,11 @@ __weak __typeof(self) weakSelf = self;
 ```objective-c
 __weak __typeof(self)weakSelf = self;
 [self executeBlock:^(NSData *data, NSError *error) {
-  __strong __typeof(weakSelf)strongSelf = weakSelf;
-
-  [strongSelf doSomethingWithData:data];
-  [strongSelf doSomethingWithData:data];
+    __strong __typeof(weakSelf) strongSelf = weakSelf;
+    if (strongSelf) {
+        [strongSelf doSomethingWithData:data];
+        [strongSelf doSomethingWithData:data];
+    }
 }];
 ```
 
@@ -1648,8 +1649,8 @@ __weak __typeof(self)weakSelf = self;
 ```objective-c
 __weak __typeof(self)weakSelf = self;
 [self executeBlock:^(NSData *data, NSError *error) {
-  [weakSelf doSomethingWithData:data];
-  [weakSelf doSomethingWithData:data];
+    [weakSelf doSomethingWithData:data];
+    [weakSelf doSomethingWithData:data];
 }];
 ```
 
