@@ -591,7 +591,7 @@ There are three different situations that may present when defining a new class:
 2. Overriding designated initializer
 3. Define a new designated initializer
 
-The first case is the most trivial: we you don't need to add any specific logic at the initialization of your class you simply rely on you parent designated initializer.
+The first case is the most trivial: you don't need to add any specific logic at the initialization of your class you simply rely on you parent designated initializer.
 When you want to provide additional initialization logic you can decide to override the designated initializer. You should only override your immediate superclass's designated initializer and be sure that your implementation calls the super of the method you're overriding.  
 A typical example is whether you create a `UIViewController` subclass overriding `initWithNibName:bundle:`:
 
