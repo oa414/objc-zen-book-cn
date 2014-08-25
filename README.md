@@ -915,7 +915,7 @@ Private properties should be declared in class extensions (anonymous categories)
 
 ### Mutable Object
 
-Any property that potentially can be set with a mutable object (e.g. `NSString`,`NSArray`,`NSURL`) must have the memory-management type to `copy`. This is done in order to ensure the encapsulation and prevent that the value is changed after the property is set without that the object know it.
+Any property that potentially can be set with a mutable object (e.g. `NSString`,`NSArray`,`NSURLRequest`) must have the memory-management type to `copy`. This is done in order to ensure the encapsulation and prevent that the value is changed after the property is set without that the object know it.
 
 You should also avoid to expose mutable object in the public interface, because this allows clients of your class to change your own internal representation and break the encapsulation. You can provide a read-only property that returns an immutable copy of your object:
 
