@@ -8,7 +8,7 @@ It's also good practice to name the notification using the verb Did/Will and ter
 
 因为你在头文件中暴露了符号，所以你应该按照统一的命名空间前缀法则，用类名前缀作为这个通知名字的前缀。 
 
-同时，用一个 Did/Will 这样的动词以及用 "Notifications" 后缀来命名这个通知一个好的实践。 
+同时，用一个 Did/Will 这样的动词以及用 "Notifications" 后缀来命名这个通知也是一个好的实践。 
 
 ```objective-c
 // Foo.h
