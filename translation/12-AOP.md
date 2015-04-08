@@ -61,7 +61,8 @@ For instance, the following code will perform the block parameter after the exec
 ```
 
 In other words: the code provided in the block parameter will always be executed after each call of the `@selector` parameter on any object of type `MyClass` (or on the class itself if the method is a class method).
-
+ 
+换一句话shuoi：这个代码避免了 block 参数会总是执行在 `@selector`  参数调用之后，在一个  `MyClass` 的对象上（或者在一个类本身，如果方法是一个类方法的话）
 
 
 We added an aspect on `MyClass` for the method `myMethod:`.
@@ -133,11 +134,14 @@ This approach is clean and unobtrusive:
 * 为所有加入到我们代码的切面定义一个 SPOC 文件 (single point of customization)提供了可能
 * SPOC 应该在 App 刚开始启动的时候就加入切面
 * 公司负责统计的团队通常会提供统计文档，罗列出需要追踪的事件。这个文档可以很容易映射到一个 SPOC 文件。
-*
-*
+* 追踪逻辑抽象化之后，扩展到 a grater number of 统计提供方变得可能
+* 对于屏幕视图，足够在 SPOC 文件，类相关的（相当的层面会加入到 `viewDidAppear:` 方法）。对于必要的定义 selector 的方法，同时发送屏幕视图和时间，一个喝醉粽 label 和可能的额外的需要元信息来土工额外数据（取决于统计提供方）
 *
 
 We may want a SPOC file similar to the following (also a .plist file would perfectly fit as well):
+
+
+我们可能希望一个 SPOC 文件类似下面的（同样的一个 .plist 文件会适配）
 
 ```objective-c
 NSDictionary *analyticsConfiguration()
@@ -176,6 +180,8 @@ NSDictionary *analyticsConfiguration()
 ```
 
 The architecture proposed is hosted on GitHub on the [EF Education First](https://github.com/ef-ctx/JohnnyEnglish/blob/master/CTXUserActivityTrackingManager.m) profile.
+
+这个提及的架构在 Github 中托管 [EF Education First](https://github.com/ef-ctx/JohnnyEnglish/blob/master/CTXUserActivityTrackingManager.m)
 
 ```objective-c
 - (void)setupWithConfiguration:(NSDictionary *)configuration
