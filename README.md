@@ -42,8 +42,26 @@ ObjC Zen Book 非常棒，是对 Objective-C 语言程序书写的进阶佳作�
 |13  | X| X | O|
 
 
+## 作者
 
+原作者：
 
+**Luca Bernardi**
+
+- http://lucabernardi.com
+- @luka_bernardi
+- http://github.com/lukabernardi
+
+**Alberto De Bortoli**
+
+- http://albertodebortoli.com
+- @albertodebo
+- http://github.com/albertodebortoli
+
+翻译和校队：
+
+- 林翔宇 linxiangyu@nupter.org
+- 庞博 bopang@sohu-inc.com
 
 * [前言](./translation/1-1-前言.md#preface)
   * [Swift](#swift)
