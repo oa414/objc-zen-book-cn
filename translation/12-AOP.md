@@ -137,7 +137,7 @@ This approach is clean and unobtrusive:
 * 公司负责统计的团队通常会提供统计文档，罗列出需要追踪的事件。这个文档可以很容易映射到一个 SPOC 文件。
 * 追踪逻辑抽象化之后，扩展到很多其他统计框架会很方便
 * 对于屏幕视图，对于需要定义 selector 的方法，只需要在 SPOC 文件修改相关的类（相关的切面会加入到 `viewDidAppear:` 方法）。如果要同时发送屏幕视图和时间，一个追踪的 label 和其他元信息来提供额外数据（取决于统计提供方）【疑问】
-*
+
 
 We may want a SPOC file similar to the following (also a .plist file would perfectly fit as well):
 

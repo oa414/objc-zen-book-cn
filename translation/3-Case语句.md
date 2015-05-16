@@ -3,7 +3,7 @@
 Braces are not required for case statements, unless enforced by the complier. 
 When a case contains more than one line, braces should be added.
 
-括号在 case 语句里面是不必要的，除非编译器强制要求。但是当一个 case 包含了多行语句的时候，需要加上括号。
+除非编译器强制要求，括号在 case 语句里面是不必要的。但是当一个 case 包含了多行语句的时候，需要加上括号。
 
 
 ```objective-c
@@ -71,7 +71,7 @@ When using `enum`s, it is recommended to use the new fixed underlying type speci
 
 当使用 `enum` 的时候，建议使用新的固定的基础类型定义，因它有更强大的的类型检查和代码补全。 SDK 现在有一个 宏来鼓励和促进使用固定类型定义 - `NS_ENUM()`
 
-**Example:**
+*例子: **
 
 ```objective-c
 typedef NS_ENUM(NSUInteger, ZOCMachineState) {
