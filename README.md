@@ -113,12 +113,12 @@ Objective-C 没有消失，但是现在用一个慢慢失去关注的语言来�
 
 译者
 
-** 林翔宇 **
+**林翔宇**
 - http://linxiangyu.org
 - linxiangyu@nupter.org
 - http://github.com/oa414
 
-** 庞博 **
+**庞博**
 - bopang@sohu-inc.com
 - https://github.com/heistings
 
