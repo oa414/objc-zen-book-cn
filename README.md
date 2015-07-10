@@ -111,12 +111,21 @@ Objective-C 没有消失，但是现在用一个慢慢失去关注的语言来�
 
 ## 关于中文翻译
 
-翻译：
+译者
 
-- 林翔宇 linxiangyu@nupter.org
-- 庞博 bopang@sohu-inc.com
+** 林翔宇 **
+- http://linxiangyu.org
+- linxiangyu@nupter.org
+- http://github.com/oa414
 
-部分译文表达可能存在不妥之处，非常欢迎各种修订建议和校队，关于译文的错误可以在 <github.com/oa414/objc-zen-book-cn> 提交 pull-request。
+** 庞博 **
+- bopang@sohu-inc.com
+- https://github.com/heistings
+
+
+翻译已得到原作者许可，并且会在更加完善后申请合并到原文仓库。
+
+部分译文表达可能存在不妥之处，非常欢迎各种修订建议和校队，关于译文的错误可以在 <https://github.com/oa414/objc-zen-book-cn> 提交 pull-request。
 
 #  条件语句
 
