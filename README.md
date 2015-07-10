@@ -1,4 +1,4 @@
-# 禅与 Objective-C 编程艺术 （ObjC Zen Book 中文翻译）
+# 禅与 Objective-C 编程艺术 （Zen and the Art of the Objective-C Craftsmanship 中文翻译）
 
 原文 <https://github.com/objc-zen/objc-zen-book>
 
