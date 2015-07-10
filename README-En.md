@@ -320,7 +320,7 @@ switch (condition) {
         break;
     case 2: {
         // ...
-        // Multi-line example using braces
+        // Multi-line example using braces (case 里面有多行代码的时候，需要用括号)
         break;
        }
     case 3:

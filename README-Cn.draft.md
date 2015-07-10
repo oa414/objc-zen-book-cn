@@ -11,6 +11,7 @@
   * [Swift](#swift)
   * [贡献给社区](#for-the-community)
   * [作者](#authors)
+  * [关于中文翻译](#about-translation)
 * [条件语句](#conditionals)
   * [尤达表达式](#yoda-conditions)
   * [nil 和 BOOL 检查](#nil-and-bool-checks)
@@ -77,11 +78,11 @@
 
 # 前言
 
-我们在 2013 年 11 月份开始写这本书，最初的目标是提供一份编写干净漂亮的 Objective-C 代码的指南：现在虽然有很多指南，但是它们都是有一些问题的。我们不想介绍一些死板的规定，我们想提供一个在开发者们之间写更一致的代码的方法。随时间的推移，这本书开始转向介绍如何设计和构建优秀的代码。
+我们在 2013 年 11 月份开始写这本书，最初的目标是提供一份如何编写干净漂亮的 Objective-C 代码的指南：现在虽然有很多指南，但是它们都是有一些问题的。我们不想介绍一些死板的规定，我们想提供一个在开发者们之间写更一致的代码的途径。随时间的推移，这本书开始转向介绍如何设计和构建优秀的代码。
 
-这本书的理念是代码不仅是可以编译的，同时应该是 “有效” 的。好的代码有一些特性：简明，自我解释，优秀的组织，良好的文档，良好的命名，优秀的设计以及经得起时间的考验。
-这本书的理念是是代码的清晰性优先于性能，同时提供为什么这么做的原因。
-虽然所有的代码都是 Objective-C 写的，但是一些主题是通用的并且独立于编程语言的。
+这本书的观点是代码不仅是可以编译的，同时应该是 “有效” 的。好的代码有一些特性：简明，自我解释，优秀的组织，良好的文档，良好的命名，优秀的设计以及可以被久经考验。
+本书的一个理念是是代码的清晰性优先于性能，同时阐述为什么应该这么做。
+虽然所有的代码都是 Objective-C 写的，但是一些主题是通用的，并且独立于编程语言。
 
 ## Swift
 
@@ -109,9 +110,19 @@ Objective-C 没有消失，但是现在用一个慢慢失去关注的语言来�
 - @albertodebo
 - http://github.com/albertodebortoli
 
+## 关于中文翻译
+
+翻译：
+
+- 林翔宇 linxiangyu@nupter.org
+- 庞博 bopang@sohu-inc.com
+
+部分译文表达可能存在不妥之处，非常欢迎各种修订建议和校队，关于译文的错误可以在 <github.com/oa414/objc-zen-book-cn> 提交 pull-request。
+
 #  条件语句
 
-条件语句体应该总是被大括号包围来避免错误，即使可以不用（比如，只有一行内容）。这些错误包括多加了第二行，并且误以为它是 if 语句体里面的。此外，更危险的可能是，如果把 if 语句体里的一行注释掉了，之后的一行代码会不知不觉成为 if 语句里的代码。
+为了避免错误，条件语句体应该总是被大括号包围，即使可以不这样做（比如，条件语句体只有一行内容）。可能的错误是：多加了第二行，并且误以为它是 if 语句体里面的。此外，更危险的是，如果把 if 语句体里的一行注释掉了，之后的一行代码会成为 if 语句里的代码。
+
 
 **推荐:**
 
@@ -165,7 +176,7 @@ fail:
 ```
 
 
-显而易见，这里有没有括号包围的2行连续的 `goto fail;` 。我们当然不希望写出上面的代码导致出现错误。
+显而易见，这里有没有括号包围的2行连续的 `goto fail;` 。我们当然不希望写出上面的代码导致错误。
 
 此外，在其他条件语句里面也应该按照这种风格统一，这样更便于检查。
 
@@ -191,7 +202,7 @@ if ([@42 isEqual:myValue]) { ...
 ## nil 和 BOOL 检查
 
 
-类似于 Yoda 表达式，nil 检查的方式也是存在争议的。一些 notous 库 像这样检查对象是否为 nil：
+类似于 Yoda 表达式，nil 检查的方式也是存在争议的。一些 notous 库像这样检查对象是否为 nil：
 
 ```objective-c
 if (nil == myValue) { ...
@@ -210,9 +221,9 @@ if (myValue = nil) { ...
 ```
 
 
-这是合法的语句，但是即使你是一个丰富经验的程序员，即使盯着眼睛瞧上好多遍也很难调试出错误。但是如果把 nil 放在左边，因为它不能被赋值，所以就不会发生这样的错误。 如果程序员这样做，他/她就可以轻松检查出可能的原因，比一遍一遍查看敲下的代码要好很多。
+这是合法的语句，但是即使你是一个丰富经验的程序员，即使盯着眼睛瞧上好多遍也很难调试出错误。但是如果把 nil 放在左边，因为它不能被赋值，所以就不会发生这样的错误。 如果程序员这样做，他/她就可以轻松检查出可能的原因，比一遍遍检查敲下的代码要好很多。
 
-为了避免这些奇怪的问题，途径是使用感叹号来判断。因为 nil 是 解释到 NO 所以没必要在条件语句里面把它和其他值比较。同时，不要直接把它和 `YES` 比较，因为 `YES` 的定义是 1 而 `BOOL` 是 8 位的，实际上是 char 类型。
+为了避免这些奇怪的问题，可以用感叹号来作为运算符。因为 nil 是 解释到 NO，所以没必要在条件语句里面把它和其他值比较。同时，不要直接把它和 `YES` 比较，因为 `YES` 的定义是 1， 而 `BOOL` 是 8 bit的，实际上是 char 类型。
 
 **推荐:**
 ```objective-c
@@ -227,12 +238,11 @@ if (someObject == YES) { ... // Wrong
 if (myRawValue == YES) { ... // Never do this.
 if ([someObject boolValue] == NO) { ...
 ```
-
-这样同时也能提高一致性，以及提升可读性。
+同时这样也能提高一致性，以及提升可读性。
 
 ## 黄金大道
 
-当编写条件语句的时候，左边的代码间距应该是一个“黄金”或者“快乐”的大道。 这是说，不要嵌套`if`语句。多个 return 语句是OK的。这样可以避免 Cyclomatic 复杂性，并且让代码更加容易阅读。因为你的方法的重要的部分没有嵌套在分支上，你可以很清楚地找到相关的代码。
+当编写条件语句的时候，左边的代码间距应该是一个“黄金”或者“快乐”的大道。 这是说，不要嵌套 `if` 语句。多个 return 语句是 OK 的。这样可以避免 Cyclomatic 复杂性，并且让代码更加容易阅读。因为你的方法的重要部分没有嵌套在分支上，你可以很清楚地找到相关的代码。
 
 **推荐:**
 
@@ -257,7 +267,7 @@ if ([someObject boolValue] == NO) { ...
 ```
 ## 复杂的表达式 
 
-当你有一个复杂的 if 子句的时候，你应该把它们提取出来赋给一个 BOOL 变量，这样可以让逻辑更清楚，而且让每个子句的意义体现出来
+当你有一个复杂的 if 子句的时候，你应该把它们提取出来赋给一个 BOOL 变量，这样可以让逻辑更清楚，而且让每个子句的意义体现出来。
 
 
 ```objective-c
@@ -273,7 +283,7 @@ if (isSwiftSession) {
 ## 三元运算符
 
 
-三元运算符 ? 应该只用在它能让代码更加清楚的地方。 一个条件语句的所有的变量应该是已经被求值了的。计算多个条件子句通常会让语句更加难以理解，就像if语句的情况一样，或者把它们重构到实例变量里面。
+三元运算符 ? 应该只用在它能让代码更加清楚的地方。 一个条件语句的所有的变量应该是已经被求值了的。类似 if 语句，计算多个条件子句通常会让语句更加难以理解。或者可以把它们重构到实例变量里面。
 
 
 **推荐:**
@@ -338,7 +348,7 @@ switch (condition) {
 ```
 
 
-有时候可以使用 fall-through 在不同的 case 里面执行一样的代码。一个 fall-through  是指移除 case 语句的 “break” 然后让下面的 case 继续执行。
+有时候可以使用 fall-through 在不同的 case 里面执行同一段代码。一个 fall-through  是指移除 case 语句的 “break” 然后让下面的 case 继续执行。
 
 ```objective-c
 switch (condition) {
@@ -372,14 +382,14 @@ switch (menuType) {
 
 此外，为了避免使用默认的 case，如果新的值加入到 enum，程序员会马上收到一个 warning 通知
 
-`Enumeration value 'ZOCEnumValue3' not handled in switch.`
+`Enumeration value 'ZOCEnumValue3' not handled in switch.（枚举类型 'ZOCEnumValue3' 没有被 switch 处理）`
 
-### Enumerated Types 枚举类型
+### 枚举类型
 
 
 当使用 `enum` 的时候，建议使用新的固定的基础类型定义，因它有更强大的的类型检查和代码补全。 SDK 现在有一个 宏来鼓励和促进使用固定类型定义 - `NS_ENUM()`
 
-*例子: **
+**例子: **
 
 ```objective-c
 typedef NS_ENUM(NSUInteger, ZOCMachineState) {
@@ -410,7 +420,7 @@ UIButton *settingsButton;
 UIButton *setBut;
 ```
 
-## Constants 常量
+##  常量
 
 常量应该使用驼峰命名法，并且为了清楚，应该用相关的类名作为前缀。
 
@@ -424,7 +434,7 @@ static const NSTimeInterval ZOCSignInViewControllerFadeOutAnimationDuration = 0.
 static const NSTimeInterval fadeOutTime = 0.4;
 ```
 
-常量应该尽量使用 in-line 的字符串字面值或者数字，这样便于经常用到的时候复用，并且可以快速修改而不用查找和替换。 常量应该用 `static` 声明，并且不要使用 `#define`，除非它就是明确作为一个宏来用的。
+常量应该尽量使用 in-line 的字符串字面值或者数字，这样便于经常用到的时候复用，并且可以快速修改而避免查找和替换。 常量应该用 `static` 声明，不要使用 `#define`，除非它就是明确作为一个宏来用的。
 
 **推荐:**
 ```objective-c
@@ -478,7 +488,7 @@ extern NSString *const ZOCCacheControllerDidClearCacheNotification;
 ##  字面值
 
 
-`NSString`, `NSDictionary`, `NSArray`, 和 `NSNumber` 字面值应该用在任何创建不可变的实例对象。特别小心 `nil` 不能放进 `NSArray` 和 `NSDictionary` 里，这会导致 Crash。
+`NSString`, `NSDictionary`, `NSArray`, 和 `NSNumber` 字面值应该用在任何创建不可变的实例对象。特别小心不要把 `nil` 放进 `NSArray` 和 `NSDictionary` 里，这会导致崩溃
 
 **例子：**
 
@@ -502,7 +512,7 @@ NSNumber *buildingZIPCode = [NSNumber numberWithInteger:10018];
 对于那些可变的副本，我们推荐使用明确的如 `NSMutableArray`, `NSMutableString` 这些类。
 
 
-下面的例子 **应该被避免**:
+下面的例子**应该被避免**:
 
 ```objective-c
 NSMutableArray *aMutableArray = [@[] mutableCopy];
@@ -517,9 +527,9 @@ NSMutableArray *aMutableArray = [@[] mutableCopy];
 
 ##  类名
  
-类名应加上 **三** 个大写字母作为前缀（两个字母的为 Apple 的类保留）。虽然这个规范看起来难看，但是这样做是为了减少 objective-c 没有命名空间所带来的问题。
+类名应加上**三**个大写字母作为前缀（两个字母的为 Apple 的类保留）。虽然这个规范看起来难看，但是这样做可以减少 objective-c 没有命名空间所带来的问题。
 
-一些开发者在定义 Model 对象时并不遵循这个规范（对于 Core Data 对象，我们更应该遵循这个规范）。我们建议在定义 Core Data 对象时严格遵循这个约定，因为你最后可能把你的 Managed Object Model 和其他（第三方库）的 Managed Object Model 合并。
+一些开发者在定义 Model 对象时并不遵循这个规范（对于 Core Data 对象，我们更应该遵循这个规范）。我们建议在定义 Core Data 对象时严格遵循这个约定，因为你最后可能把你的 Managed Object Model （托管对象）合并到其他（第三方库）的 Managed Object Model 。
 
 你可能注意到了，这本书里的类的前缀（其实不仅仅是类）是`ZOC`。
 
@@ -548,14 +558,14 @@ NSMutableArray *aMutableArray = [@[] mutableCopy];
 
 为什么设置 `self` 为 `[super init]` 的返回值，以及中间发生了什么呢？这是一个十分有趣的话题。
 
-让我们后退一步：我们曾经写了类似 `[[NSObject alloc] init]` 的表达式， `alloc` 和 `init` 区别慢慢褪去 。一个 Objective-C 的特性叫 *两步创建* 。 这意味着申请分配内存和初始化是两个分离的操作。
+让我们后退一步：我们一直写类似 `[[NSObject alloc] init]` 的表达式，而淡化了 `alloc` 和 `init` 的区别 。一个 Objective-C 的特性叫 *两步创建* 。 这意味着申请分配内存和初始化是两个分离的操作。
 
 - `alloc`表示对象分配内存，这个过程涉及分配足够的可用内存来保存对象，写入`isa`指针，初始化 retain 的计数，并且初始化所有实例变量。
-- `init` 是表示初始化对象，这意味着把对象放到了一个可用的状态。这通常是指把对象的实例变量赋给了可用的值。
+- `init` 是表示初始化对象，这意味着把对象转换到了个可用的状态。这通常是指把可用的值赋给了对象的实例变量。
 
 
-`alloc` 方法会返回一个合法的没有初始化的实例对象。每一个发送到实例的信息会被翻译为名字是 `self` 的 `alloc` 返回的指针的参数返回的 `objc_msgSend()` 的调用。这样之后 `self` 已经可以执行所有方法了。
-为了完成两步创建，第一个发送给新创建的实例的方法应该是约定俗成的 `init` 方法。注意 `NSObject` 的 `init` 实现中，仅仅是返回了 `self`。
+`alloc` 方法会返回一个合法的没有初始化的实例对象。每一个发送到实例的消息会被翻译为`objc_msgSend()` 函数的调用，它的参数是指向 `alloc` 返回的对象的、名为 `self` 的指针的。这样之后 `self` 已经可以执行所有方法了。
+为了完成两步创建，第一个发送给新创建的实例的方法应该是约定俗成的 `init` 方法。注意在 `NSObject` 的 `init` 实现中，仅仅是返回了 `self`。
 
 
 关于 `init` 有一个另外的重要的约定：这个方法可以（并且应该）在不能成功完成初始化的时候返回 `nil`；初始化可能因为各种原因失败，比如一个输入的格式错误，或者未能成功初始化一个需要的对象。
@@ -616,13 +626,14 @@ designated 初始化方法是提供所有的参数，secondary 初始化方法�
 
 
 当定义一个新类的时候有三个不同的方式：
+
 1. 不需要重载任何初始化函数
 2. 重载 designated initializer
 3. 定义一个新的 designated initializer
 
 
 第一个方案是最简单的：你不需要增加类的任何初始化逻辑，只需要依照父类的designated initializer。
-当你希望提供额外的初始化逻辑的时候你可以重载 designated initializer。你只需要重载你的直接的超类的 designated initializer 并且确认你的实现调用了超类的方法。
+当你希望提供额外的初始化逻辑的时候，你可以重载 designated initializer。你只需要重载你的直接的超类的 designated initializer 并且确认你的实现调用了超类的方法。
 你一个典型的例子是你创造`UIViewController`子类的时候重载
 `initWithNibName:bundle:`方法。
 
@@ -634,7 +645,7 @@ designated 初始化方法是提供所有的参数，secondary 初始化方法�
     // call to the superclass designated initializer
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     if (self) {
-        // Custom initialization
+        // Custom initialization （自定义的初始化过程）
     }
     return self;
 }
@@ -644,14 +655,13 @@ designated 初始化方法是提供所有的参数，secondary 初始化方法�
 
 在 `UIViewController`  子类的例子里面如果重载  `init` 会是一个错误，这个情况下调用者会尝试调用 `initWithNib:bundle` 初始化你的类，你的类实现不会被调用。着同样违背了它应该是合法调用任何 designated initializer 的规则。
 
-In case you want to provide your own designated initializer there are three steps that you need to follow in order to guarantee the correct behavior:
 
 在你希望提供你自己的初始化函数的时候，你应该遵守这三个步骤来保证正确的性：
 
 
-1. 定义你的 designated initializer，确保调用了直接超类的 designated initializer
-2. 重载直接超类的 designated initializer。调用你的新的  designated initializer.
-3. 为新的 designated initializer 写文档
+1. 定义你的 designated initializer，确保调用了直接超类的 designated initializer。
+2. 重载直接超类的 designated initializer。调用你的新的  designated initializer。
+3. 为新的 designated initializer 写文档。
 
 
 很多开发者忽略了后两步，这不仅仅是一个粗心的问题，而且这样违反了框架的规则，而且可能导致不确定的行为和bug。
@@ -662,7 +672,7 @@ In case you want to provide your own designated initializer there are three step
 
 - (id)initWithNews:(ZOCNews *)news
 {
-    // call to the immediate superclass's designated initializer
+    // call to the immediate superclass's designated initializer （调用直接超类的 designated initializer）
     self = [super initWithNibName:nil bundle:nil];
     if (self) {
         _news = news;
@@ -681,13 +691,13 @@ In case you want to provide your own designated initializer there are three step
 ```
 
 
-这个例子里，你没重载 `initWithNibName:bundle:` 而且调用者决定用这个方法初始化你的类(这是完全合法的)。 `initWithNews:` 永远不会被调用，所以导致了不正确的初始化流程，你的类特定的初始化逻辑没有被执行。
+如果你没重载 `initWithNibName:bundle:` ，而且调用者决定用这个方法初始化你的类(这是完全合法的)。 `initWithNews:` 永远不会被调用，所以导致了不正确的初始化流程，你的类特定的初始化逻辑没有被执行。
 
 
 
 
-即使可以推断那个方法是 designate initializer它，但是最好清晰地明确（未来的你或者其他开发者在改代码的时候会感谢你的）。你应该考虑来用这两个策略（不是互斥的）：第一个是你在文档中明确哪一个初始化方法是 designated 的，但是最好你可以用编译器的指令 `__attribute__((objc_designated_initializer))`  来标记你的意图。
-用这个编译指令的时候，编译器回来帮你。如果你的新的 designate initializer 没有调用你超类的 designated initializer，上编译器会发出警告。
+即使可以推断那个方法是 designate initializer，也最好清晰地明确它（未来的你或者其他开发者在改代码的时候会感谢你的）。你应该考虑来用这两个策略（不是互斥的）：第一个是你在文档中明确哪一个初始化方法是 designated 的，你可以用编译器的指令 `__attribute__((objc_designated_initializer))`  来标记你的意图。
+用这个编译指令的时候，编译器会来帮你。如果你的新的 designate initializer 没有调用你超类的 designated initializer，那么编译器会发出警告。
 然而，当没有调用类的  designated initializer 的时候（并且依次提供必要的参数），并且调用其他父类中的 designated initialize 的时候，会变成一个不可用的状态。参考之前的例子，当实例化一个 `ZOCNewsViewController`  展示一个新闻而那条新闻没有展示的话，就会毫无意义。这个情况下你应该只需要让其他的 designated initializer 失效，来强制调用一个非常特别的 designated initializer。通过使用另外一个编译器指令  `__attribute__((unavailable("Invoke the designated initializer"))) ` 来修饰一个方法，通过这个属性，会让你在试图调用这个方法的时候产生一个编译错误。
 
 这是之前的例子相关的实现的头文件(这里使用宏来让代码没有那么啰嗦)
@@ -708,9 +718,9 @@ In case you want to provide your own designated initializer there are three step
 上述的一个推论是：你应该永远不从 designated initializer 里面调用一个 secondary initializer （如果secondary initializer 遵守约定，它会调用 designated initializer）。如果这样，调用很可能会调用一个子类重写的 init 方法并且陷入无限递归之中。
 
 
-然而一个意外是一个对象是否遵守 `NSCoding` 协议，并且它通过方法 `initWithCoder:` 初始化。
-我们应该区别超类是否符合 `NSCoding` 的情况。
-如果符合，如果你只是调用 `[super initWithCoder:]` 你会可能有一个共享的初始化代码在 designated initializer 里面，一个好的方法是吧这些代码放在私有方法里面(比如  `p_commonInit` )。
+不过一个例外是一个对象是否遵守 `NSCoding` 协议，并且它通过方法 `initWithCoder:` 初始化。
+我们应该看超类是否符合 `NSCoding` 协议来区别对待。
+如果符合，如果你只是调用 `[super initWithCoder:]` ，你会可能有一个共享的初始化代码在 designated initializer 里面，一个好的方法是把这些代码放在私有方法里面(比如  `p_commonInit` )。
 当你的超类不符合`NSCoding` 协议的时候，推荐把 `initWithCoder:` 作为 secondary initializer 来对待，并且调用 `self` 的 designated initializer。 注意这是违反 Apple 的 [Archives and Serializations Programming Guide](https://developer.apple.com/library/mac/documentation/cocoa/Conceptual/Archiving/Articles/codingobjects.html#//apple_ref/doc/uid/20000948-BCIHBJDE)  上面写的：
 
 
@@ -795,9 +805,6 @@ Class clusters 在 Apple 的Framework 中广泛使用：一些明显的例子比
 
 
 
-A typical example of this is when you have the same UIViewController subclass for both iPhone and iPad, but the behavior is slightly different depending on the the device.
-
-
 一个经典的例子是如果你有为 iPad 和 iPhone 写的一样的 UIViewController 子类，但是在不同的设备上有不同的行为。
 
 
@@ -833,14 +840,14 @@ A typical example of this is when you have the same UIViewController subclass fo
 ```
 
 
-之前的代码的例子展示了如何创建一个类簇。首先，`[self isMemberOfClass:ZOCKintsugiPhotoViewController.class]`  来避免在子类中重载初始化方法，来避免无限的递归。当  `[[ZOCKintsugiPhotoViewController alloc] initWithPhotos:photos]` 得到调用的时候之前的检查会变成 true 的，`self = nil` 是用来移除所有到 `ZOCKintsugiPhotoViewController` 实例的引用的，它会被释放，按照这个逻辑来检查哪个类应该被初始化。
+上面的代码的例子展示了如何创建一个类簇。首先，`[self isMemberOfClass:ZOCKintsugiPhotoViewController.class]`  来避免在子类中重载初始化方法，来避免无限的递归。当  `[[ZOCKintsugiPhotoViewController alloc] initWithPhotos:photos]` 得到调用的时候之前的检查会变成 true 的，`self = nil` 是用来移除所有到 `ZOCKintsugiPhotoViewController` 实例的引用的，它会被释放，按照这个逻辑来检查哪个类应该被初始化。
 让我们假设在 iPhone 上运行了这个代码， `ZOCKintsugiPhotoViewController_iPhone` 没有重载`initWithPhotos:`，在这个情况下，当执行 `self = [[ZOCKintsugiPhotoViewController_iPhone alloc] initWithPhotos:photos];` 的时候，`ZOCKintsugiPhotoViewController`  会被调用，并且当第一次检查的时候，这样不会让 `ZOCKintsugiPhotoViewController`  检查会变成 false 调用`return [super initWithNibName:nil bundle:nil];` ，这会让 继续初始化执行正确的初始化之前的会话。
 
 
 ####   单例
 
 如果可能，请尽量避免使用单例而是依赖注入。
-然而，如果一定要用，请使用一个线程安全的模式来创建共享的实例。 对于GCD，用 `dispatch_once()` 函数就可以咯。
+然而，如果一定要用，请使用一个线程安全的模式来创建共享的实例。对于 GCD，用 `dispatch_once()` 函数就可以咯。
 
 
 ```objective-c
@@ -856,7 +863,7 @@ A typical example of this is when you have the same UIViewController subclass fo
 ```
 
 
-使用dispatch_once()，来控制代码同步，取代了原来老的约定俗成的用法。
+使用 dispatch_once()，来控制代码同步，取代了原来的约定俗成的用法。
 
 
 ```objective-c
@@ -873,10 +880,10 @@ A typical example of this is when you have the same UIViewController subclass fo
 ```
 
 
- `dispatch_once()`  的优点是，它更快，而且语法上更干净，因为dispatch_once()的意思就是 ”把一些东西执行一次“，就像我们做的一样。 这样同时可以避免[possible and sometimes prolific crashes][singleton_cocoasamurai].
+ `dispatch_once()`  的优点是，它更快，而且语法上更干净，因为dispatch_once()的意思就是 “把一些东西执行一次”，就像我们做的一样。 这样同时可以避免 [possible and sometimes prolific crashes][singleton_cocoasamurai].
 
 
-经典的可以接受的单例对象的例子是一个设备的 GPS 以及 动作传感器。即使单例对象可以被子类化，这个情况可以十分有用。这个接口应该证明给出的类是趋向于使用单例的。然而，经常使用一个单独的公开的 `sharedInstance` 类方法就够了，并且不可写的属性也应该被暴露。
+经典的使用单例对象的例子是一个设备的 GPS 以及动作传感器。即使单例对象可以被子类化，这个情况也可以十分有用。这个接口应该证明给出的类是趋向于使用单例的。然而，通常使用一个单独的公开的 `sharedInstance` 类方法就够了，并且不可写的属性也应该被暴露。
 
 
 把单例作为一个对象的容器来在代码或者应用层面上共享是糟糕和丑陋的，这是一个不好的设计。
@@ -900,33 +907,33 @@ NSString * text;
 
 
 （注意：这个习惯和常量不同，这是主要从常用和可读性考虑。 C++ 的开发者偏好从变量名中分离类型，作为类型它应该是
-`NSString*` （对于从堆中分配的对象，同事对于C++是不能从栈上分配的）格式。）
+`NSString*` （对于从堆中分配的对象，对于C++是能从栈上分配的）格式。）
 
 
 使用属性的自动同步 (synthesize) 而不是手动的  `@synthesize` 语句，除非你的属性是 protocol 的一部分而不是一个完整的类。如果 Xcode 可以自动同步这些变量，就让它来做吧。否则只会让你抛开 Xcode 的优点，维护更冗长的代码。
 
-你应该总是使用 setter 和 getter 方法访问属性，除了 `init` 和 `dealloc` 方法。通常，使用属性让你增加了在当前作用域之外的代码块的可能所以可能带来更多副作用
+你应该总是使用 setter 和 getter 方法访问属性，除了 `init` 和 `dealloc` 方法。通常，使用属性让你增加了在当前作用域之外的代码块的可能所以可能带来更多副作用。
 
-你总应该用 getter 和 setter 因为：
+你总应该用 getter 和 setter ，因为：
 
-- 使用  setter 会遵守定义的内存管理语义(`strong`, `weak`, `copy` etc...) 这回定义更多相关的在ARC是钱，因为它始终是相关的。举个例子，`copy` 每个时候你用 setter 并且传送数据的时候，它会复制数据而不用额外的操作
-- KVO 通知(`willChangeValueForKey`, `didChangeValueForKey`) 会被自动执行
+- 使用  setter 会遵守定义的内存管理语义(`strong`, `weak`, `copy` etc...) ，这个在 ARC 之前就是相关的内容。举个例子，`copy` 属性定义了每个时候你用 setter 并且传送数据的时候，它会复制数据而不用额外的操作。
+- KVO 通知(`willChangeValueForKey`, `didChangeValueForKey`) 会被自动执行。
 - 更容易debug：你可以设置一个断点在属性声明上并且断点会在每次 getter / setter 方法调用的时候执行，或者你可以在自己的自定义 setter/getter 设置断点。
 - 允许在一个单独的地方为设置值添加额外的逻辑。
 
 你应该倾向于用 getter：
 
-- 它是对未来的变化有扩展能力的（比如，属性是自动生成的）
-- 它允许子类化
+- 它是对未来的变化有扩展能力的（比如，属性是自动生成的）。
+- 它允许子类化。
 - 更简单的debug（比如，允许拿出一个断点在 getter 方法里面，并且看谁访问了特别的 getter
-- 它让意图更加清晰和明确：通过访问 ivar `_anIvar` 你可以明确的访问 `self->_anIvar`.这可能导致问题。在 block 里面访问 ivar （你捕捉并且 retain 了 sefl 即使你没有明确的看到 self 关键词）
-- 它自动产生KVO 通知
-- 在消息发送的时候增加的开销是微不足道的。更多关于新年问题的介绍你可以看 [Should I Use a Property or an Instance Variable?](http://blog.bignerdranch.com/4005-should-i-use-a-property-or-an-instance-variable/)
+- 它让意图更加清晰和明确：通过访问 ivar `_anIvar` 你可以明确的访问 `self->_anIvar`.这可能导致问题。在 block 里面访问 ivar （你捕捉并且 retain 了 self，即使你没有明确的看到 self 关键词）。
+- 它自动产生KVO 通知。
+- 在消息发送的时候增加的开销是微不足道的。更多关于新年问题的介绍你可以看 [Should I Use a Property or an Instance Variable?](http://blog.bignerdranch.com/4005-should-i-use-a-property-or-an-instance-variable/)。
 
 #### Init 和 Dealloc
 
 
-有一个例外：你永远不能在 init （以及其他初始化函数）里面用 getter 和 setter 方法，并且你直接访问实例变量。事实上一个子类可以重载sette或者getter并且尝试调用其他方法，访问属性的或者 ivar 的话，他们可能没有完全初始化。记住一个对象是仅仅在 init 返回的时候，才会被认为是初始化完成到一个状态了。
+有一个例外：你永远不能在 init （以及其他初始化函数）里面用 getter 和 setter 方法，并且你直接访问实例变量。事实上一个子类可以重载 setter 或者 getter 并且尝试调用其他方法，访问属性的或者 ivar 的话，他们可能没有完全初始化。记住一个对象是仅仅在 init 返回的时候，才会被认为是初始化完成到一个状态了。
 
 同样在 dealloc 方法中（在 dealloc 方法中，一个对象可以在一个 不确定的状态中）这是同样需要被注意的。
 
@@ -935,12 +942,12 @@ NSString * text;
 * in a [pull request](https://github.com/NYTimes/objective-c-style-guide/issues/6) form Dave DeLong's. 
 
 
-此外，在 init 中使用 setter 不会很好执行  `UIAppearence`  代理（参见  [UIAppearance for Custom Views](http://petersteinberger.com/blog/2013/uiappearance-for-custom-views/) 看更多相关信息).）
+此外，在 init 中使用 setter 不会很好执行  `UIAppearence`  代理（参见  [UIAppearance for Custom Views](http://petersteinberger.com/blog/2013/uiappearance-for-custom-views/) 看更多相关信息)。
 
 #### 点符号
 
 
-当使用 setter getter 方法的时候尽量使用点符号。应该总是用点符号来访问以及设置属性
+当使用 setter getter 方法的时候尽量使用点符号。应该总是用点符号来访问以及设置属性。
 
 **例子:**
 ```objective-c
@@ -990,7 +997,7 @@ UIApplication.sharedApplication.delegate;
 @property (assign, getter=isEditable) BOOL editable;
 ```
 
-文字和例子是引用 [Cocoa Naming Guidelines](https://developer.apple.com/library/mac/#documentation/Cocoa/Conceptual/CodingGuidelines/Articles/NamingIvarsAndTypes.html#//apple_ref/doc/uid/20001284-BAJGIIJE).
+文字和例子引用自 [Cocoa Naming Guidelines](https://developer.apple.com/library/mac/#documentation/Cocoa/Conceptual/CodingGuidelines/Articles/NamingIvarsAndTypes.html#//apple_ref/doc/uid/20001284-BAJGIIJE)。
 
 为了避免 `@synthesize` 的使用，在实现文件中，Xcode已经自动帮你添加了。
 
@@ -1049,9 +1056,7 @@ UIApplication.sharedApplication.delegate;
 
 ```
 
-
-即使在一些情况下这是有益的，但是我们仍然建议你在决定这样做之前经过深思熟虑，事实上这样是可以避免的。下面是使用　延迟实例化的争议。
-
+即使这样做在某些情况下很不错，但是在实际这样做之前应当深思熟虑。事实上，这样的做法是可以避免的。下面是使用延迟实例化的争议。
 
 
 
@@ -1075,7 +1080,7 @@ UIApplication.sharedApplication.delegate;
 
 ##  相等性
 
-当你要实现相等性的时候记住这个约定：你需要同时实现`isEqual` and the `hash`方法。如果两个对象是被`isEqual`认为相等的，它们的 `hash` 方法需要返回一样的值。但是如果  `hash` 返回一样的值，并不能确保他们相等。
+当你要实现相等性的时候记住这个约定：你需要同时实现`isEqual` 和 `hash`方法。如果两个对象是被`isEqual`认为相等的，它们的 `hash` 方法需要返回一样的值。但是如果  `hash` 返回一样的值，并不能确保他们相等。
 
 这个约定是因为当被存储在集合（如 `NSDictionary` 和 `NSSet` 在底层使用 hash 表数据的数据结构）的时候，如何查找这些对象。
 
@@ -1091,7 +1096,7 @@ UIApplication.sharedApplication.delegate;
         return NO;
     }
 
-    // check objects properties (name and birthday) for equality
+    // check objects properties (name and birthday) for equality （检查对象属性（名字和生日）的相等性
     ...
     return propertiesMatch;
 }
@@ -1173,7 +1178,7 @@ UIApplication.sharedApplication.delegate;
 ```
 
 
-分类可以用来在头文件中定义一组功能相似的方法。这是在 Apple的 Framework 也很常见的一个实践（下面例子的取自`NSDate` 头）。我们也强烈建议在自己的代码中这样使用。
+分类可以用来在头文件中定义一组功能相似的方法。这是在 Apple的 Framework 也很常见的一个实践（下面例子的取自`NSDate` 头文件）。我们也强烈建议在自己的代码中这样使用。
 
 我们的经验是，创建一组分类对以后的重构十分有帮助。一个类的接口增加的时候，可能意味着你的类做了太多事情，违背了类的单一功能原则。 
 
@@ -1217,8 +1222,6 @@ UIApplication.sharedApplication.delegate;
 
 一个幼稚的方法是创建一个 `UITableViewController` 的子类，并且把所有的检索订阅数据，解析以及展示的逻辑放在一起，或者说是一个 MVC (Massive View Controller)。这可以跑起来，但是它的设计非常糟糕，不过它足够过一些要求不高的面试了。
 
-A minimal step forward would be to follow the Single Responsibility Principle and create at least 2 components to do the different tasks:
-
 最小的步骤是遵从单一功能原则，创建至少两个组成部分来完成这个任务：
 
 - 一个 feed 解析器来解析搜集到的结果
@@ -1254,7 +1257,7 @@ A minimal step forward would be to follow the Single Responsibility Principle an
 ```
 
 
-`ZOCFeedParser` 用一个 `NSURL` 来初始化来获取 RSS 订阅（在这之下可能会使用 NSXMLParser 和 NSXMLParserDelegate 创建有意义的数据），`ZOCTableViewController` 会用这个 parser 来进行初始化。 我们希望它显示 parser 接受到的指并且我们用下面的 protocol 实现委托：
+`ZOCFeedParser` 用一个 `NSURL` 来初始化来获取 RSS 订阅（在这之下可能会使用 NSXMLParser 和 NSXMLParserDelegate 创建有意义的数据），`ZOCTableViewController` 会用这个 parser 来进行初始化。 我们希望它显示 parser 接受到的值并且我们用下面的 protocol 实现委托：
 
 
 ```objective-c
@@ -1292,12 +1295,10 @@ feedParser.delegate = tableViewController;
 到目前你可能觉得你的代码还是不错的，但是有多少代码是可以有效复用的呢？view controller 只能处理 `ZOCFeedParser` 类型的对象： 从这点来看我们只是把代码分离成了两个组成部分，而没有做任何其他有价值的事情。
 
 
-view controller 的职责应该是“从<someone>上显示一些内容”，但是如果我们只允许传递`ZOCFeedParser`的话就不是这样的了。这就表现了需要传递给 View controller 一个更泛型的对象的需求。
+view controller 的职责应该是“显示某些东西提供的内容”，但是如果我们只允许传递`ZOCFeedParser`的话，就不是这样的了。这就体现了需要传递给 view controller 一个更泛型的对象的需求。
 
 
-We modify our feed parser introducing the `ZOCFeedParserProtocol` protocol (in the ZOCFeedParserProtocol.h file where also `ZOCFeedParserDelegate` will be).
-
-我们使用  `ZOCFeedParserProtocol` 这个 protocol (在 ZOCFeedParserProtocol.h 文件里面，同时文件里也有 `ZOCFeedParserDelegate` )
+我们使用  `ZOCFeedParserProtocol` 这个 protocol (在 ZOCFeedParserProtocol.h 文件里面，同时文件里也有 `ZOCFeedParserDelegate` )。
 
 ```objective-c
 
@@ -1323,7 +1324,7 @@ We modify our feed parser introducing the `ZOCFeedParserProtocol` protocol (in t
 ```
 
 
-注意这个代理 protocol 现在处理响应我们新的 protocol 而且 ZOCFeedParser 的接口文件更加精炼了：
+注意这个代理 protocol 现在处理响应我们新的 protocol， 而且 ZOCFeedParser 的接口文件更加精炼了：
 
 ```objective-c
 
@@ -1357,13 +1358,13 @@ We modify our feed parser introducing the `ZOCFeedParserProtocol` protocol (in t
 - `ZOCViewController` （UI逻辑部分）可以被复用
 - 测试更简单了，因为可以用 mock 对象来达到 protocol 预期的效果
 
-当实现一个 protocol 你总应该坚持 [里氏替换原则](http://en.wikipedia.org/wiki/Liskov_substitution_principle)。这个原则让你应该取代任意接口（也就是Objective-C里的的"protocol"）实现，而不用改变客户端或者相关实现。
+当实现一个 protocol 你总应该坚持 [里氏替换原则](http://en.wikipedia.org/wiki/Liskov_substitution_principle)。这个原则是：你应该可以取代任意接口（也就是Objective-C里的的"protocol"）实现，而不用改变客户端或者相关实现。
 
 此外这也意味着你的 protocol 不应该关注实现类的细节，更加认真地设计你的  protocol  的抽象表述的时候，需要注意它和底层实现是不相干的，协议是暴露给使用者的抽象概念。
 
 任何可以在未来复用的设计意味着可以提高代码质量，同时也是程序员的目标。是否这样设计代码，就是大师和菜鸟的区别。
 
-最后的代码可以在这找到。[here](http://github.com/albertodebortoli/ADBFeedReader).
+最后的代码可以在[这里](http://github.com/albertodebortoli/ADBFeedReader) 找到。
 
 
 
@@ -1415,10 +1416,10 @@ if (user.isHappy)
 
 
 
-*　方法之间应该要有一个空行来帮助提高阅读清晰度以及组织代码。 方法内的空白应该用来分离功能，但是通常不同的功能应该用新的方法来定义。
+* 方法之间应该要有一个空行来帮助提高阅读清晰度以及组织代码。 方法内的空白应该用来分离功能，但是通常不同的功能应该用新的方法来定义。
 优先使用 auto-synthesis。但是如果必要的话， `@synthesize` and `@dynamic` 
 * 应该在实现文件中的声明应该新起一行。
-* 应该总是让冒号对其。有一些方法签名可能超过三个冒号，用冒号对齐可以让代码更具有可读性。总是用冒号对其方法，即使有代码块存在。
+* 应该总是让冒号对齐。有一些方法签名可能超过三个冒号，用冒号对齐可以让代码更具有可读性。即使有代码块存在，也应该用冒号对其方法。
 
 
 **推荐:**
@@ -1446,7 +1447,7 @@ if (user.isHappy)
 
 如果自动对齐让可读性变得糟糕，那么应该在之前把 block 定义为变量，或者重新考虑你的代码签名设计。
 
-### Line Breaks 换行
+###  换行
 
 本指南关注代码显示效果以及在线浏览的可读性，所以换行是一个重要的主题。
 
@@ -1601,7 +1602,7 @@ NSURL *url = ({
 ## 明确编译器警告和错误
 
 
-编译器是一个机器人，它会标记你代码中被 Clang 规则定义为错误的地方。但是，你总是比 Clang 更聪明。通常，你会发现一些讨厌的代码 会导致这个问题，而且不论怎么做，你都解决不了。你可以这样明确一个错误：
+编译器是一个机器人，它会标记你代码中被 Clang 规则定义为错误的地方。但是，你总是比 Clang 更聪明。通常，你会发现一些讨厌的代码会导致这个问题，但是暂时却解决不了。你可以这样明确一个错误：
 
 
 ```objective-c
@@ -1613,7 +1614,7 @@ NSURL *url = ({
 ```
 
 
-类似的，你可以这样标明一个 警告
+类似的，你可以这样标明一个警告
 
 
 ```objective-c
@@ -1632,7 +1633,7 @@ NSURL *url = ({
 ## 字符串文档
 
 
-所有重要的方法，接口，分类以及协议定义应该有伴随的注释来解释它们的用途以及如何使用。更多的例子可以看 Google 代码风格指南 [File and Declaration Comments](http://google-styleguide.googlecode.com/svn/trunk/objcguide.xml#File_Comments)。
+所有重要的方法，接口，分类以及协议定义应该有伴随的注释来解释它们的用途以及如何使用。更多的例子可以看 Google 代码风格指南中的 [File and Declaration Comments](http://google-styleguide.googlecode.com/svn/trunk/objcguide.xml#File_Comments)。
 
 简而言之：有长的和短的两种字符串文档。
 
@@ -1668,9 +1669,9 @@ NSURL *url = ({
 
 ##  注释
 
-当它需要的时候，注释应该用来解释特定的代码做了什么。所有的注释必须被持续维护或者干脆就删除。
+当它需要的时候，注释应该用来解释特定的代码做了什么。所有的注释必须被持续维护或者干脆就删掉。
 
-块注释应该被避免，代码本身应该尽可能就像文档一样表示意图，只需要很少的打断注释  *例外： 这不能适用于用来产生文档的注释*
+块注释应该被避免，代码本身应该尽可能就像文档一样表示意图，只需要很少的打断注释。  *例外： 这不能适用于用来产生文档的注释*
 
 ###  头文档
 
