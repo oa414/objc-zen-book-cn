@@ -994,7 +994,7 @@ UIApplication.sharedApplication.delegate;
 @property (nonatomic, readonly) NSObject *object
 @end
 
-@implementation MyClass ()
+@interface MyClass ()
 @property (nonatomic, readwrite, strong) NSObject *object
 @end
 ```
@@ -2489,7 +2489,7 @@ NSDictionary *analyticsConfiguration()
 
 其他：
 
-* [Objcetive-Clean](http://objclean.com): an attempt to write a standard for writing Objective-C code with Xcode integration;
+* [Objective-Clean](http://objclean.com): an attempt to write a standard for writing Objective-C code with Xcode integration;
 * [Uncrustify](http://uncrustify.sourceforge.net/): source code beautifier.
 
 ### 其他的 Objective-C 风格指南
