@@ -35,7 +35,7 @@
     * [instancetype](#instancetype)
         * [参考](#参考)
     * [初始化模式](#初始化模式)
-      * [类簇 （class cluster)](#类簇-（class-cluster))
+      * [类簇 （class cluster)](#类簇-（class-cluster）)
       * [单例](#单例)
   * [属性](#属性)
       * [Init 和 Dealloc](#init-和-dealloc)
@@ -43,7 +43,7 @@
     * [属性定义](#属性定义)
       * [私有属性](#私有属性)
     * [可变对象](#可变对象)
-    * [懒加载](#懒加载)
+    * [懒加载 (Lazy Loading)](#懒加-（lazy-loading）)
   * [方法](#方法)
     * [参数断言](#参数断言)
     * [私有方法](#私有方法)
@@ -1041,8 +1041,7 @@ UIApplication.sharedApplication.delegate;
 }
 ```
 
-### 懒加载
-
+### 懒加载（Lazy Loading）
 
 当实例化一个对象可能耗费很多资源的，或者需要只配置一次并且有一些配置方法需要调用，而且你还不想弄乱这些方法。
 
