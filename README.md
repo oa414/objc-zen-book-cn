@@ -65,8 +65,8 @@
   * [注释](#注释)
     * [头文档](#头文档)
 * [对象间的通讯](#对象间的通讯)
-  * [Blocks](#blocks)
-    * [深入 Blocks](#深入-blocks)
+  * [Block](#blocks)
+    * [深入 Block](#深入-block)
     * [self 的循环引用](#self-的循环引用)
   * [委托和数据源](#委托和数据源)
     * [继承](#继承)
@@ -445,7 +445,7 @@ static const NSTimeInterval ZOCSignInViewControllerFadeOutAnimationDuration = 0.
 static const NSTimeInterval fadeOutTime = 0.4;
 ```
 
-常量应该尽量使用 in-line 的字符串字面值或者数字，这样便于经常用到的时候复用，并且可以快速修改而避免查找和替换。 常量应该用 `static` 声明，不要使用 `#define`，除非它就是明确作为一个宏来用的。
+常量应该尽量使用一致的字符串字面值或者数字，这样便于经常用到的时候复用，并且可以快速修改而避免查找和替换。 常量应该用 `static` 声明，不要使用 `#define`，除非它就是明确作为一个宏来用的。
 
 **推荐:**
 ```objective-c
@@ -538,7 +538,7 @@ NSMutableArray *aMutableArray = [@[] mutableCopy];
 
 ##  类名
  
-类名应加上**三**个大写字母作为前缀（两个字母的为 Apple 的类保留）。虽然这个规范看起来难看，但是这样做可以减少 objective-c 没有命名空间所带来的问题。
+类名应加上**三**个大写字母作为前缀（两个字母的为 Apple 的类保留）。虽然这个规范看起来难看，但是这样做可以减少 Objective-c 没有命名空间所带来的问题。
 
 一些开发者在定义 Model 对象时并不遵循这个规范（对于 Core Data 对象，我们更应该遵循这个规范）。我们建议在定义 Core Data 对象时严格遵循这个约定，因为你最后可能把你的 Managed Object Model （托管对象）合并到其他（第三方库）的 Managed Object Model 。
 
@@ -580,7 +580,7 @@ NSMutableArray *aMutableArray = [@[] mutableCopy];
 
 
 关于 `init` 有一个另外的重要的约定：这个方法可以（并且应该）在不能成功完成初始化的时候返回 `nil`；初始化可能因为各种原因失败，比如一个输入的格式错误，或者未能成功初始化一个需要的对象。
-这样我们就理解了为什么需要总是调用  `self = [super init]`。如果你的超类没有成功初始化它自己，你必须假设你在一个矛盾的状态，并且在你的实现中不要处理你自己的初始化逻辑，同时返回 `nil`。如果你不是这样做，你看你会得到一个不能用的对象，并且它的行为是不可预测的，最终可能会导致你的 app 发生 crash。
+这样我们就理解了为什么需要总是调用  `self = [super init]`。如果你的超类没有成功初始化它自己，你必须假设你在一个矛盾的状态，并且在你的实现中不要处理你自己的初始化逻辑，同时返回 `nil`。如果你不是这样做，你看你会得到一个不能用的对象，并且它的行为是不可预测的，最终可能会导致你的 App 发生 crash。
 
 重新给 `self` 赋值同样可以被 `init` 利用为在被调用的时候返回不同的实例。一个例子是 [类簇](#class-cluster) 或者其他的返回相同的（不可变的）实例对象的 Cocoa 类。
 
@@ -1071,7 +1071,7 @@ UIApplication.sharedApplication.delegate;
 
 
 * getter　方法不应该有副作用。在使用 getter 方法的时候你不要想着它可能会创建一个对象或者导致副作用，事实上，如果调用 getter 方法的时候没有涉及返回的对象，编译器就会放出警告：getter 不应该产生副作用
-* 你在第一次访问的时候改变了初始化的消耗，产生了副作用，这回让优化性能变得困难（以及测试）
+* 你在第一次访问的时候改变了初始化的消耗，产生了副作用，这会让优化性能变得困难（以及测试）
 * 这个初始化可能是不确定的：比如你期望属性第一次被一个方法访问，但是你改变了类的实现，访问器在你预期之前就得到了调用，这样可以导致问题，特别是初始化逻辑可能依赖于类的其他不同状态的时候。总的来说最好明确依赖关系。
 * 这个行为不是 KVO 友好的。如果 getter 改变了引用，他应该通过一个  KVO 通知来通知改变。当访问 getter 的时候收到一个改变的通知很奇怪。
 
@@ -1429,7 +1429,7 @@ if (user.isHappy)
 * 方法之间应该要有一个空行来帮助代码看起来清晰且有组织。 方法内的空格应该用来分离功能，但是通常不同的功能应该用新的方法来定义。
 * 优先使用 auto-synthesis。但是如果必要的话， `@synthesize` and `@dynamic` 
 * 在实现文件中的声明应该新起一行。
-* 应该总是让冒号对齐。有一些方法签名可能超过三个冒号，用冒号对齐可以让代码更具有可读性。即使有代码块存在，也应该用冒号对其方法。
+* 应该总是让冒号对齐。有一些方法签名可能超过三个冒号，用冒号对齐可以让代码更具有可读性。即使有代码块存在，也应该用冒号对齐方法。
 
 
 **推荐:**
@@ -1707,9 +1707,9 @@ NSURL *url = ({
 
 对象之间需要通信，这也是所有软件的基础。再非凡的软件也需要通过对象通信来完成复杂的目标。本章将深入讨论一些设计概念，以及如何依据这些概念来设计出良好的架构。
 
-## Blocks 
+## Block 
 
-Blocks 是 Objective-C 版本的 lambda 或者 closure（闭包）。
+Block 是 Objective-C 版本的 lambda 或者 closure（闭包）。
 
 使用 block 定义异步接口:
 
@@ -1751,7 +1751,7 @@ Blocks 是 Objective-C 版本的 lambda 或者 closure（闭包）。
 
 此外，Apple 提供的一些同步接口在成功状态下向 error 参数（如果非 NULL) 写入了垃圾值，所以检查 error 的值可能出现问题。
 
-### 深入 Blocks
+### 深入 Block
 
 一些关键点：
 
@@ -1771,13 +1771,13 @@ Blocks 是 Objective-C 版本的 lambda 或者 closure（闭包）。
 最重要的事情是 `__block` 声明的变量和指针在 block 里面是作为显示操作真实值/对象的结构来对待的。
 
 
-block 在 Objective-C 里面被当作一等公民对待：他们有一个 `isa` 指针，一个类也是用 `isa` 指针来访问 Objective-C 运行时来访问方法和存储数据的。在非 ARC 环境肯定会把它搞得很糟糕，并且悬挂指针会导致 Crash。`__block` 仅仅对 block 内的变量起作用，它只是简单地告诉 block：
+block 在 Objective-C 里面被当作一等公民对待：他们有一个 `isa` 指针，一个类也是用 `isa` 指针来访问 Objective-C 运行时来访问方法和存储数据的。在非 ARC 环境肯定会把它搞得很糟糕，并且悬挂指针会导致 crash。`__block` 仅仅对 block 内的变量起作用，它只是简单地告诉 block：
 
 > 嗨，这个指针或者原始的类型依赖它们在的栈。请用一个栈上的新变量来引用它。我是说，请对它进行双重解引用，不要 retain 它。
 谢谢，哥们。
 
 
-如果在定义之后但是 block 没有被调用前，对象被释放了，那么 block 的执行会导致 Crash。 `__block`  变量不会在 block 中被持有，最后... 指针、引用、解引用以及引用计数变得一团糟。
+如果在定义之后但是 block 没有被调用前，对象被释放了，那么 block 的执行会导致 crash。 `__block`  变量不会在 block 中被持有，最后... 指针、引用、解引用以及引用计数变得一团糟。
 
 [blocks_uth1]:  http://developer.apple.com/library/ios/#documentation/cocoa/Conceptual/Blocks/Articles/00_Introduction.html
 [blocks_uth2]: http://ios-blog.co.uk/tutorials/programming-with-blocks-an-overview/
@@ -1786,7 +1786,7 @@ block 在 Objective-C 里面被当作一等公民对待：他们有一个 `isa` 
 ###  self 的循环引用
 
 
-当使用代码块和异步分发的时候，要注意避免引用循环。 总是使用 `weak` 引用会导致引用循环。 此外，把持有 blocks 的属性设置为 nil (比如 `self.completionBlock = nil`) 是一个好的实践。它会打破 blocks 捕获的作用域带来的引用循环。
+当使用代码块和异步分发的时候，要注意避免引用循环。 总是使用 `weak` 引用会导致引用循环。 此外，把持有 block 的属性设置为 nil (比如 `self.completionBlock = nil`) 是一个好的实践。它会打破 block 捕获的作用域带来的引用循环。
 
 
 **例子:**
@@ -1844,7 +1844,7 @@ __strong __typeof(weakSelf)strongSelf = weakSelf;
 3. 在 block 外定义一个 `__weak` 的 引用到 self，并在在 block 内部通过这个弱引用定义一个 `__strong`  的引用。
 
 
-**1. 直接在 block 里面使用关键词 `self`**
+**方案 1. 直接在 block 里面使用关键词 `self`**
 
 如果我们直接在 block 里面用 self 关键字，对象会在 block 的定义时候被 retain，（实际上 block 是 [copied][blocks_caveat13]  但是为了简单我们可以忽略这个）。一个 const 的对 self 的引用在 block 里面有自己的位置并且它会影响对象的引用计数。如果 block 被其他 class 或者/并且传送过去了，我们可能想要 retain  self 就像其他被 block 使用的对象，从他们需要被block执行
 
@@ -1881,7 +1881,7 @@ Capturing 'self' strongly in this block is likely to lead to a retain cycle （�
 ```
 所以可以用 `weak` 修饰
 
-**2. 在 block 外定义一个 `__weak` 的 引用到 self，并且在 block 里面使用这个弱引用**
+**方案 2. 在 block 外定义一个 `__weak` 的 引用到 self，并且在 block 里面使用这个弱引用**
 
 
 这样会避免循环引用，也是我们通常在 block 已经被 self 的 property 属性里面 retain 的时候会做的。
@@ -1905,7 +1905,7 @@ MyViewController *myController = [[MyViewController alloc] init...];
 
 下面的更有意思。
 
-**3. 在 block 外定义一个 `__weak` 的 引用到 self，并在在 block 内部通过这个弱引用定义一个 `__strong`  的引用**
+**方案 3. 在 block 外定义一个 `__weak` 的 引用到 self，并在在 block 内部通过这个弱引用定义一个 `__strong`  的引用**
 
 你可能会想，首先，这是避免 retain cycle  警告的一个技巧。然而不是，这个到 self 的强引用在 *block 的执行时间*　被创建。当 block 在定义的时候， block 如果使用 self 的时候，就会 retain 了 self 对象。
 
@@ -1942,11 +1942,11 @@ myController.completionHandler =  ^(NSInteger result) {
 
 在 block 内用强引用的优点是，抢占执行的时候的鲁棒性。看上面的三个例子，在 block 执行的时候
 
-**1. 直接在 block 里面使用关键词 `self`**
+**方案 1. 直接在 block 里面使用关键词 `self`**
 
 如果 block 被属性 retain，self 和 block 之间会有一个循环引用并且它们不会再被释放。如果 block 被传送并且被其他的对象 copy 了，self 在每一个 copy 里面被 retain
 
-**2. 在 block 外定义一个 `__weak` 的 引用到 self，并且在 block 里面使用这个弱引用**
+**方案 2. 在 block 外定义一个 `__weak` 的 引用到 self，并且在 block 里面使用这个弱引用**
 
 没有循环引用的时候，block 是否被 retain 或者是一个属性都没关系。如果 block 被传递或者 copy 了，在执行的时候，weakSelf 可能会变成 nil。
 
@@ -1961,7 +1961,7 @@ dispatch_block_t block =  ^{
 };
 ```
 
-** 3. 在 block 外定义一个 `__weak` 的 引用到 self，并在在 block 内部通过这个弱引用定义一个 `__strong`  的引用。**
+**方案 3. 在 block 外定义一个 `__weak` 的 引用到 self，并在在 block 内部通过这个弱引用定义一个 `__strong`  的引用。**
 
 不论管 block 是否被 retain 或者是一个属性，这样也不会有循环引用。如果 block 被传递到其他对象并且被复制了，执行的时候，weakSelf 可能被nil，因为强引用被复制并且不会变成nil的时候，我们确保对象 在 block 调用的完整周期里面被 retain了，如果抢占发生了，随后的对 strongSelf 的执行会继续并且会产生一样的值。如果 strongSelf 的执行到 nil，那么在 block 不能正确执行前已经返回了。
 
@@ -1999,11 +1999,11 @@ myObj.myBlock =  ^{
 
 在最后
 
-* **1**: 只能在 block 不是作为一个 property 的时候使用，否则会导致 retain cycle。
+* **方案 1**: 只能在 block 不是作为一个 property 的时候使用，否则会导致 retain cycle。
 
-* **2**:  当 block 被声明为一个 property 的时候使用。
+* **方案 2**:  当 block 被声明为一个 property 的时候使用。
 
-* **3**: 和并发执行有关。当涉及异步的服务的时候，block 可以在之后被执行，并且不会发生关于 self 是否存在的问题。
+* **方案 3**: 和并发执行有关。当涉及异步的服务的时候，block 可以在之后被执行，并且不会发生关于 self 是否存在的问题。
 
 [blocks_caveat1]: http://developer.apple.com/library/mac/#releasenotes/ObjectiveC/RN-TransitioningToARC/Introduction/Introduction.html
 [blocks_caveat2]: http://dhoerl.wordpress.com/2013/04/23/i-finally-figured-out-weakself-and-strongself/
@@ -2104,7 +2104,7 @@ myObj.myBlock =  ^{
 @end
 ```
 
-对于可选的方法，委托者必须在发送消息前检查委托是否确实实现了特定的方法（否则会Crash）：
+对于可选的方法，委托者必须在发送消息前检查委托是否确实实现了特定的方法（否则会 crash）：
 
 ```objective-c
 if ([self.delegate respondsToSelector:@selector(signUpViewControllerDidPressSignUpButton:)]) {
@@ -2146,7 +2146,7 @@ if ([self.delegate respondsToSelector:@selector(signUpViewControllerDidPressSign
 [super respondsToSelector:@selector(tableView:heightForRowAtIndexPath:)]
 ```
 
-会用 NSObject 的实现，寻找，在 `self` 的上下文中无疑有它的实现，但是 app 会在下一行 Crash 并且报下面的错：
+会用 NSObject 的实现，寻找，在 `self` 的上下文中无疑有它的实现，但是 App 会在下一行 crash 并且报下面的错：
 
 ```
 *** Terminating app due to uncaught exception 'NSInvalidArgumentException', reason: '-[UIViewControllerB tableView:heightForRowAtIndexPath:]: unrecognized selector sent to instance 0x8d82820'
