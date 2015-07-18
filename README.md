@@ -1,6 +1,7 @@
 # 禅与 Objective-C 编程艺术 （Zen and the Art of the Objective-C Craftsmanship 中文翻译）
 
-原文 <https://github.com/objc-zen/objc-zen-book>
+- 原文 <https://github.com/objc-zen/objc-zen-book>
+- Gitbook 链接(包含 PDF, mobi, epub 格式): <http://yourtion.gitbooks.io/objc-zen-book-cn/> (感谢 [yourtion](https://github.com/yourtion) 整理 )
 
 
 ![](./images/zen-logo-thumb.png)
