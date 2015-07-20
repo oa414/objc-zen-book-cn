@@ -401,7 +401,7 @@ switch (menuType) {
 
 当使用 `enum` 的时候，建议使用新的固定的基础类型定义，因它有更强大的的类型检查和代码补全。 SDK 现在有一个 宏来鼓励和促进使用固定类型定义 - `NS_ENUM()`
 
-**例子: **
+**例子:**
 
 ```objective-c
 typedef NS_ENUM(NSUInteger, ZOCMachineState) {
