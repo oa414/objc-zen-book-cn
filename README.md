@@ -852,7 +852,7 @@ Class clusters 在 Apple 的Framework 中广泛使用：一些明显的例子比
 ```
 
 
-上面的代码的例子展示了如何创建一个类簇。首先，`[self isMemberOfClass:ZOCKintsugiPhotoViewController.class]`  来避免在子类中重载初始化方法，来避免无限的递归。当  `[[ZOCKintsugiPhotoViewController alloc] initWithPhotos:photos]` 得到调用的时候之前的检查会变成 true 的，`self = nil` 是用来移除所有到 `ZOCKintsugiPhotoViewController` 实例的引用的，它会被释放，按照这个逻辑来检查哪个类应该被初始化。
+上面的代码的例子展示了如何创建一个类簇。首先，`[self isMemberOfClass:ZOCKintsugiPhotoViewController.class]`  来避免在子类中重载初始化方法，来避免无限的递归。当  `[[ZOCKintsugiPhotoViewController alloc] initWithPhotos:photos]` 得到调用的时候之前的检查则为 true ，`self = nil` 是用来移除将被释放的`ZOCKintsugiPhotoViewController` 实例的所有引用，接下来是检查哪个类应该被初始化的逻辑。
 让我们假设在 iPhone 上运行了这个代码， `ZOCKintsugiPhotoViewController_iPhone` 没有重载`initWithPhotos:`，在这个情况下，当执行 `self = [[ZOCKintsugiPhotoViewController_iPhone alloc] initWithPhotos:photos];` 的时候，`ZOCKintsugiPhotoViewController`  会被调用，并且当第一次检查的时候，这样不会让 `ZOCKintsugiPhotoViewController`  检查会变成 false 调用`return [super initWithNibName:nil bundle:nil];` ，这会让 继续初始化执行正确的初始化之前的会话。
 
 
