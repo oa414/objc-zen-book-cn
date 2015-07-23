@@ -322,7 +322,7 @@ result = object ? object : [self createObject];
 
 ## 错误处理
 
-当方法返回一个错误参数的引用的时候，检查返回值，而不是错误的变量。
+有些方法通通过参数返回 error 的引用，使用这样的方法时应当检查方法的返回值，而非 error 的引用。
 
 **推荐:**
 ```objective-c
