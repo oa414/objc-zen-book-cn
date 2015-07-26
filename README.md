@@ -898,10 +898,14 @@ Class clusters 在 Apple 的Framework 中广泛使用：一些明显的例子比
  `dispatch_once()`  的优点是，它更快，而且语法上更干净，因为dispatch_once()的意思就是 “把一些东西执行一次”，就像我们做的一样。 这样同时可以避免 [possible and sometimes prolific crashes][singleton_cocoasamurai].
 
 
-经典的使用单例对象的例子是一个设备的 GPS 以及动作传感器。即使单例对象可以被子类化，这个情况也可以十分有用。这个接口应该证明给出的类是趋向于使用单例的。然而，通常使用一个单独的公开的 `sharedInstance` 类方法就够了，并且不可写的属性也应该被暴露。
+经典的单例对象是：一个设备的GPS以及它的加速度传感器(也称动作感应器)。
+虽然单例对象可以子类化，但这种方式能够有用的情况非常少见。
+必须有证据表明，给定类的接口趋向于作为单例来使用。
+所以，单例通常公开一个`sharedInstance`的类方法就已经足够了，没有任何的可写属性需要被暴露出来。
 
+尝试着把单例作为一个对象的容器，在代码或者应用层面上共享，是一个糟糕和丑陋的设计。
 
-把单例作为一个对象的容器来在代码或者应用层面上共享是糟糕和丑陋的，这是一个不好的设计。
+> NOTE：单例模式应该运用于类及类的接口趋向于作为单例来使用的情况 （译者注）
 
 [singleton_cocoasamurai]: http://cocoasamurai.blogspot.com/2011/04/singletons-your-doing-them-wrong.html
 
