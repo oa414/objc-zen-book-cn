@@ -826,7 +826,7 @@ Class clusters 在 Apple 的Framework 中广泛使用：一些明显的例子比
 
 
 ```objective-c
-@implementation 
+@implementation ZOCKintsugiPhotoViewController
 
 - (id)initWithPhotos:(NSArray *)photos
 {
