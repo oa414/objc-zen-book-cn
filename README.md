@@ -800,11 +800,7 @@ designated 初始化方法是提供所有的参数，secondary 初始化方法�
 
 
 
-class cluster 的想法很简单，你经常有一个抽象类在初始化期间处理信息，经常作为一个构造器里面的参数或者环境中读取，来完成特定的逻辑并且实例化子类。这个"public facing" 应该知晓它的子类而且返回适合的私有子类。
-
-
-
-这个模式非常有用，因为它减少了构造器调用中的复杂性，只需要知道接口如何与对象通信，而不需要知道怎么实现。
+class cluster 的想法很简单: 使用信息进行(类的)初始化处理期间，会使用一个抽象类（通常作为初始化方法的参数或者判定环境的可用性参数）来完成特定的逻辑或者实例化一个具体的子类。而这个"Public Facing（面向公众的）"类，必须非常清楚他的私有子类，以便在面对具体任务的时候有能力返回一个恰当的私有子类实例。对调用者来说只需知道对象的各种API的作用即可。这个模式隐藏了他背后复杂的初始化逻辑，调用者也不需要关心背后的实现。
 
 
 Class clusters 在 Apple 的Framework 中广泛使用：一些明显的例子比如  `NSNumber` 可以返回不同类型给你的子类，取决于 数字类型如何提供  (Integer, Float, etc...) 或者 `NSArray` 返回不同的最优存储策略的子类。
@@ -830,7 +826,7 @@ Class clusters 在 Apple 的Framework 中广泛使用：一些明显的例子比
 
 
 ```objective-c
-@implementation ZOCKintsugiPhotoViewController
+@implementation 
 
 - (id)initWithPhotos:(NSArray *)photos
 {
