@@ -744,8 +744,8 @@ designated 初始化方法是提供所有的参数，secondary 初始化方法�
 ####  Secondary Initializer 
 
 
-正如之前的描述么，secondary initializer 是一种方便提供默认值、行为到 designated initializer 的 方法。也就是说，你不应该强制很多初始化操作在这样的方法里面，并且你应该一直假设这个方法不会得到调用。我们保证的是唯一被调用的方法是 designated initializer。
-这意味着你的 designated initializer 总是应该调用其他的 secondary initializer  或者你 `self` 的 designated initializer。有时候，因为错误，可能打成了  `super`，这样会导致不符合上面提及的初始化顺序（在这个特别的例子里面，是跳过当前类的初始化）
+正如之前的描述，secondary initializer 是一种提供默认值、行为到 designated initializer的方法。也就是说，在这样的方法里面你不应该有初始化实例变量的操作，并且你应该一直假设这个方法不会得到调用。我们保证的是唯一被调用的方法是 designated initializer。
+这意味着你的 secondary initializer 总是应该调用 Designated initializer  或者你自定义(上面的第三种情况：自定义Designated initializer)的 `self`的 designated initializer。有时候，因为错误，可能打成了  `super`，这样会导致不符合上面提及的初始化顺序（在这个特别的例子里面，是跳过当前类的初始化）
 
 #####  参考
 
