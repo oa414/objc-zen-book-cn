@@ -419,10 +419,9 @@ typedef NS_ENUM(NSUInteger, ZOCMachineState) {
 
 尽可能遵守 Apple 的命名约定，尤其是和 [内存管理规则](https://developer.apple.com/library/mac/#documentation/Cocoa/Conceptual/MemoryMgmt/Articles/MemoryMgmt.html) ([NARC](http://stackoverflow.com/a/2865194/340508)) 相关的地方。
 
-推荐使用长的、描述性的方法和变量名
+推荐使用长的、描述性的方法和变量名。
 
 **推荐:**
-
 ```objective-c
 UIButton *settingsButton;
 ```
@@ -434,7 +433,7 @@ UIButton *setBut;
 
 ##  常量
 
-常量应该使用驼峰命名法，并且为了清楚，应该用相关的类名作为前缀。
+常量应该以驼峰法命名，并以相关类名作为前缀。
 
 **推荐:**
 ```objective-c
@@ -446,9 +445,10 @@ static const NSTimeInterval ZOCSignInViewControllerFadeOutAnimationDuration = 0.
 static const NSTimeInterval fadeOutTime = 0.4;
 ```
 
-常量应该尽量使用一致的字符串字面值或者数字，这样便于经常用到的时候复用，并且可以快速修改而避免查找和替换。 常量应该用 `static` 声明，不要使用 `#define`，除非它就是明确作为一个宏来用的。
+推荐使用常量来代替字符串字面值和数字，这样能够方便复用，而且可以快速修改而不需要查找和替换。常量应该用 `static` 声明为静态常量，而不要用 `#define`，除非它明确的作为一个宏来使用。
 
 **推荐:**
+
 ```objective-c
 static NSString * const ZOCCacheControllerDidClearCacheNotification = @"ZOCCacheControllerDidClearCacheNotification";
 static const CGFloat ZOCImageThumbnailHeight = 50.0f;
@@ -461,15 +461,14 @@ static const CGFloat ZOCImageThumbnailHeight = 50.0f;
 #define magicNumber 42
 ```
 
-常量应该在 interface 文件中这样被声明：
+常量应该在头文件中以这样的形式暴露给外部：
 
 ```objective-c
 extern NSString *const ZOCCacheControllerDidClearCacheNotification;
 ```
+并在实现文件中为它赋值。
 
-并且应该在实现文件中实现它的定义。
-
-你只需要为公开的常量添加命名空间前缀。尽管私有常量在实现文件中可能以不同的模式使用，你也没有必要不坚持这个规则。
+只有公有的常量才需要添加命名空间作为前缀。尽管命名实现文件中的私有常量可以遵循另外一种模式，你仍旧可以遵循这个规则。
 
 
 ##  方法
