@@ -472,11 +472,10 @@ extern NSString *const ZOCCacheControllerDidClearCacheNotification;
 
 
 ##  方法
- 
-对于方法签名，在方法类型 (`-`/`+` 符号)后应该要有一个空格。方法段之间也应该有一个空格（来符合 Apple 的规范）。在参数名称之前总是应该有一个描述性的关键词。
 
+方法名与方法类型 (`-`/`+` 符号)之间应该以空格间隔。方法段之间也应该以空格间隔（以符合 Apple 风格）。参数前应该总是有一个描述性的关键词。
 
-使用“and”命名的时候应当更加谨慎。它不应该用作阐明有多个参数，比如下面的`initWithWidth:height:` 例子：
+尽可能少用 "and" 这个词。它不应该用来阐明有多个参数，比如下面的 `initWithWidth:height:` 这个例子：
 
 **推荐:**
 ```objective-c
