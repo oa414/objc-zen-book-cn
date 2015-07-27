@@ -466,10 +466,9 @@ static const CGFloat ZOCImageThumbnailHeight = 50.0f;
 ```objective-c
 extern NSString *const ZOCCacheControllerDidClearCacheNotification;
 ```
-
 并在实现文件中为它赋值。
 
-你只需要为公开的常量添加命名空间前缀。尽管私有常量在实现文件中可能以不同的模式使用，你也没有必要不坚持这个规则。
+只有公有的常量才需要添加命名空间作为前缀。尽管命名实现文件中的私有常量可以遵循另外一种模式，你仍旧可以遵循这个规则。
 
 
 ##  方法
