@@ -546,11 +546,10 @@ NSMutableArray *aMutableArray = [@[] mutableCopy];
 
 ## Initializer 和 dealloc 
 
-推荐的代码组织方式：将 `dealloc` 方法放在实现文件的最前面（直接在  `@synthesize` 以及 `@dynamic` 之后），`init` 应该放在 `dealloc`  之后。如果有多个初始化方法， designated initializer 应该放在第一个，secondary initializer 在之后紧随，这样逻辑性更好。
+推荐的代码组织方式是将 `dealloc` 方法放在实现文件的最前面（直接在  `@synthesize` 以及 `@dynamic` 之后），`init` 应该跟在 `dealloc` 方法后面。如果有多个初始化方法， 指定初始化方法应该放在最前面，次要初始化方法跟在后面，这样更有逻辑性。
 如今有了 ARC，dealloc 方法几乎不需要实现，不过把 init 和 dealloc 放在一起可以从视觉上强调它们是一对的。通常，在 init 方法中做的事情需要在 dealloc 方法中撤销。
 
 `init` 方法应该是这样的结构：
-
 
 ```objective-c
 - (instancetype)init
@@ -566,11 +565,9 @@ NSMutableArray *aMutableArray = [@[] mutableCopy];
 
 为什么设置 `self` 为 `[super init]` 的返回值，以及中间发生了什么呢？这是一个十分有趣的话题。
 
-让我们后退一步：我们一直写类似 `[[NSObject alloc] init]` 的表达式，而淡化了 `alloc` 和 `init` 的区别 。一个 Objective-C 的特性叫 *两步创建* 。 这意味着申请分配内存和初始化是两个分离的操作。
-
-- `alloc`表示对象分配内存，这个过程涉及分配足够的可用内存来保存对象，写入`isa`指针，初始化 retain 的计数，并且初始化所有实例变量。
-- `init` 是表示初始化对象，这意味着把对象转换到了个可用的状态。这通常是指把可用的值赋给了对象的实例变量。
-
+我们退一步讲：我们常常写 `[[NSObject alloc] init]` 这样的代码，从而淡化了 `alloc` 和 `init` 的区别。Objective-C 的这个特性叫做 *两步创建* 。 这意味着申请分配内存和初始化被分离成两步，`alloc` and `init`。
+- `alloc` 负责为对象申请内存，这个过程涉及申请足够的可用内存来保存对象，写入 `isa` 指针，初始化引用计数，以及重置所有实例变量。
+- `init` 负责初始化对象，也就是说使对象处于可用状态。这通常意味着为对象的实例变量赋予合理有用的值。
 
 `alloc` 方法会返回一个合法的没有初始化的实例对象。每一个发送到实例的消息会被翻译为`objc_msgSend()` 函数的调用，它的参数是指向 `alloc` 返回的对象的、名为 `self` 的指针的。这样之后 `self` 已经可以执行所有方法了。
 为了完成两步创建，第一个发送给新创建的实例的方法应该是约定俗成的 `init` 方法。注意在 `NSObject` 的 `init` 实现中，仅仅是返回了 `self`。
@@ -581,7 +578,7 @@ NSMutableArray *aMutableArray = [@[] mutableCopy];
 
 重新给 `self` 赋值同样可以被 `init` 利用为在被调用的时候返回不同的实例。一个例子是 [类簇](#class-cluster) 或者其他的返回相同的（不可变的）实例对象的 Cocoa 类。
 
-### Designated 和 Secondary Initializers
+### 指定初始化方法 和 次要初始化方法
 
 
 Objective-C 有 designated 和 secondary 初始化方法的观念。
