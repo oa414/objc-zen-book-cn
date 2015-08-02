@@ -1019,7 +1019,7 @@ UIApplication.sharedApplication.delegate;
 
 ```
 
-如果 `BOOL` 属性的名字是描述性的，这个属性可以省略 "is" ，但是特定要在 get 访问器中指定名字，如：
+描述`BOOL`属性的词如果是形容词，那么setter不应该带`is`前缀，但它对应的getter访问器应该带上这个前缀，如：
 
 ```objective-c
 @property (assign, getter=isEditable) BOOL editable;
@@ -1027,12 +1027,12 @@ UIApplication.sharedApplication.delegate;
 
 文字和例子引用自 [Cocoa Naming Guidelines](https://developer.apple.com/library/mac/#documentation/Cocoa/Conceptual/CodingGuidelines/Articles/NamingIvarsAndTypes.html#//apple_ref/doc/uid/20001284-BAJGIIJE)。
 
-为了避免 `@synthesize` 的使用，在实现文件中，Xcode已经自动帮你添加了。
+在实现文件中应避免使用`@synthesize`,因为Xcode已经(自动)为你添加了。。
 
 #### 私有属性
 
 
-私有属性应该在类实现文件的类拓展（class extensions，没有名字的 categories 中）中。有名字的 categories（如果 `ZOCPrivate`）不应该使用，除非拓展另外的类。
+私有属性应该定义在类的实现文件的类的扩展(匿名类别)中。不允许在署名的类别(如 `ZOCPrivate`）中定义私有属性，除非你扩展其他类。
 
 **例子:**
 
@@ -1061,7 +1061,7 @@ UIApplication.sharedApplication.delegate;
 }
 ```
 
-### 懒加载（Lazy Loading）
+### 延迟加载（Lazy Loading）
 
 当实例化一个对象可能耗费很多资源的，或者需要只配置一次并且有一些配置方法需要调用，而且你还不想弄乱这些方法。
 
