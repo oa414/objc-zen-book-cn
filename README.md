@@ -969,13 +969,16 @@ NSString * text;
 当使用 setter getter 方法的时候尽量使用点符号。应该总是用点符号来访问以及设置属性。
 
 **例子:**
-```objective-c
+
+```Objective-C
 view.backgroundColor = [UIColor orangeColor];
 [UIApplication sharedApplication].delegate;
+
 ```
 
 **不要这样:**
-```objective-c
+
+```Objective-C
 [view setBackgroundColor:[UIColor orangeColor]];
 UIApplication.sharedApplication.delegate;
 ```
@@ -991,7 +994,7 @@ UIApplication.sharedApplication.delegate;
 @property (nonatomic, readwrite, copy) NSString *name;
 ```
 
-属性的参数应该按照下面的顺序排列： 原子性，读写 和 内存管理。 这样做你的属性更容易修改正确，并且更好阅读。
+参数的顺序排列：原子性、读写属性和内存管理权限符。(因为习惯上修改某个属性的修饰符时，一般是这样搜索的：先找属性名"name",然后从右向左搜索需要修动的修饰符。)最可能从最右边开始修改这些属性的修饰符，(根据经验这些修饰符被修改的可能性从高到底应为：内存管理===>读写权限===>原子操作，所以从人体工程学设计的角度考虑，这样)更容易被眼睛扫描到。
 
 你必须使用 `nonatomic`，除非特别需要的情况。在iOS中，`atomic`带来的锁特别影响性能。
 
@@ -1001,13 +1004,19 @@ UIApplication.sharedApplication.delegate;
 为了完成一个共有的 getter 和一个私有的 setter，你应该声明公开的属性为 `readonly`  并且在类扩展总重新定义通用的属性为 `readwrite` 的。
 
 ```objective-c
+//.h文件中
 @interface MyClass : NSObject
-@property (nonatomic, readonly) NSObject *object
+@property (nonatomic, readonly, strong) NSObject *object;
+@end
+//.m文件中
+@interface MyClass ()
+@property (nonatomic, readwrite, strong) NSObject *object;
 @end
 
-@interface MyClass ()
-@property (nonatomic, readwrite, strong) NSObject *object
+@implementation MyClass
+//Do Something cool
 @end
+
 ```
 
 如果 `BOOL` 属性的名字是描述性的，这个属性可以省略 "is" ，但是特定要在 get 访问器中指定名字，如：
