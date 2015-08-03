@@ -1136,7 +1136,8 @@ UIApplication.sharedApplication.delegate;
 ```
 
 
-一定要注意 hash 方法不能返回一个常量。这是一个典型的错误并且会导致严重的问题，因为使用了这个值作为 hash 表的 key，会导致 hash 表 100%的碰撞
+一定要注意 hash 方法不能返回一个常量。这是一个典型的错误并且会导致严重的问题，因为实际上`hash`方法的返回值会作为对象在hash散列表中的key,这会导致hash表100%的("键值")碰撞。
+> NSHashTable:仿自NSSet但提供与之不同的操作，特别是支持弱引用关系。
 
 
 你总是应该用 `isEqualTo<#class-name-without-prefix#>:` 这样的格式实现一个相等性检查方法。如果你这样做，会优先调用这个方法来避免上面的类型检查。
