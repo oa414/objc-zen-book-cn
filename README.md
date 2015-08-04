@@ -532,23 +532,20 @@ NSMutableArray *aMutableArray = [@[] mutableCopy];
 #  类 
 
 ##  类名
- 
-类名应加上**三**个大写字母作为前缀（两个字母的为 Apple 的类保留）。虽然这个规范看起来难看，但是这样做可以减少 Objective-c 没有命名空间所带来的问题。
 
-一些开发者在定义 Model 对象时并不遵循这个规范（对于 Core Data 对象，我们更应该遵循这个规范）。我们建议在定义 Core Data 对象时严格遵循这个约定，因为你最后可能把你的 Managed Object Model （托管对象）合并到其他（第三方库）的 Managed Object Model 。
+类名应该以**三**个大写字母作为前缀（双字母前缀为 Apple 的类预留）。尽管这个规范看起来有些古怪，但是这样做可以减少 Objective-c 没有命名空间所带来的问题。
+一些开发者在定义模型对象时并不遵循这个规范（对于 Core Data 对象，我们更应该遵循这个规范）。我们建议在定义 Core Data 对象时严格遵循这个约定，因为最终你可能需要把你的 Managed Object Model（托管对象模型）与其他（第三方库）的 MOMs（Managed Object Model）合并。
+你可能注意到了，这本书里类的前缀（不仅仅）是`ZOC`。
 
-你可能注意到了，这本书里的类的前缀（其实不仅仅是类）是`ZOC`。
-
-另一个类的命名规范：当你创建一个子类的时候，你应该把说明性的部分放在前缀和父类名的在中间。举个例子：如果你有一个 `ZOCNetworkClient` 类，子类的名字会是`ZOCTwitterNetworkClient` (注意 "Twitter" 在 "ZOC" 和 "NetworkClient" 之间); 按照这个约定， 一个`UIViewController` 的子类会是 `ZOCTimelineViewController`.
+另一个好的类的命名规范：当你创建一个子类的时候，你应该把说明性的部分放在前缀和父类名的在中间。举个例子：如果你有一个 `ZOCNetworkClient` 类，子类的名字会是`ZOCTwitterNetworkClient` (注意 "Twitter" 在 "ZOC" 和 "NetworkClient" 之间); 按照这个约定， 一个`UIViewController` 的子类会是 `ZOCTimelineViewController`.
 
 
 ## Initializer 和 dealloc 
 
-推荐的代码组织方式：将 `dealloc` 方法放在实现文件的最前面（直接在  `@synthesize` 以及 `@dynamic` 之后），`init` 应该放在 `dealloc`  之后。如果有多个初始化方法， designated initializer 应该放在第一个，secondary initializer 在之后紧随，这样逻辑性更好。
+推荐的代码组织方式是将 `dealloc` 方法放在实现文件的最前面（直接在  `@synthesize` 以及 `@dynamic` 之后），`init` 应该跟在 `dealloc` 方法后面。如果有多个初始化方法， 指定初始化方法应该放在最前面，次要初始化方法跟在后面，这样更有逻辑性。
 如今有了 ARC，dealloc 方法几乎不需要实现，不过把 init 和 dealloc 放在一起可以从视觉上强调它们是一对的。通常，在 init 方法中做的事情需要在 dealloc 方法中撤销。
 
 `init` 方法应该是这样的结构：
-
 
 ```objective-c
 - (instancetype)init
@@ -564,23 +561,19 @@ NSMutableArray *aMutableArray = [@[] mutableCopy];
 
 为什么设置 `self` 为 `[super init]` 的返回值，以及中间发生了什么呢？这是一个十分有趣的话题。
 
-让我们后退一步：我们一直写类似 `[[NSObject alloc] init]` 的表达式，而淡化了 `alloc` 和 `init` 的区别 。一个 Objective-C 的特性叫 *两步创建* 。 这意味着申请分配内存和初始化是两个分离的操作。
+我们退一步讲：我们常常写 `[[NSObject alloc] init]` 这样的代码，从而淡化了 `alloc` 和 `init` 的区别。Objective-C 的这个特性叫做 *两步创建* 。 这意味着申请分配内存和初始化被分离成两步，`alloc` and `init`。
+- `alloc` 负责创建对象，这个过程包括分配足够的内存来保存对象，写入 `isa` 指针，初始化引用计数，以及重置所有实例变量。
+- `init` 负责初始化对象，这意味着使对象处于可用状态。这通常意味着为对象的实例变量赋予合理有用的值。
 
-- `alloc`表示对象分配内存，这个过程涉及分配足够的可用内存来保存对象，写入`isa`指针，初始化 retain 的计数，并且初始化所有实例变量。
-- `init` 是表示初始化对象，这意味着把对象转换到了个可用的状态。这通常是指把可用的值赋给了对象的实例变量。
+`alloc` 方法将返回一个有效的未初始化的对象实例。每一个对这个实例发送的消息会被转换成一次 `objc_msgSend()` 函数的调用，形参 `self` 的实参是 `alloc` 返回的指针；这样 `self` 在所有方法的作用域内都能够被访问。
+按照惯例，为了完成两步创建，新创建的实例第一个被调用的方法将是 `init` 方法。注意，`NSObject` 在实现 `init` 时，只是简单的返回了 `self`。
 
+关于 `init` 的约定还有一个重要部分：这个方法可以（并且应该）通过返回 `nil` 来告诉调用者，初始化失败了；初始化可能会因为各种原因失败，比如一个输入的格式错误了，或者另一个需要的对象初始化失败了。
+这样我们就能理解为什么总是需要调用 `self = [super init]`。如果你的父类说初始化自己的时候失败了，那么你必须假定你正处于一个不稳定的状态，因此在你的实现里不要继续你自己的初始化并且也返回 `nil`。如果不这样做，你可能会操作一个不可用的对象，它的行为是不可预测的，最终可能会导致你的程序崩溃。
 
-`alloc` 方法会返回一个合法的没有初始化的实例对象。每一个发送到实例的消息会被翻译为`objc_msgSend()` 函数的调用，它的参数是指向 `alloc` 返回的对象的、名为 `self` 的指针的。这样之后 `self` 已经可以执行所有方法了。
-为了完成两步创建，第一个发送给新创建的实例的方法应该是约定俗成的 `init` 方法。注意在 `NSObject` 的 `init` 实现中，仅仅是返回了 `self`。
+`init` 方法在被调用的时候可以通过重新给 `self` 重新赋值来返回另一个实例，而非调用的那个实例。例如[类簇](#类簇)，还有一些 Cocoa 类为相等的（不可变的）对象返回同一个实例。
 
-
-关于 `init` 有一个另外的重要的约定：这个方法可以（并且应该）在不能成功完成初始化的时候返回 `nil`；初始化可能因为各种原因失败，比如一个输入的格式错误，或者未能成功初始化一个需要的对象。
-这样我们就理解了为什么需要总是调用  `self = [super init]`。如果你的超类没有成功初始化它自己，你必须假设你在一个矛盾的状态，并且在你的实现中不要处理你自己的初始化逻辑，同时返回 `nil`。如果你不是这样做，你看你会得到一个不能用的对象，并且它的行为是不可预测的，最终可能会导致你的 App 发生 crash。
-
-重新给 `self` 赋值同样可以被 `init` 利用为在被调用的时候返回不同的实例。一个例子是 [类簇](#class-cluster) 或者其他的返回相同的（不可变的）实例对象的 Cocoa 类。
-
-### Designated 和 Secondary Initializers
-
+### 指定初始化方法 和 次要初始化方法
 
 Objective-C 有 designated 和 secondary 初始化方法的观念。
 designated 初始化方法是提供所有的参数，secondary 初始化方法是一个或多个，并且提供一个或者更多的默认参数来调用 designated 初始化方法的初始化方法。
