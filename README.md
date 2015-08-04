@@ -1184,7 +1184,7 @@ UIApplication.sharedApplication.delegate;
 @end
 ```
 
-** 不要这样做 **
+** 不要这样 **
 
 ```objective-c
 @interface NSDate (ZOCTimeExtensions)
@@ -1803,7 +1803,7 @@ __weak __typeof(self) weakSelf = self;
 }];
 ```
 
-**不要这样做:**
+**不要这样:**
 
 ```objective-c
 [self executeBlock:^(NSData *data, NSError *error) {
@@ -1824,7 +1824,7 @@ __weak __typeof(self)weakSelf = self;
 }];
 ```
 
-**不要这样做:**
+**不要这样:**
 
 ```objective-c
 __weak __typeof(self)weakSelf = self;
