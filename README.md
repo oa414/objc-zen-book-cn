@@ -967,13 +967,16 @@ NSString * text;
 当使用 setter getter 方法的时候尽量使用点符号。应该总是用点符号来访问以及设置属性。
 
 **例子:**
-```objective-c
+
+```Objective-C
 view.backgroundColor = [UIColor orangeColor];
 [UIApplication sharedApplication].delegate;
+
 ```
 
 **不要这样:**
-```objective-c
+
+```Objective-C
 [view setBackgroundColor:[UIColor orangeColor]];
 UIApplication.sharedApplication.delegate;
 ```
@@ -989,7 +992,7 @@ UIApplication.sharedApplication.delegate;
 @property (nonatomic, readwrite, copy) NSString *name;
 ```
 
-属性的参数应该按照下面的顺序排列： 原子性，读写 和 内存管理。 这样做你的属性更容易修改正确，并且更好阅读。
+参数的顺序排列：原子性、读写属性和内存管理权限符。(因为习惯上修改某个属性的修饰符时，一般是这样搜索的：先找属性名"name",然后从右向左搜索需要修动的修饰符。)最可能从最右边开始修改这些属性的修饰符，(根据经验这些修饰符被修改的可能性从高到底应为：内存管理===>读写权限===>原子操作，所以从人体工程学设计的角度考虑，这样)更容易被眼睛扫描到。
 
 你必须使用 `nonatomic`，除非特别需要的情况。在iOS中，`atomic`带来的锁特别影响性能。
 
@@ -999,16 +1002,22 @@ UIApplication.sharedApplication.delegate;
 为了完成一个共有的 getter 和一个私有的 setter，你应该声明公开的属性为 `readonly`  并且在类扩展总重新定义通用的属性为 `readwrite` 的。
 
 ```objective-c
+//.h文件中
 @interface MyClass : NSObject
-@property (nonatomic, readonly) NSObject *object
+@property (nonatomic, readonly, strong) NSObject *object;
+@end
+//.m文件中
+@interface MyClass ()
+@property (nonatomic, readwrite, strong) NSObject *object;
 @end
 
-@interface MyClass ()
-@property (nonatomic, readwrite, strong) NSObject *object
+@implementation MyClass
+//Do Something cool
 @end
+
 ```
 
-如果 `BOOL` 属性的名字是描述性的，这个属性可以省略 "is" ，但是特定要在 get 访问器中指定名字，如：
+描述`BOOL`属性的词如果是形容词，那么setter不应该带`is`前缀，但它对应的getter访问器应该带上这个前缀，如：
 
 ```objective-c
 @property (assign, getter=isEditable) BOOL editable;
@@ -1016,12 +1025,12 @@ UIApplication.sharedApplication.delegate;
 
 文字和例子引用自 [Cocoa Naming Guidelines](https://developer.apple.com/library/mac/#documentation/Cocoa/Conceptual/CodingGuidelines/Articles/NamingIvarsAndTypes.html#//apple_ref/doc/uid/20001284-BAJGIIJE)。
 
-为了避免 `@synthesize` 的使用，在实现文件中，Xcode已经自动帮你添加了。
+在实现文件中应避免使用`@synthesize`,因为Xcode已经(自动)为你添加了。。
 
 #### 私有属性
 
 
-私有属性应该在类实现文件的类拓展（class extensions，没有名字的 categories 中）中。有名字的 categories（如果 `ZOCPrivate`）不应该使用，除非拓展另外的类。
+私有属性应该定义在类的实现文件的类的扩展(匿名类别)中。不允许在署名的类别(如 `ZOCPrivate`）中定义私有属性，除非你扩展其他类。
 
 **例子:**
 
@@ -1036,9 +1045,9 @@ UIApplication.sharedApplication.delegate;
 
 任何可以用来用一个可变的对象设置的（(比如 `NSString`,`NSArray`,`NSURLRequest`)）属性的的内存管理类型必须是 `copy` 的。
 
-这个是用来确保包装，并且在对象不知道的情况下避免改变值。
+这是为了确保(对象被)封装好之后，在不知道的情况下，防止它的值被修改(如属性为NSArray,外部人员将一个NSMutableArray的值赋给它，这时候只有`copy`权限符才会将MutableArray拷贝成不可变对象NSArray，否则这个对象实质上就会变为可变对象，这时候外部的赋值者便可以随意修改该属性中的元素，这可能导致不明错误)。
 
-你应该同时避免暴露在公开的接口中可变的对象，因为这允许你的类的使用者改变你自己的内部表示并且破坏了封装。你可以提供可以只读的属性来返回你对象的不可变的副本。
+你应该同时避免暴露在公开的接口中可变的对象，因为这允许你的类的使用者改变类自己的内部表示并且破坏类的封装。你可以提供可以只读的属性来返回你对象的不可变的副本。
 
 ```objective-c
 /* .h */
@@ -1052,10 +1061,7 @@ UIApplication.sharedApplication.delegate;
 
 ### 懒加载（Lazy Loading）
 
-当实例化一个对象可能耗费很多资源的，或者需要只配置一次并且有一些配置方法需要调用，而且你还不想弄乱这些方法。
-
-
-在这个情况下，我们可以选择使用重载属性的　getter　方法来做　lazy　实例化。通常这种操作的模板像这样：
+当实例化一个对象需要耗费很多资源，或者配置一次就要调用很多配置相关的方法而你又不想弄乱这些方法时，我们需要重写getter方法以延迟实例化，而不是在init方法里给对象分配内存。通常这种操作使用下面这样的模板：
 
 
 ```objective-c
@@ -1064,8 +1070,8 @@ UIApplication.sharedApplication.delegate;
   if (!_dateFormatter) {
     _dateFormatter = [[NSDateFormatter alloc] init];
         NSLocale *enUSPOSIXLocale = [[NSLocale alloc] initWithLocaleIdentifier:@"en_US_POSIX"];
-        [dateFormatter setLocale:enUSPOSIXLocale];
-        [dateFormatter setDateFormat:@"yyyy-MM-dd'T'HH:mm:ss.SSSSS"];
+        [_dateFormatter setLocale:enUSPOSIXLocale];
+        [_dateFormatter setDateFormat:@"yyyy-MM-dd'T'HH:mm:ss.SSS"];//毫秒是SSS，而非SSSSS
   }
   return _dateFormatter;
 }
@@ -1076,7 +1082,10 @@ UIApplication.sharedApplication.delegate;
 
 
 
-* getter　方法不应该有副作用。在使用 getter 方法的时候你不要想着它可能会创建一个对象或者导致副作用，事实上，如果调用 getter 方法的时候没有涉及返回的对象，编译器就会放出警告：getter 不应该产生副作用
+* getter方法应该避免函数副作用.看到右手边的getter方法(属性名都是在界面的右边所以这么说)，你不会想到会因此创建一个对象或导致副作用，实际上如果调用getter方法而不使用其返回值编译器会报警告“Getter不应该仅因它产生的副作用而被调用”。
+
+> 函数副作用指当调用函数时，除了返回函数值之外，还对主调用函数产生附加的影响。例如修改全局变量（函数外的变量）或修改参数。函数副作用会给程序设计带来不必要的麻烦，给程序带来十分难以查找的错误，并且降低程序的可读性。
+
 * 你在第一次访问的时候改变了初始化的消耗，产生了副作用，这会让优化性能变得困难（以及测试）
 * 这个初始化可能是不确定的：比如你期望属性第一次被一个方法访问，但是你改变了类的实现，访问器在你预期之前就得到了调用，这样可以导致问题，特别是初始化逻辑可能依赖于类的其他不同状态的时候。总的来说最好明确依赖关系。
 * 这个行为不是 KVO 友好的。如果 getter 改变了引用，他应该通过一个  KVO 通知来通知改变。当访问 getter 的时候收到一个改变的通知很奇怪。
@@ -1125,7 +1134,8 @@ UIApplication.sharedApplication.delegate;
 ```
 
 
-一定要注意 hash 方法不能返回一个常量。这是一个典型的错误并且会导致严重的问题，因为使用了这个值作为 hash 表的 key，会导致 hash 表 100%的碰撞
+一定要注意 hash 方法不能返回一个常量。这是一个典型的错误并且会导致严重的问题，因为实际上`hash`方法的返回值会作为对象在hash散列表中的key,这会导致hash表100%的("键值")碰撞。
+> NSHashTable:仿自NSSet但提供与之不同的操作，特别是支持弱引用关系。
 
 
 你总是应该用 `isEqualTo<#class-name-without-prefix#>:` 这样的格式实现一个相等性检查方法。如果你这样做，会优先调用这个方法来避免上面的类型检查。
