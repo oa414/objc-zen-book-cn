@@ -29,7 +29,7 @@
 * [类](#类)
   * [类名](#类名)
   * [Initializer 和 dealloc](#initializer-和-dealloc)
-    * [Designated 和 Secondary Initializers](#designated-和-secondary-initializers)
+    * [Designated 和 Secondary 初始化方法](#designated-和-secondary初始化方法)
       * [Designated Initializer](#designated-initializer)
       * [Secondary Initializer](#secondary-initializer)
         * [参考](#参考)
@@ -535,14 +535,14 @@ NSMutableArray *aMutableArray = [@[] mutableCopy];
 
 类名应该以**三**个大写字母作为前缀（双字母前缀为 Apple 的类预留）。尽管这个规范看起来有些古怪，但是这样做可以减少 Objective-c 没有命名空间所带来的问题。
 一些开发者在定义模型对象时并不遵循这个规范（对于 Core Data 对象，我们更应该遵循这个规范）。我们建议在定义 Core Data 对象时严格遵循这个约定，因为最终你可能需要把你的 Managed Object Model（托管对象模型）与其他（第三方库）的 MOMs（Managed Object Model）合并。
-你可能注意到了，这本书里类的前缀（不仅仅）是`ZOC`。
+你可能注意到了，这本书里类的前缀（不仅仅是类，也包括公开的常量、Protocol 等的前缀）是`ZOC`。
 
 另一个好的类的命名规范：当你创建一个子类的时候，你应该把说明性的部分放在前缀和父类名的在中间。举个例子：如果你有一个 `ZOCNetworkClient` 类，子类的名字会是`ZOCTwitterNetworkClient` (注意 "Twitter" 在 "ZOC" 和 "NetworkClient" 之间); 按照这个约定， 一个`UIViewController` 的子类会是 `ZOCTimelineViewController`.
 
 
 ## Initializer 和 dealloc 
 
-推荐的代码组织方式是将 `dealloc` 方法放在实现文件的最前面（直接在  `@synthesize` 以及 `@dynamic` 之后），`init` 应该跟在 `dealloc` 方法后面。如果有多个初始化方法， 指定初始化方法应该放在最前面，次要初始化方法跟在后面，这样更有逻辑性。
+推荐的代码组织方式是将 `dealloc` 方法放在实现文件的最前面（直接在  `@synthesize` 以及 `@dynamic` 之后），`init` 应该跟在 `dealloc` 方法后面。如果有多个初始化方法， 指定初始化方法 (designated initializer) 应该放在最前面，次要初始化方法 (secondary initializer) 跟在后面，这样更有逻辑性。
 如今有了 ARC，dealloc 方法几乎不需要实现，不过把 init 和 dealloc 放在一起可以从视觉上强调它们是一对的。通常，在 init 方法中做的事情需要在 dealloc 方法中撤销。
 
 `init` 方法应该是这样的结构：
@@ -561,7 +561,7 @@ NSMutableArray *aMutableArray = [@[] mutableCopy];
 
 为什么设置 `self` 为 `[super init]` 的返回值，以及中间发生了什么呢？这是一个十分有趣的话题。
 
-我们退一步讲：我们常常写 `[[NSObject alloc] init]` 这样的代码，从而淡化了 `alloc` 和 `init` 的区别。Objective-C 的这个特性叫做 *两步创建* 。 这意味着申请分配内存和初始化被分离成两步，`alloc` and `init`。
+我们退一步讲：我们常常写 `[[NSObject alloc] init]` 这样的代码，从而淡化了 `alloc` 和 `init` 的区别。Objective-C 的这个特性叫做 *两步创建* 。 这意味着申请分配内存和初始化被分离成两步，`alloc` 和 `init`。
 - `alloc` 负责创建对象，这个过程包括分配足够的内存来保存对象，写入 `isa` 指针，初始化引用计数，以及重置所有实例变量。
 - `init` 负责初始化对象，这意味着使对象处于可用状态。这通常意味着为对象的实例变量赋予合理有用的值。
 
@@ -573,9 +573,9 @@ NSMutableArray *aMutableArray = [@[] mutableCopy];
 
 `init` 方法在被调用的时候可以通过重新给 `self` 重新赋值来返回另一个实例，而非调用的那个实例。例如[类簇](#类簇)，还有一些 Cocoa 类为相等的（不可变的）对象返回同一个实例。
 
-### 指定初始化方法 和 次要初始化方法
+### Designated 和 Secondary 初始化方法
 
-Objective-C 有 designated 和 secondary 初始化方法的观念。
+Objective-C 有指定(designated 和次要(secondary)初始化方法的观念。
 designated 初始化方法是提供所有的参数，secondary 初始化方法是一个或多个，并且提供一个或者更多的默认参数来调用 designated 初始化方法的初始化方法。
 
 ```objective-c
@@ -981,7 +981,8 @@ UIApplication.sharedApplication.delegate;
 @property (nonatomic, readwrite, copy) NSString *name;
 ```
 
-参数的顺序排列：原子性、读写属性和内存管理权限符。(因为习惯上修改某个属性的修饰符时，一般是这样搜索的：先找属性名"name",然后从右向左搜索需要修动的修饰符。)最可能从最右边开始修改这些属性的修饰符，(根据经验这些修饰符被修改的可能性从高到底应为：内存管理===>读写权限===>原子操作，所以从人体工程学设计的角度考虑，这样)更容易被眼睛扫描到。
+属性的参数应该按照下面的顺序排列： 原子性，读写 和 内存管理。 这样做你的属性更容易修改正确，并且更好阅读。(译者注：习惯上修改某个属性的修饰符时，一般从属性名从右向左搜索需要修动的修饰符。最可能从最右边开始修改这些属性的修饰符，根据经验这些修饰符被修改的可能性从高到底应为：内存管理 > 读写权限 >原子操作)
+
 
 你必须使用 `nonatomic`，除非特别需要的情况。在iOS中，`atomic`带来的锁特别影响性能。
 
@@ -1006,7 +1007,7 @@ UIApplication.sharedApplication.delegate;
 
 ```
 
-描述`BOOL`属性的词如果是形容词，那么setter不应该带`is`前缀，但它对应的getter访问器应该带上这个前缀，如：
+描述`BOOL`属性的词如果是形容词，那么setter不应该带`is`前缀，但它对应的 getter 访问器应该带上这个前缀，如：
 
 ```objective-c
 @property (assign, getter=isEditable) BOOL editable;
@@ -1014,12 +1015,12 @@ UIApplication.sharedApplication.delegate;
 
 文字和例子引用自 [Cocoa Naming Guidelines](https://developer.apple.com/library/mac/#documentation/Cocoa/Conceptual/CodingGuidelines/Articles/NamingIvarsAndTypes.html#//apple_ref/doc/uid/20001284-BAJGIIJE)。
 
-在实现文件中应避免使用`@synthesize`,因为Xcode已经(自动)为你添加了。。
+在实现文件中应避免使用`@synthesize`,因为Xcode已经自动为你添加了。
 
 #### 私有属性
 
 
-私有属性应该定义在类的实现文件的类的扩展(匿名类别)中。不允许在署名的类别(如 `ZOCPrivate`）中定义私有属性，除非你扩展其他类。
+私有属性应该定义在类的实现文件的类的扩展 (class extensions) 中。不允许在有名字的的 category(如 `ZOCPrivate`）中定义私有属性，除非你扩展其他类。
 
 **例子:**
 
@@ -1034,7 +1035,7 @@ UIApplication.sharedApplication.delegate;
 
 任何可以用来用一个可变的对象设置的（(比如 `NSString`,`NSArray`,`NSURLRequest`)）属性的的内存管理类型必须是 `copy` 的。
 
-这是为了确保(对象被)封装好之后，在不知道的情况下，防止它的值被修改(如属性为NSArray,外部人员将一个NSMutableArray的值赋给它，这时候只有`copy`权限符才会将MutableArray拷贝成不可变对象NSArray，否则这个对象实质上就会变为可变对象，这时候外部的赋值者便可以随意修改该属性中的元素，这可能导致不明错误)。
+这是为了确保防止在不明确的情况下修改被封装好的对象的值(译者注：比如执行 array(定义为 copy 的 NSArray 实例) = mutableArray，copy 属性会让 array 的 setter 方法为 array = [mutableArray copy], [mutableArray copy] 返回的是不可变的 NSArray 实例，就保证了正确性。用其他属性修饰符修饰，容易在直接赋值的时候，array 指向的是 NSMuatbleArray 的实例，在之后可以随意改变它的值，就容易出错)。
 
 你应该同时避免暴露在公开的接口中可变的对象，因为这允许你的类的使用者改变类自己的内部表示并且破坏类的封装。你可以提供可以只读的属性来返回你对象的不可变的副本。
 
@@ -1050,7 +1051,7 @@ UIApplication.sharedApplication.delegate;
 
 ### 懒加载（Lazy Loading）
 
-当实例化一个对象需要耗费很多资源，或者配置一次就要调用很多配置相关的方法而你又不想弄乱这些方法时，我们需要重写getter方法以延迟实例化，而不是在init方法里给对象分配内存。通常这种操作使用下面这样的模板：
+当实例化一个对象需要耗费很多资源，或者配置一次就要调用很多配置相关的方法而你又不想弄乱这些方法时，我们需要重写 getter 方法以延迟实例化，而不是在 init 方法里给对象分配内存。通常这种操作使用下面这样的模板：
 
 
 ```objective-c
@@ -1071,9 +1072,9 @@ UIApplication.sharedApplication.delegate;
 
 
 
-* getter方法应该避免函数副作用.看到右手边的getter方法(属性名都是在界面的右边所以这么说)，你不会想到会因此创建一个对象或导致副作用，实际上如果调用getter方法而不使用其返回值编译器会报警告“Getter不应该仅因它产生的副作用而被调用”。
+* getter 方法应该避免副作用。看到 getter 方法的时候，你不会想到会因此创建一个对象或导致副作用，实际上如果调用 getter 方法而不使用其返回值编译器会报警告 “Getter 不应该仅因它产生的副作用而被调用”。
 
-> 函数副作用指当调用函数时，除了返回函数值之外，还对主调用函数产生附加的影响。例如修改全局变量（函数外的变量）或修改参数。函数副作用会给程序设计带来不必要的麻烦，给程序带来十分难以查找的错误，并且降低程序的可读性。
+> 副作用指当调用函数时，除了返回函数值之外，还对主调用函数产生附加的影响。例如修改全局变量（函数外的变量）或修改参数。函数副作用会给程序设计带来不必要的麻烦，给程序带来十分难以查找的错误，并且降低程序的可读性。（译者注）
 
 * 你在第一次访问的时候改变了初始化的消耗，产生了副作用，这会让优化性能变得困难（以及测试）
 * 这个初始化可能是不确定的：比如你期望属性第一次被一个方法访问，但是你改变了类的实现，访问器在你预期之前就得到了调用，这样可以导致问题，特别是初始化逻辑可能依赖于类的其他不同状态的时候。总的来说最好明确依赖关系。
@@ -1123,8 +1124,7 @@ UIApplication.sharedApplication.delegate;
 ```
 
 
-一定要注意 hash 方法不能返回一个常量。这是一个典型的错误并且会导致严重的问题，因为实际上`hash`方法的返回值会作为对象在hash散列表中的key,这会导致hash表100%的("键值")碰撞。
-> NSHashTable:仿自NSSet但提供与之不同的操作，特别是支持弱引用关系。
+一定要注意 hash 方法不能返回一个常量。这是一个典型的错误并且会导致严重的问题，因为实际上`hash`方法的返回值会作为对象在 hash 散列表中的 key,这会导致 hash 表 100% 的碰撞。
 
 
 你总是应该用 `isEqualTo<#class-name-without-prefix#>:` 这样的格式实现一个相等性检查方法。如果你这样做，会优先调用这个方法来避免上面的类型检查。
