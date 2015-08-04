@@ -542,7 +542,7 @@ NSMutableArray *aMutableArray = [@[] mutableCopy];
 
 ## Initializer 和 dealloc 
 
-推荐的代码组织方式是将 `dealloc` 方法放在实现文件的最前面（直接在  `@synthesize` 以及 `@dynamic` 之后），`init` 应该跟在 `dealloc` 方法后面。如果有多个初始化方法， 指定初始化方法 (designated initializer) 应该放在最前面，次要初始化方法 (secondary initializer) 跟在后面，这样更有逻辑性。
+推荐的代码组织方式是将 `dealloc` 方法放在实现文件的最前面（直接在  `@synthesize` 以及 `@dynamic` 之后），`init` 应该跟在 `dealloc` 方法后面。如果有多个初始化方法， 指定初始化方法 (designated initializer) 应该放在最前面，间接初始化方法 (secondary initializer) 跟在后面，这样更有逻辑性。
 如今有了 ARC，dealloc 方法几乎不需要实现，不过把 init 和 dealloc 放在一起可以从视觉上强调它们是一对的。通常，在 init 方法中做的事情需要在 dealloc 方法中撤销。
 
 `init` 方法应该是这样的结构：
@@ -575,8 +575,8 @@ NSMutableArray *aMutableArray = [@[] mutableCopy];
 
 ### Designated 和 Secondary 初始化方法
 
-Objective-C 有指定(designated 和次要(secondary)初始化方法的观念。
-designated 初始化方法是提供所有的参数，secondary 初始化方法是一个或多个，并且提供一个或者更多的默认参数来调用 designated 初始化方法的初始化方法。
+Objective-C 有指定初始化方法(designated initializer)和间接(secondary initializer)初始化方法的观念。
+designated 初始化方法是提供所有的参数，secondary 初始化方法是一个或多个，并且提供一个或者更多的默认参数来调用 designated 初始化的初始化方法。
 
 ```objective-c
 @implementation ZOCEvent
