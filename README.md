@@ -123,6 +123,9 @@ Objective-C 没有消失，但是现在用一个慢慢失去关注的语言来�
 - bopang@sohu-inc.com
 - https://github.com/heistings
 
+**Kevin.Xiao**
+- kevinxiao1919@gmail.com
+- https://github.com/KevinHM
 
 翻译已得到原作者许可，并且会在更加完善后申请合并到原文仓库。
 
