@@ -1226,17 +1226,17 @@ UIApplication.sharedApplication.delegate;
 
 #  Protocols
 
-在 Objective-C 的世界里面经常错过的一个东西是抽象接口。接口（interface）这个词通常指一个类的 `.h` 文件，但是它在 Java 程序员眼里有另外的含义： 一系列不依赖具体实现的方法的定义。
+在 Objective-C 的世界里面经常错过的一个东西是抽象接口。接口（interface）这个词通常指一个类的 `.h` 文件，但是它在 Java 程序员眼里有另外的含义： 一系列不依赖具体实现的方法的定义。(译者注：在OC中，类的接口对应在.m文件中都会有具体的实现，但Java中接口更接近于OC中的抽象接口或者说协议(protocol))
 
-在 Objective-C 里是通过 protocol 来实现抽象接口的。因为历史原因，protocol （作为 Java 接口使用）并没有在 Objective-C 社区里面广泛使用。一个主要原因是大多数的 Apple 开发的代码没有包含它，而几乎所有的开发者都是遵从 Apple 的模式以及指南的。Apple 几乎只是在委托模式下使用 protocol。
+在 Objective-C 里是通过 protocol 来实现抽象接口的。因为历史原因，protocol （使用方法类似java的接口）并没有大量地在Objective-C的代码中使用也没有在社区中普及(指的是那种像Java程序员使用接口那样来使用protocol的方式)。一个主要原因是大多数的 Apple 开发的代码没有采用这种的方式，而几乎所有的开发者都是遵从 Apple 的模式以及指南。Apple 几乎只是在委托模式下使用 protocol。
 
-但是抽象接口的概念很强大，它计算机科学的历史中就有起源，没有理由不在 Objective-C 中使用。
+但是抽象接口的概念很强大，在计算机科学的历史中颇有渊源，没有理由不在 Objective-C 中使用。
 
-我们会解释 protocol 的强大力量（用作抽象接口），用具体的例子来解释：把非常糟糕的设计的架构改造为一个良好的可复用的代码。
+这里通过一个具体的例子来解释 protocol 的强大力量（用作抽象接口）：把非常糟糕的设计的架构改造为一个良好的可复用的代码。
 
-这个例子是在实现一个 RSS 订阅的阅读器（它可是经常在技术面试中作为一个测试题呢）。
+这个例子是在实现一个 RSS 阅读器（它可是经常在技术面试中作为一个测试题呢）。
 
-要求很简单明了：把一个远程的 RSS 订阅展示在一个 tableview 中。
+要求很简单：在TableView中展示一个远程的RSS订阅。
 
 一个幼稚的方法是创建一个 `UITableViewController` 的子类，并且把所有的检索订阅数据，解析以及展示的逻辑放在一起，或者说是一个 MVC (Massive View Controller)。这可以跑起来，但是它的设计非常糟糕，不过它足够过一些要求不高的面试了。
 
@@ -1275,7 +1275,7 @@ UIApplication.sharedApplication.delegate;
 ```
 
 
-`ZOCFeedParser` 用一个 `NSURL` 来初始化来获取 RSS 订阅（在这之下可能会使用 NSXMLParser 和 NSXMLParserDelegate 创建有意义的数据），`ZOCTableViewController` 会用这个 parser 来进行初始化。 我们希望它显示 parser 接受到的值并且我们用下面的 protocol 实现委托：
+`ZOCFeedParser` 用 `NSURL` 进行初始化，来获取 RSS 订阅（在这之下可能会使用 NSXMLParser 和 NSXMLParserDelegate 创建有意义的数据），`ZOCTableViewController` 会用这个 parser 来进行初始化。 我们希望它显示 parser 接受到的值并且我们用下面的 protocol 实现委托：
 
 
 ```objective-c
@@ -1292,7 +1292,7 @@ UIApplication.sharedApplication.delegate;
 ```
 
 
-用合适的 protocol 来来处理 RSS 非常完美。view controller 会遵从它的公开的接口：
+我要说，这是一个处理RSS业务的完全合理而恰当的protocol。这个ViewController在Public接口中将遵循这个protocol：
 
 ```objective-c
 @interface ZOCTableViewController : UITableViewController <ZOCFeedParserDelegate>
@@ -1355,8 +1355,8 @@ view controller 的职责应该是“显示某些东西提供的内容”，但�
 ```
 
 
-因为 `ZOCFeedParser` 实现了 `ZOCFeedParserProtocol`，它需要实现所有需要的方法。
-从这点来看 view controller  可以接受任何实现这个新的  protocol 的对象，确保所有的对象会响应从 `start` 和 `stop` 的方法，而且它会通过 delegate 的属性来提供信息。所有的 view controller  只需要知道相关对象并且不需要知道实现的细节。
+因为 `ZOCFeedParser` 实现了 `ZOCFeedParserProtocol`，它需要实现所有的`required`方法。
+从这点来看 viewController能接受任何遵循该协议的对象，只要确保所有的对象都会响应`start`和`stop`方法并通过`delegate`属性提供信息(译者注：因为protocol默认情况下所有的方法定义都是`required`的)。对指定的对象而言，这就是viewController所要知道的一切,且不需要知道其实现的细节。
 
 
 ```objective-c
