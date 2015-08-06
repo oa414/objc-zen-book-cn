@@ -1369,18 +1369,18 @@ view controller 的职责应该是“显示某些东西提供的内容”，但�
 
 ```
 
-上面的代码片段的改变看起来不多，但是有了一个巨大的提升。view controller 是面向一个协议而不是具体的实现的。这带来了以下的优点：
+上面的代码片段的改变看起来不多，但是有了一个巨大的提升。view controller 将基于协议而不是具体的实现来工作。这带来了以下的优点：
 
-- view controller 可以通过 delegate 属性带来的信息的任意对象，可以是  RSS 远程解析器，或者本地解析器，或是一个读取其他远程或者本地数据的服务
+- view controller 现在可以接收通过`delegate`属性提供信息的任意对象：可以是  RSS 远程解析器，或者本地解析器，或是一个读取其他远程或者本地数据的服务
 - `ZOCFeedParser` 和 `ZOCFeedParserDelegate` 可以被其他组成部分复用
 - `ZOCViewController` （UI逻辑部分）可以被复用
 - 测试更简单了，因为可以用 mock 对象来达到 protocol 预期的效果
 
 当实现一个 protocol 你总应该坚持 [里氏替换原则](http://en.wikipedia.org/wiki/Liskov_substitution_principle)。这个原则是：你应该可以取代任意接口（也就是Objective-C里的的"protocol"）实现，而不用改变客户端或者相关实现。
 
-此外这也意味着你的 protocol 不应该关注实现类的细节，更加认真地设计你的  protocol  的抽象表述的时候，需要注意它和底层实现是不相干的，协议是暴露给使用者的抽象概念。
+此外，这也意味着`protocol`不该关心类的实现细节；设计protocol的抽象表述时应非常用心，并且要牢记它和它背后的实现是不相干的，真正重要的是协议（这个暴露给使用者的抽象表述）。
 
-任何可以在未来复用的设计意味着可以提高代码质量，同时也是程序员的目标。是否这样设计代码，就是大师和菜鸟的区别。
+任何在未来可复用的设计，无形当中可以提高代码质量，这也应该一直是程序员的追求。是否这样设计代码，就是大师和菜鸟的区别。
 
 最后的代码可以在[这里](http://github.com/albertodebortoli/ADBFeedReader) 找到。
 
