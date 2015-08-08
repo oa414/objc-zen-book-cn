@@ -1777,7 +1777,22 @@ Block 是 Objective-C 版本的 lambda 或者 closure（闭包）。
 * (如果在Block中修改Block块外的)栈上的变量和指针，那么这些变量和指针必须用`__block`关键字申明(译者注：否则就会跟上面的情况一样只是捕获他们的瞬时值)。
 
 
-如果 block 没有在其他地方被保持，那么它会随着栈生存并且当栈帧（stack frame）返回的时候消失。仅存在于栈上时，block对对象访问的内存管理和生命周期没有任何影响。如果 block 需要在栈帧返回的时候存在，它们需要明确地被复制到堆上，这样，block 会像其他 Cocoa 对象一样增加引用计数。当它们被复制的时候，它会带着它们的捕获作用域一起，retain 他们所有引用的对象。如果一个 block指向一个栈变量或者指针，那么这个block初始化的时候它会有一份声明为 const 的副本，所以对它们赋值是没用的。当一个 block 被复制后，`__block` 声明的栈变量的引用被复制到了堆里，复制之后栈上的以及产生的堆上的 block 都会引用这个堆上的变量。
+如果 block 没有在其他地方被保持，那么它会随着栈生存并且当栈帧（stack frame）返回的时候消失。仅存在于栈上时，block对对象访问的内存管理和生命周期没有任何影响。如果 block 需要在栈帧返回的时候存在，它们需要明确地被复制到堆上，这样，block 会像其他 Cocoa 对象一样增加引用计数。当它们被复制的时候，它会带着它们的捕获作用域一起，retain 他们所有引用的对象。如果一个 block引用了一个栈变量或指针，那么这个block初始化的时候会拥有这个变量或指针的const副本，所以(被捕获之后再在栈中改变这个变量或指针的值)是不起作用的。(译者注：所以这时候我们在block中对这种变量进行赋值会编译报错:`Variable is not assignable(missing __block type specifier)`，因为他们是副本而且是const的.具体见下面的例程)。当一个 block 被复制后，`__block` 声明的栈变量的引用被复制到了堆里，复制完成之后，无论是栈上的block还是刚刚产生在堆上的block(栈上block的副本)都会引用该变量在堆上的副本。
+
+译者加
+
+```objective-c
+   ...
+   CGFloat blockInt = 10;
+   void (^playblock)(void) = ^{
+        NSLog(@"blockInt = %zd", blockInt);
+    };
+    blockInt ++;
+    playblock();
+    ...
+    
+    //结果为:blockInt = 10
+```
 
 用 LLDB 来展示 block 是这样子的：
 
