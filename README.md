@@ -1817,7 +1817,7 @@ block 在 Objective-C 的 runtime(运行时) 里面被当作一等公民对待�
 ###  self 的循环引用
 
 
-当使用代码块和异步分发的时候，要注意避免引用循环。 总是使用 `weak` 引用会导致引用循环。 此外，把持有 block 的属性设置为 nil (比如 `self.completionBlock = nil`) 是一个好的实践。它会打破 block 捕获的作用域带来的引用循环。
+当使用代码块和异步分发的时候，要注意避免引用循环。 总是使用 `weak` 来引用对象，避免引用循环。（译者注：这里更为优雅的方式是采用影子变量@weakify/@strongify [这里有更为详细的说明](https://github.com/jspahrsummers/libextobjc/blob/master/extobjc/EXTScope.h)） 此外，把持有 block 的属性设置为 nil (比如 `self.completionBlock = nil`) 是一个好的实践。它会打破 block 捕获的作用域带来的引用循环。
 
 
 **例子:**
