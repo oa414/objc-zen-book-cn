@@ -1877,7 +1877,7 @@ __strong __typeof(weakSelf)strongSelf = weakSelf;
 
 **方案 1. 直接在 block 里面使用关键词 `self`**
 
-如果我们直接在 block 里面用 self 关键字，对象会在 block 的定义时候被 retain，（实际上 block 是 [copied][blocks_caveat13]  但是为了简单我们可以忽略这个）。一个 const 的对 self 的引用在 block 里面有自己的位置并且它会影响对象的引用计数。如果 block 被其他 class 或者/并且传送过去了，我们可能想要 retain  self 就像其他被 block 使用的对象，从他们需要被block执行
+如果我们直接在 block 里面用 self 关键字，对象会在 block 的定义时候被 retain，（实际上 block 是 [copied][blocks_caveat13]  但是为了简单我们可以忽略这个）。一个 const 的对 self 的引用在 block 里面有自己的位置并且它会影响对象的引用计数。如果这个block被其他的类使用并且(或者)彼此间传来传去，我们可能想要在 block 中保留 self，就像其他在 block 中使用的对象一样. 因为他们是block执行所需要的.
 
 ```objective-c
 dispatch_block_t completionBlock = ^{
@@ -1891,7 +1891,7 @@ MyViewController *myController = [[MyViewController alloc] init...];
 ```
 
 
-不是很麻烦的事情。但是, 当 block 被 self 在一个属性 retain（就像下面的例子）呢
+没啥大不了。但是如果通过一个属性中的 `self` 保留 了这个 block（就像下面的例程一样）,对象( self )保留了 block 会怎么样呢？
 
 ```objective-c
 self.completionHandler = ^{
@@ -1910,12 +1910,12 @@ MyViewController *myController = [[MyViewController alloc] init...];
 ```objective-c 
 Capturing 'self' strongly in this block is likely to lead to a retain cycle （在 block 里面发现了 `self` 的强引用，可能会导致循环引用）
 ```
-所以可以用 `weak` 修饰
+所以 `__weak` 就有用武之地了。
 
 **方案 2. 在 block 外定义一个 `__weak` 的 引用到 self，并且在 block 里面使用这个弱引用**
 
 
-这样会避免循环引用，也是我们通常在 block 已经被 self 的 property 属性里面 retain 的时候会做的。
+这样会避免循环引用，也是我们通常在 block 已经被 property 属性中的 self (译者注：属性默认会强引用 self) retain 的时候会做的。
 
 ```objective-c
 __weak typeof(self) weakSelf = self;
@@ -1930,15 +1930,15 @@ MyViewController *myController = [[MyViewController alloc] init...];
 ```
 
 
-这个情况下 block 没有 retain 对象并且对象在属性里面 retain 了 block 。所以这样我们能保证了安全的访问 self。 不过糟糕的是，它可能被设置成 nil 的。问题是：如果和让 self 在 block 里面安全地被销毁。
+这个情况下 block 没有 retain 对象并且对象在属性里面 retain 了 block 。所以这样我们能保证了安全的访问 self。 不过糟糕的是，它可能被设置成 nil 的。问题是：如何让 self 在 block 里面安全地被销毁。
 
-举个例子， block 被一个对象复制到了另外一个（比如 myControler）作为属性赋值的结果。之前的对象在可能在被复制的 block 有机会执行被销毁。
+考虑这么个情况：block 作为属性(property)赋值的结果，从一个对象被复制到另一个对象(如 myController)，在这个复制的 block 执行之前，前者（即之前的那个对象）已经被解除分配。
 
 下面的更有意思。
 
 **方案 3. 在 block 外定义一个 `__weak` 的 引用到 self，并在在 block 内部通过这个弱引用定义一个 `__strong`  的引用**
 
-你可能会想，首先，这是避免 retain cycle  警告的一个技巧。然而不是，这个到 self 的强引用在 *block 的执行时间*　被创建。当 block 在定义的时候， block 如果使用 self 的时候，就会 retain 了 self 对象。
+你可能会想，首先，这是避免 retain cycle  警告的一个技巧。这不是重点，这个 self 的强引用在 block 执行时被创建，在 block 使用 self 时(什么时候使用，在 block 定义时就被定下来了)，就会 retin self 对象。
 
 [Apple 文档][blocks_caveat1] 中表示 "为了 non-trivial cycles ，你应该这样" ：
 
@@ -1960,7 +1960,7 @@ myController.completionHandler =  ^(NSInteger result) {
 ```
 
 
-首先，我觉得这个例子看起来是错误的。如果 block 本身被 completionHandler 属性里面 retain 了，那么 self 如何被 delloc 和在 block 之外赋值为 nil 呢? completionHandler 属性可以被声明为  `assign` 或者 `unsafe_unretained` 的，来允许对象在 block 被传递之后被销毁。
+首先，我觉得这个例子看起来是错误的。如果 block 本身在 completionHandler 属性中被 retain 了，那么 self 如何被 delloc 和在 block 之外赋值为 nil 呢? completionHandler 属性可以被声明为  `assign` 或者 `unsafe_unretained` 的，来允许对象在 block 被传递之后被销毁。
 
 我不能理解这样做的理由，如果其他对象需要这个对象（self），block 被传递的时候应该 retain 对象，所以 block 应该不被作为属性存储。这种情况下不应该用 `__weak`/`__strong` 
 
