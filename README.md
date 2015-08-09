@@ -1226,17 +1226,17 @@ UIApplication.sharedApplication.delegate;
 
 #  Protocols
 
-在 Objective-C 的世界里面经常错过的一个东西是抽象接口。接口（interface）这个词通常指一个类的 `.h` 文件，但是它在 Java 程序员眼里有另外的含义： 一系列不依赖具体实现的方法的定义。
+在 Objective-C 的世界里面经常错过的一个东西是抽象接口。接口（interface）这个词通常指一个类的 `.h` 文件，但是它在 Java 程序员眼里有另外的含义： 一系列不依赖具体实现的方法的定义。(译者注：在OC中，类的接口对应在.m文件中都会有具体的实现，但Java中接口更接近于OC中的抽象接口或者说协议(protocol))
 
-在 Objective-C 里是通过 protocol 来实现抽象接口的。因为历史原因，protocol （作为 Java 接口使用）并没有在 Objective-C 社区里面广泛使用。一个主要原因是大多数的 Apple 开发的代码没有包含它，而几乎所有的开发者都是遵从 Apple 的模式以及指南的。Apple 几乎只是在委托模式下使用 protocol。
+在 Objective-C 里是通过 protocol 来实现抽象接口的。因为历史原因，protocol （使用方法类似java的接口）并没有大量地在Objective-C的代码中使用也没有在社区中普及(指的是那种像Java程序员使用接口那样来使用protocol的方式)。一个主要原因是大多数的 Apple 开发的代码没有采用这种的方式，而几乎所有的开发者都是遵从 Apple 的模式以及指南。Apple 几乎只是在委托模式下使用 protocol。
 
-但是抽象接口的概念很强大，它计算机科学的历史中就有起源，没有理由不在 Objective-C 中使用。
+但是抽象接口的概念很强大，在计算机科学的历史中颇有渊源，没有理由不在 Objective-C 中使用。
 
-我们会解释 protocol 的强大力量（用作抽象接口），用具体的例子来解释：把非常糟糕的设计的架构改造为一个良好的可复用的代码。
+这里通过一个具体的例子来解释 protocol 的强大力量（用作抽象接口）：把非常糟糕的设计的架构改造为一个良好的可复用的代码。
 
-这个例子是在实现一个 RSS 订阅的阅读器（它可是经常在技术面试中作为一个测试题呢）。
+这个例子是在实现一个 RSS 阅读器（它可是经常在技术面试中作为一个测试题呢）。
 
-要求很简单明了：把一个远程的 RSS 订阅展示在一个 tableview 中。
+要求很简单：在TableView中展示一个远程的RSS订阅。
 
 一个幼稚的方法是创建一个 `UITableViewController` 的子类，并且把所有的检索订阅数据，解析以及展示的逻辑放在一起，或者说是一个 MVC (Massive View Controller)。这可以跑起来，但是它的设计非常糟糕，不过它足够过一些要求不高的面试了。
 
@@ -1275,7 +1275,7 @@ UIApplication.sharedApplication.delegate;
 ```
 
 
-`ZOCFeedParser` 用一个 `NSURL` 来初始化来获取 RSS 订阅（在这之下可能会使用 NSXMLParser 和 NSXMLParserDelegate 创建有意义的数据），`ZOCTableViewController` 会用这个 parser 来进行初始化。 我们希望它显示 parser 接受到的值并且我们用下面的 protocol 实现委托：
+`ZOCFeedParser` 用 `NSURL` 进行初始化，来获取 RSS 订阅（在这之下可能会使用 NSXMLParser 和 NSXMLParserDelegate 创建有意义的数据），`ZOCTableViewController` 会用这个 parser 来进行初始化。 我们希望它显示 parser 接受到的值并且我们用下面的 protocol 实现委托：
 
 
 ```objective-c
@@ -1292,7 +1292,7 @@ UIApplication.sharedApplication.delegate;
 ```
 
 
-用合适的 protocol 来来处理 RSS 非常完美。view controller 会遵从它的公开的接口：
+我要说，这是一个处理RSS业务的完全合理而恰当的protocol。这个ViewController在Public接口中将遵循这个protocol：
 
 ```objective-c
 @interface ZOCTableViewController : UITableViewController <ZOCFeedParserDelegate>
@@ -1355,8 +1355,8 @@ view controller 的职责应该是“显示某些东西提供的内容”，但�
 ```
 
 
-因为 `ZOCFeedParser` 实现了 `ZOCFeedParserProtocol`，它需要实现所有需要的方法。
-从这点来看 view controller  可以接受任何实现这个新的  protocol 的对象，确保所有的对象会响应从 `start` 和 `stop` 的方法，而且它会通过 delegate 的属性来提供信息。所有的 view controller  只需要知道相关对象并且不需要知道实现的细节。
+因为 `ZOCFeedParser` 实现了 `ZOCFeedParserProtocol`，它需要实现所有的`required`方法。
+从这点来看 viewController能接受任何遵循该协议的对象，只要确保所有的对象都会响应`start`和`stop`方法并通过`delegate`属性提供信息(译者注：因为protocol默认情况下所有的方法定义都是`required`的)。对指定的对象而言，这就是viewController所要知道的一切,且不需要知道其实现的细节。
 
 
 ```objective-c
@@ -1369,18 +1369,18 @@ view controller 的职责应该是“显示某些东西提供的内容”，但�
 
 ```
 
-上面的代码片段的改变看起来不多，但是有了一个巨大的提升。view controller 是面向一个协议而不是具体的实现的。这带来了以下的优点：
+上面的代码片段的改变看起来不多，但是有了一个巨大的提升。view controller 将基于协议而不是具体的实现来工作。这带来了以下的优点：
 
-- view controller 可以通过 delegate 属性带来的信息的任意对象，可以是  RSS 远程解析器，或者本地解析器，或是一个读取其他远程或者本地数据的服务
+- view controller 现在可以接收通过`delegate`属性提供信息的任意对象：可以是  RSS 远程解析器，或者本地解析器，或是一个读取其他远程或者本地数据的服务
 - `ZOCFeedParser` 和 `ZOCFeedParserDelegate` 可以被其他组成部分复用
 - `ZOCViewController` （UI逻辑部分）可以被复用
 - 测试更简单了，因为可以用 mock 对象来达到 protocol 预期的效果
 
 当实现一个 protocol 你总应该坚持 [里氏替换原则](http://en.wikipedia.org/wiki/Liskov_substitution_principle)。这个原则是：你应该可以取代任意接口（也就是Objective-C里的的"protocol"）实现，而不用改变客户端或者相关实现。
 
-此外这也意味着你的 protocol 不应该关注实现类的细节，更加认真地设计你的  protocol  的抽象表述的时候，需要注意它和底层实现是不相干的，协议是暴露给使用者的抽象概念。
+此外，这也意味着`protocol`不该关心类的实现细节；设计protocol的抽象表述时应非常用心，并且要牢记它和它背后的实现是不相干的，真正重要的是协议（这个暴露给使用者的抽象表述）。
 
-任何可以在未来复用的设计意味着可以提高代码质量，同时也是程序员的目标。是否这样设计代码，就是大师和菜鸟的区别。
+任何在未来可复用的设计，无形当中可以提高代码质量，这也应该一直是程序员的追求。是否这样设计代码，就是大师和菜鸟的区别。
 
 最后的代码可以在[这里](http://github.com/albertodebortoli/ADBFeedReader) 找到。
 
@@ -1441,6 +1441,7 @@ if (user.isHappy)
 
 
 **推荐:**
+
 ```objective-c
 [UIView animateWithDuration:1.0
                  animations:^{
@@ -1517,7 +1518,8 @@ NSURL *url = ({
 });
 ```
 
-这个特性非常适合组织小块的代码，通常是设置一个类。他给了读者一个重要的入口并且减少相关干扰，能让读者聚焦于关键的变量和函数中。此外，这个方法有一个优点，所有的变量都在代码块中，也就是只在代码块的区域中有效，这意味着可以减少对其他作用域的命名污染。
+
+
 
 ## Pragma 
 
@@ -1603,10 +1605,10 @@ NSURL *url = ({
 
 ### 忽略没用使用变量的编译警告
 
-这对表明你一个定义但是没有使用的变量很有用。大多数情况下，你希望移除这些引用来（稍微地）提高性能，但是有时候你希望保留它们。为什么？或许它们以后有用，或者有些特性只是暂时移除。无论如何，一个消除这些警告的好方法是用相关语句进行注解，使用 `#pragma unused()`:
+告诉你申明的变量它将不会被使用，这种做法很有用。大多数情况下，你希望移除这些引用来（稍微地）提高性能，但是有时候你希望保留它们。为什么？或许它们以后有用，或者有些特性只是暂时移除。无论如何，一个消除这些警告的好方法是用相关语句进行注解，使用 `#pragma unused()`:
 
 ```objective-c
-- (void)giveMeFive
+- (NSInteger)giveMeFive
 {
     NSString *foo;
     #pragma unused (foo)
@@ -1615,7 +1617,7 @@ NSURL *url = ({
 }
 ```
 
-现在你的代码不用任何编译警告了。注意你的 pragma 需要标记到未定义的变量之下。
+现在你的代码不用任何编译警告了。注意你的 pragma 需要标记到问题代码之下。
 
 ## 明确编译器警告和错误
 
@@ -1664,7 +1666,13 @@ NSURL *url = ({
 
 文本应该用一个动词 ("return")  而不是 "returns" 这样的描述。
 
-如果描述超出一行，你应该用长的字符串文档: 一行斜杠和两个星号来开始块文档 (/\*\*, 之后是总结的一句话，可以用句号、问号或者感叹号结尾，然后空一行，在和第一句话对齐写下剩下的注释，然后用一个 (\*/)来结束。
+如果描述超过一行，应改用长字符串文档：
+
+ * 以`/**`开始
+ * 换行写一句总结的话，以`?或者!或者.`结尾。
+ * 空一行
+ * 在与第一行对齐的位置开始写剩下的注释
+ * 最后用`*/`结束。
 
 ```
 /**
@@ -1733,7 +1741,7 @@ Block 是 Objective-C 版本的 lambda 或者 closure（闭包）。
 
 * 通常这成功处理和失败处理会共享一些代码（比如让一个进度条或者提示消失）；
 * Apple 也是这样做的，与平台一致能够带来一些潜在的好处；
-* block 通常会有多行代码，如果不是在最后一个参数的话会打破调用点；
+* block 通常会有多行代码，如果不作为最后一个参数放在后面的话，会打破调用点；
 * 使用多个 block 作为参数可能会让调用看起来显得很笨拙，并且增加了复杂性。
 
 看上面的方法，完成处理的 block 的参数很常见：第一个参数是调用者希望获取的数据，第二个是错误相关的信息。这里需要遵循以下两点：
@@ -1765,11 +1773,26 @@ Block 是 Objective-C 版本的 lambda 或者 closure（闭包）。
 
 * block 是在栈上创建的 
 * block 可以复制到堆上
-* block 有自己的私有的栈变量（以及指针）的常量复制
-* 可变的栈上的变量和指针必须用 __block  关键字声明
+* Block会捕获栈上的变量(或指针)，将其复制为自己私有的const(变量)。
+* (如果在Block中修改Block块外的)栈上的变量和指针，那么这些变量和指针必须用`__block`关键字申明(译者注：否则就会跟上面的情况一样只是捕获他们的瞬时值)。
 
 
-如果 block 没有在其他地方被保持，那么它会随着栈生存并且当栈帧（stack frame）返回的时候消失。当在栈上的时候，一个 block 对访问的任何内容不会有影响。如果 block 需要在栈帧返回的时候存在，它们需要明确地被复制到堆上，这样，block 会像其他 Cocoa 对象一样增加引用计数。当它们被复制的时候，它会带着它们的捕获作用域一起，retain 他们所有引用的对象。如果一个 block指向一个栈变量或者指针，那么这个block初始化的时候它会有一份声明为 const 的副本，所以对它们赋值是没用的。当一个 block 被复制后，`__block` 声明的栈变量的引用被复制到了堆里，复制之后栈上的以及产生的堆上的 block 都会引用这个堆上的变量。
+如果 block 没有在其他地方被保持，那么它会随着栈生存并且当栈帧（stack frame）返回的时候消失。仅存在于栈上时，block对对象访问的内存管理和生命周期没有任何影响。如果 block 需要在栈帧返回的时候存在，它们需要明确地被复制到堆上，这样，block 会像其他 Cocoa 对象一样增加引用计数。当它们被复制的时候，它会带着它们的捕获作用域一起，retain 他们所有引用的对象。如果一个 block引用了一个栈变量或指针，那么这个block初始化的时候会拥有这个变量或指针的const副本，所以(被捕获之后再在栈中改变这个变量或指针的值)是不起作用的。(译者注：所以这时候我们在block中对这种变量进行赋值会编译报错:`Variable is not assignable(missing __block type specifier)`，因为他们是副本而且是const的.具体见下面的例程)。当一个 block 被复制后，`__block` 声明的栈变量的引用被复制到了堆里，复制完成之后，无论是栈上的block还是刚刚产生在堆上的block(栈上block的副本)都会引用该变量在堆上的副本。
+
+译者加
+
+```objective-c
+   ...
+   CGFloat blockInt = 10;
+   void (^playblock)(void) = ^{
+        NSLog(@"blockInt = %zd", blockInt);
+    };
+    blockInt ++;
+    playblock();
+    ...
+    
+    //结果为:blockInt = 10
+```
 
 用 LLDB 来展示 block 是这样子的：
 
@@ -1779,7 +1802,7 @@ Block 是 Objective-C 版本的 lambda 或者 closure（闭包）。
 最重要的事情是 `__block` 声明的变量和指针在 block 里面是作为显示操作真实值/对象的结构来对待的。
 
 
-block 在 Objective-C 里面被当作一等公民对待：他们有一个 `isa` 指针，一个类也是用 `isa` 指针来访问 Objective-C 运行时来访问方法和存储数据的。在非 ARC 环境肯定会把它搞得很糟糕，并且悬挂指针会导致 crash。`__block` 仅仅对 block 内的变量起作用，它只是简单地告诉 block：
+block 在 Objective-C 的 runtime(运行时) 里面被当作一等公民对待：他们有一个 `isa` 指针，一个类也是用 `isa` 指针在Objective-C 运行时来访问方法和存储数据的。在非 ARC 环境肯定会把它搞得很糟糕，并且悬挂指针会导致 crash。`__block` 仅仅对 block 内的变量起作用，它只是简单地告诉 block：
 
 > 嗨，这个指针或者原始的类型依赖它们在的栈。请用一个栈上的新变量来引用它。我是说，请对它进行双重解引用，不要 retain 它。
 谢谢，哥们。
@@ -1794,7 +1817,7 @@ block 在 Objective-C 里面被当作一等公民对待：他们有一个 `isa` 
 ###  self 的循环引用
 
 
-当使用代码块和异步分发的时候，要注意避免引用循环。 总是使用 `weak` 引用会导致引用循环。 此外，把持有 block 的属性设置为 nil (比如 `self.completionBlock = nil`) 是一个好的实践。它会打破 block 捕获的作用域带来的引用循环。
+当使用代码块和异步分发的时候，要注意避免引用循环。 总是使用 `weak` 来引用对象，避免引用循环。（译者注：这里更为优雅的方式是采用影子变量@weakify/@strongify [这里有更为详细的说明](https://github.com/jspahrsummers/libextobjc/blob/master/extobjc/EXTScope.h)） 此外，把持有 block 的属性设置为 nil (比如 `self.completionBlock = nil`) 是一个好的实践。它会打破 block 捕获的作用域带来的引用循环。
 
 
 **例子:**
