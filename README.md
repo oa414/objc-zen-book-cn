@@ -1915,7 +1915,7 @@ Capturing 'self' strongly in this block is likely to lead to a retain cycle （�
 **方案 2. 在 block 外定义一个 `__weak` 的 引用到 self，并且在 block 里面使用这个弱引用**
 
 
-这样会避免循环引用，也是我们通常在 block 已经被 property 属性中的 self (译者注：属性默认会强引用 self) retain 的时候会做的。
+这样会避免循坏引用，也是通常情况下我们的block作为类的属性被self retain 的时候会做的。
 
 ```objective-c
 __weak typeof(self) weakSelf = self;
@@ -1938,7 +1938,7 @@ MyViewController *myController = [[MyViewController alloc] init...];
 
 **方案 3. 在 block 外定义一个 `__weak` 的 引用到 self，并在在 block 内部通过这个弱引用定义一个 `__strong`  的引用**
 
-你可能会想，首先，这是避免 retain cycle  警告的一个技巧。这不是重点，这个 self 的强引用在 block 执行时被创建，在 block 使用 self 时(什么时候使用，在 block 定义时就被定下来了)，就会 retin self 对象。
+你可能会想，首先，这是避免 retain cycle  警告的一个技巧。这不是重点，这个 self 的强引用是在block 执行时 被创建的，但是否使用 self 在 block 定义时就已经定下来了， 因此self (在block执行时) 会被 retain.
 
 [Apple 文档][blocks_caveat1] 中表示 "为了 non-trivial cycles ，你应该这样" ：
 
