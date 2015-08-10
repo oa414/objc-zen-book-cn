@@ -1971,7 +1971,7 @@ myController.completionHandler =  ^(NSInteger result) {
 
 虽然有 Kazuki Sakamoto 和 Tomohiko Furumoto) 讨论的 [一][blocks_caveat2] [些][blocks_caveat3] [的][blocks_caveat4] [在线][blocks_caveat5] [参考][blocks_caveat6],  [Matt Galloway][blocks_caveat16] 的 ([Effective Objective-C 2.0][blocks_caveat14] 和 [Pro Multithreading and Memory Management for iOS and OS X][blocks_caveat15] ，大多数开发者始终没有弄清楚概念。
 
-在 block 内用强引用的优点是，抢占执行的时候的鲁棒性。看上面的三个例子，在 block 执行的时候
+在 block 内用强引用的优点是，抢占执行的时候的鲁棒性。在 block 执行的时候, 再次温故下上面的三个例子：
 
 **方案 1. 直接在 block 里面使用关键词 `self`**
 
@@ -1979,9 +1979,9 @@ myController.completionHandler =  ^(NSInteger result) {
 
 **方案 2. 在 block 外定义一个 `__weak` 的 引用到 self，并且在 block 里面使用这个弱引用**
 
-没有循环引用的时候，block 是否被 retain 或者是一个属性都没关系。如果 block 被传递或者 copy 了，在执行的时候，weakSelf 可能会变成 nil。
+不管 block 是否通过属性被 retain ，这里都不会发生循环引用。如果 block 被传递或者 copy 了，在执行的时候，weakSelf 可能已经变成 nil。
 
-block 的执行可以抢占，并且后来的对 weakSelf 的不同调用可以导致不同的值(比如，在 一个特定的执行 weakSelf 可能赋值为 nil )
+block 的执行可以抢占，而且对 weakSelf 指针的调用时序不同可以导致不同的结果(如：在一个特定的时序下 weakSelf 可能会变成nil)。
 
 ```objective-c
 __weak typeof(self) weakSelf = self;
@@ -1994,7 +1994,7 @@ dispatch_block_t block =  ^{
 
 **方案 3. 在 block 外定义一个 `__weak` 的 引用到 self，并在在 block 内部通过这个弱引用定义一个 `__strong`  的引用。**
 
-不论管 block 是否被 retain 或者是一个属性，这样也不会有循环引用。如果 block 被传递到其他对象并且被复制了，执行的时候，weakSelf 可能被nil，因为强引用被复制并且不会变成nil的时候，我们确保对象 在 block 调用的完整周期里面被 retain了，如果抢占发生了，随后的对 strongSelf 的执行会继续并且会产生一样的值。如果 strongSelf 的执行到 nil，那么在 block 不能正确执行前已经返回了。
+不管 block 是否通过属性被 retain ，这里也不会发生循环引用。如果 block 被传递到其他对象并且被复制了，执行的时候，weakSelf 可能被nil，因为强引用被赋值并且不会变成nil的时候，我们确保对象 在 block 调用的完整周期里面被 retain了，如果抢占发生了，随后的对 strongSelf 的执行会继续并且会产生一样的值。如果 strongSelf 的执行到 nil，那么在 block 不能正确执行前已经返回了。
 
 ```objective-c
 __weak typeof(self) weakSelf = self;
@@ -2012,7 +2012,7 @@ myObj.myBlock =  ^{
 };
 ```
  
-在一个 ARC 的环境中，如果尝试用 `->`符号来表示，编译器会警告一个错误：
+在ARC条件中，如果尝试用 `->` 符号访问一个实例变量，编译器会给出非常清晰的错误信息：
 
 ```objective-c
 Dereferencing a __weak pointer is not allowed due to possible null value caused by race condition, assign it to a strong variable first. (对一个 __weak 指针的解引用不允许的，因为可能在竞态条件里面变成 null, 所以先把他定义成 strong 的属性)
