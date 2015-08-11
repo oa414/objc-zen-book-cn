@@ -2051,7 +2051,8 @@ myObj.myBlock =  ^{
 [blocks_caveat15]: http://www.amazon.it/Pro-Multithreading-Memory-Management-Ios/dp/1430241160
 [blocks_caveat16]: https://twitter.com/mattjgalloway
 
-## 委托和数据源
+## 代理和数据源
+(译者注： 隐含的意思为两种模式：*委托 --- 代理* 模式 以及 *委托 --- 数据源* 模式)
 
 
 委托代理( 译者注：指 委托者---代理者 模式 )是 Apple 的框架里面使用广泛的模式，同时它是四人帮的书“设计模式”中的重要模式之一。委托代理模式是单向的，消息的发送方（委托方）需要知道接收方（代理方）是谁，反过来就没有必要了。对象之间耦合较松，发送方仅需知道它的代理方是否遵守相关 protocol 即可。
