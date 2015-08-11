@@ -2054,41 +2054,41 @@ myObj.myBlock =  ^{
 ## 委托和数据源
 
 
-委托是 Apple 的框架里面使用广泛的模式，同时它是一个重要的 四人帮的书“设计模式”中的模式。委托模式是单向的，消息的发送方（委托方）需要知道接收方（委托），反过来就不是了。对象之间没有多少耦合，因为发送方只要知道它的委托实现了对应的 protocol。
+委托代理( 译者注：指 委托者---代理者 模式 )是 Apple 的框架里面使用广泛的模式，同时它是四人帮的书“设计模式”中的重要模式之一。委托代理模式是单向的，消息的发送方（委托方）需要知道接收方（代理方）是谁，反过来就没有必要了。对象之间耦合较松，发送方仅需知道它的代理方是否遵守相关 protocol 即可。
 
-本质上，委托模式只需要委托提供一些回调方法，就是说委托实现了一系列空返回值的方法。
+本质上，委托代理模式仅需要代理方提供一些回调方法，即代理方需要实现一系列空返回值的方法。
 
-不幸的是 Apple 的 API 并没有尊重这个原则，开发者也效仿 Apple 进入了歧途。一个典型的例子是 [UITableViewDelegate](https://developer.apple.com/library/ios/documentation/uikit/reference/UITableViewDelegate_Protocol/Reference/Reference.html) 协议。
+不幸的是Apple的API并没有遵守这个原则，开发者也效仿Apple进入了一个误区。典型的例子就是 [UITableViewDelegate](https://developer.apple.com/library/ios/documentation/uikit/reference/UITableViewDelegate_Protocol/Reference/Reference.html) 协议。
 
-一些有 void 返回类型的方法就像回调
+它的一些方法返回void类型，就像我们所说的回调：
 
 ```objective-c
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath;
 - (void)tableView:(UITableView *)tableView didHighlightRowAtIndexPath:(NSIndexPath *)indexPath;
 ```
 
-但是其他的不是
+但是其他的就不是那么回事：
 
 ```objective-c
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath;
 - (BOOL)tableView:(UITableView *)tableView canPerformAction:(SEL)action forRowAtIndexPath:(NSIndexPath *)indexPath withSender:(id)sender;
 ```
 
-当委托者询问委托对象一些信息的时候，这就暗示着信息是从委托对象流向委托者，而不会反过来。 这个概念就和委托模式有些不同，它是一个另外的模式：数据源。
+当委托者询问代理者一些信息的时候，这就暗示着信息是从代理者流向委托者而非相反的过程。 这(委托者 ==Data==> 代理者)是概念性的不同，须用另一个新的名字来描述这种模式：数据源（译者注： 即 委托者 --- 数据源 模式）。
 
-可能有人会说 Apple 有一个 [UITableViewDataSouce](https://developer.apple.com/library/ios/documentation/uikit/reference/UITableViewDataSource_Protocol/Reference/Reference.html)  protocol 来做这个（虽然使用委托模式的名字），但是实际上它的方法是用来提供真实的数据应该如何被展示的信息的。
+可能有人会说 Apple 有一个 [UITableViewDataSouce](https://developer.apple.com/library/ios/documentation/uikit/reference/UITableViewDataSource_Protocol/Reference/Reference.html)  protocol 来做这个（虽然使用委托代理模式的名字），但是实际上它的方法是用来提供真实的数据应该如何被展示的信息的。
 
 ```objective-c
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath;
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView;
 ```
 
-此外，以上两个方法 Apple 混合了展示层和数据层，这显的非常糟糕，但是很少的开发者感到糟糕。而且我们在这里把空返回值和非空返回值的方法都天真地叫做委托方法。
+此外，以上两个方法 Apple 混合了展示层和数据层，这显的非常糟糕，但是很少的开发者感到糟糕。而且我们在这里把空返回值和非空返回值的方法都天真地叫做代理方法。
 
 为了分离概念，我们应该这样做：
 
-* 委托模式：事件发生的时候，委托者需要通知委托
-* 数据源模式: 委托方需要从数据源对象拉取数据
+* (委托)代理模式：事件发生的时候，委托者需要通知代理者。
+* (委托)数据源模式: 委托者需要从数据源对象拉取数据。
 
 
 这个是实际的例子：
@@ -2104,7 +2104,6 @@ myObj.myBlock =  ^{
 - (ZOCUserCredentials *)credentialsForSignUpViewController:(ZOCSignUpViewController *)controller;
 @end
 
-@protocol ZOCSignUpViewControllerDataSource <NSObject>
 
 @interface ZOCSignUpViewController : UIViewController
 
@@ -2116,26 +2115,26 @@ myObj.myBlock =  ^{
 ```
 
 
-在上面的例子里面，委托方法需要总是有一个调用方作为第一个参数，否则委托对象可能被不能区别不同的委托者的实例。此外，如果调用者没有被传递到委托对象，那么就没有办法让一个委托对象处理两个不同的委托者了。所以，下面这样的方法就是人神共愤的：
+代理方法必须以调用者(即委托者)作为第一个参数，就像上面的例子一样。否则代理者无法区分不同的委托者实例。换句话说，调用者(委托者)没有被传递给代理，那就没有方法让代理处理两个不同的委托者，所以下面这种写法人神共怒：
 
 
 ```objective-c
 - (void)calculatorDidCalculateValue:(CGFloat)value;
 ```
 
-默认情况下，委托对象需要实现 protocol 的方法。可以用`@required` 和  `@optional` 关键字来标记方法是否是必要的还是可选的。
+默认情况下，代理者需要实现 protocol 的方法。可以用`@required` 和  `@optional` 关键字来标记方法是否是必要的还是可选的(默认是 `@required`: 必需的)。
 
 
 ```objective-c
 @protocol ZOCSignUpViewControllerDelegate <NSObject>
 @required
-- (void)signUpViewController:(ZOCSignUpViewController *)controller didProvideSignUpInfo:(NSDictionary *);
+- (void)signUpViewController:(ZOCSignUpViewController *)controller didProvideSignUpInfo:(NSDictionary *)dict;
 @optional
 - (void)signUpViewControllerDidPressSignUpButton:(ZOCSignUpViewController *)controller;
 @end
 ```
 
-对于可选的方法，委托者必须在发送消息前检查委托是否确实实现了特定的方法（否则会 crash）：
+对于可选的方法，委托者必须在发送消息前检查代理是否确实实现了特定的方法（否则会 crash）：
 
 ```objective-c
 if ([self.delegate respondsToSelector:@selector(signUpViewControllerDidPressSignUpButton:)]) {
