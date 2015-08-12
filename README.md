@@ -2150,11 +2150,9 @@ if ([self.delegate respondsToSelector:@selector(signUpViewControllerDidPressSign
 
 `UIViewControllerB < UIViewControllerA < UIViewController`
 
-`UIViewControllerA` conforms to `UITableViewDelegate` and implements `- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath`.
-
 `UIViewControllerA` 遵从 `UITableViewDelegate` 并且实现了 `- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath`.
 
-你可能会想要提供一个和 `UIViewControllerB` 不同的实现。一个实现可能是这样子的：
+你可能会想要在 `UIViewControllerB` 中提供一个不同的实现，这个实现可能是这样子的：
 
 ```objective-c
 
@@ -2168,19 +2166,13 @@ if ([self.delegate respondsToSelector:@selector(signUpViewControllerDidPressSign
 
 ```
 
-但是如果超类(`UIViewControllerA`)没有实现这个方法呢？
-
-
-调用过程
-
-```objective-c
-[super respondsToSelector:@selector(tableView:heightForRowAtIndexPath:)]
-```
-
-会用 NSObject 的实现，寻找，在 `self` 的上下文中无疑有它的实现，但是 App 会在下一行 crash 并且报下面的错：
+但是如果超类(`UIViewControllerA`)没有实现这个方法呢？此时调用`[super respondsToSelector:@selector(tableView:heightForRowAtIndexPath:)]`方法，将使用 NSObject 的实现，在 `self` 上下文深入查找并且明确 `self` 实现了这个方法（因为 `UITableViewControllerA` 遵从 `UITableViewDelegate`），但是应用将在下一行发生崩溃，并提示如下错误信息：
 
 ```
 *** Terminating app due to uncaught exception 'NSInvalidArgumentException', reason: '-[UIViewControllerB tableView:heightForRowAtIndexPath:]: unrecognized selector sent to instance 0x8d82820'
+
+*** 由于未捕获异常 `NSInvalidArgumentException(无效的参数异常)`导致应用终止，理由是：向实例 ox8d82820 发送了未注册的 selector `- [UIViewControllerB tableView:heightForRowAtIndexPath:]`
+
 ```
 
 这种情况下我们需要来询问特定的类实例是否可以响应对应的 selector。下面的代码提供了一个小技巧：
@@ -2197,7 +2189,7 @@ if ([self.delegate respondsToSelector:@selector(signUpViewControllerDidPressSign
 
 ```
 
-就像上面的丑陋的代码，一个委托方法也比重载方法好。
+就像上面丑陋的代码，通常它会是更好的设计架构的方式，因为这种方式委托方法不需要被重写。
 
 ###  多重委托
 
