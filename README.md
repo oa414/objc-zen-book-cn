@@ -2171,7 +2171,7 @@ if ([self.delegate respondsToSelector:@selector(signUpViewControllerDidPressSign
 ```
 *** Terminating app due to uncaught exception 'NSInvalidArgumentException', reason: '-[UIViewControllerB tableView:heightForRowAtIndexPath:]: unrecognized selector sent to instance 0x8d82820'
 
-*** 由于未捕获异常 `NSInvalidArgumentException(无效的参数异常)`导致应用终止，理由是：向实例 ox8d82820 发送了未注册的 selector `- [UIViewControllerB tableView:heightForRowAtIndexPath:]`
+*** 由于未捕获异常 `NSInvalidArgumentException(无效的参数异常)`导致应用终止，理由是：向实例 ox8d82820 发送了无法识别的 selector `- [UIViewControllerB tableView:heightForRowAtIndexPath:]`
 
 ```
 
