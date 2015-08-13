@@ -2418,8 +2418,7 @@ Aspect 的 API 有趣并且非常强大：
 * 如果SPOC文件异常,至少有一个 selector 或者 类 识别不出来，应用将会在启动时崩溃(对我们来说这很酷).
 * 公司负责统计的团队通常会提供统计文档，罗列出需要追踪的事件。这个文档可以很容易映射到一个 SPOC 文件。
 * 追踪逻辑抽象化之后，扩展到很多其他统计框架会很方便
-* 对于屏幕视图，对于需要定义 selector 的方法，只需要在 SPOC 文件修改相关的类（相关的切面会加入到 `viewDidAppear:` 方法）。如果要同时发送屏幕视图和时间，一个追踪的 label 和其他元信息来提供额外数据（取决于统计提供方）
-
+* 对于屏幕视图，对于需要定义 selector 的方法，只需要在 SPOC 文件修改相关的类（相关的切面会加入到 `viewDidAppear:` 方法）。如果要同时发送屏幕视图和事件，需要（依靠统计提供方）提供一个追踪的标示或者可能还需要提供其他的元信息。
 
 
 
@@ -2462,8 +2461,7 @@ NSDictionary *analyticsConfiguration()
 ```
 
 
-
-这个提及的架构在 Github 的[EF Education First](https://github.com/ef-ctx/JohnnyEnglish/blob/master/CTXUserActivityTrackingManager.m) 中托管 
+提及的架构托管 在 Github 的[EF Education First](https://github.com/ef-ctx/JohnnyEnglish/blob/master/CTXUserActivityTrackingManager.m) 中.
 
 ```objective-c
 - (void)setupWithConfiguration:(NSDictionary *)configuration
@@ -2475,11 +2473,13 @@ NSDictionary *analyticsConfiguration()
         [clazz aspect_hookSelector:@selector(viewDidAppear:)
                        withOptions:AspectPositionAfter
                         usingBlock:^(id<AspectInfo> aspectInfo) {
-            dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-                NSString *viewName = trackedScreen[@"label"];
-                [tracker trackScreenHitWithName:viewName];
-            });
-        }];
+               dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), 
+                          ^{
+                					NSString *viewName = trackedScreen[@"label"];
+               	 				[tracker trackScreenHitWithName:viewName];
+            					});
+        					}
+                            error:nil];
 
     }
 
@@ -2491,11 +2491,15 @@ NSDictionary *analyticsConfiguration()
         [clazz aspect_hookSelector:selektor
                        withOptions:AspectPositionAfter
                         usingBlock:^(id<AspectInfo> aspectInfo) {
-            dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-                UserActivityButtonPressedEvent *buttonPressEvent = [UserActivityButtonPressedEvent eventWithLabel:trackedEvents[@"label"]];
-                [tracker trackEvent:buttonPressEvent];
-            });
-        }];
+            	 dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), 
+            	 				^{
+                						UserActivityButtonPressedEvent *buttonPressEvent = \
+                								[UserActivityButtonPressedEvent \
+                								    eventWithLabel:trackedEvents[@"label"]];
+                						[tracker trackEvent:buttonPressEvent];
+            					});
+        				}
+       			           error:nil];
 
     }
 }
