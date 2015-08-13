@@ -2146,7 +2146,7 @@ if ([self.delegate respondsToSelector:@selector(signUpViewControllerDidPressSign
 ###   继承
 
 
-有时候你可能需要重载委托方法。考虑有两个 UIViewController 子类的情况：UIViewControllerA 和 UIViewControllerB，有下面的类继承关系。
+有时候你可能需要重载代理方法。考虑有两个 UIViewController 子类的情况：UIViewControllerA 和 UIViewControllerB，有下面的类继承关系。
 
 `UIViewControllerB < UIViewControllerA < UIViewController`
 
@@ -2189,7 +2189,7 @@ if ([self.delegate respondsToSelector:@selector(signUpViewControllerDidPressSign
 
 ```
 
-就像上面丑陋的代码，通常它会是更好的设计架构的方式，因为这种方式委托方法不需要被重写。
+就像上面丑陋的代码，通常它会是更好的设计架构的方式，因为这种方式代理方法不需要被重写。
 
 ###  多重委托
 
