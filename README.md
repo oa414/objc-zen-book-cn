@@ -2359,6 +2359,7 @@ Aspect 的 API 有趣并且非常强大：
 比如，下面的代码会对于执行 `MyClass` 类的 `myMethod:`  (实例或者类的方法) 执行块参数。
 
 ```objective-c
+
 [MyClass aspect_hookSelector:@selector(myMethod:)
                  withOptions:AspectPositionAfter
                   usingBlock:^(id<AspectInfo> aspectInfo) {
@@ -2381,6 +2382,7 @@ Aspect 的 API 有趣并且非常强大：
 在 Ray Wenderlich 的博客里有 [文章](http://www.raywenderlich.com/53459/google-analytics-ios) 和一些示例代码，通过在你的 view controller 里面加入 [Google Analytics](https://developers.google.com/analytics/devguides/collection/ios/)  进行统计。
 
 ```objective-c
+
 - (void)logButtonPress:(UIButton *)button {
     id<GAITracker> tracker = [[GAI sharedInstance] defaultTracker];
     [tracker send:[[GAIDictionaryBuilder createEventWithCategory:@"UX"
@@ -2394,6 +2396,7 @@ Aspect 的 API 有趣并且非常强大：
 上面的代码在按钮点击的时候发送了特定的上下文事件。但是当你想追踪屏幕的时候会变得很糟。
 
 ```objective-c
+
 - (void)viewDidAppear:(BOOL)animated {
     [super viewDidAppear:animated];
 
@@ -2425,6 +2428,7 @@ Aspect 的 API 有趣并且非常强大：
 我们可能希望一个 SPOC 文件类似下面的（同样的一个 .plist 文件会适配）
 
 ```objective-c
+
 NSDictionary *analyticsConfiguration()
 {
     return @{
@@ -2464,6 +2468,7 @@ NSDictionary *analyticsConfiguration()
 提及的架构托管 在 Github 的[EF Education First](https://github.com/ef-ctx/JohnnyEnglish/blob/master/CTXUserActivityTrackingManager.m) 中.
 
 ```objective-c
+
 - (void)setupWithConfiguration:(NSDictionary *)configuration
 {
     // screen views tracking
