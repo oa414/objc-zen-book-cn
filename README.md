@@ -2097,44 +2097,44 @@ myObj.myBlock =  ^{
 [blocks_caveat16]: https://twitter.com/mattjgalloway
 
 ## 委托和数据源
+(译者注： 这里是说两种模式：[委托模式](https://www.wikiwand.com/zh/%E5%A7%94%E6%89%98%E6%A8%A1%E5%BC%8F) 以及 [数据源]() 模式)
 
 
-委托是 Apple 的框架里面使用广泛的模式，同时它是一个重要的 四人帮的书“设计模式”中的模式。委托模式是单向的，消息的发送方（委托方）需要知道接收方（委托），反过来就不是了。对象之间没有多少耦合，因为发送方只要知道它的委托实现了对应的 protocol。
+委托模式是 Apple 的框架里面使用广泛的模式，同时它是四人帮的书“设计模式”中的重要模式之一。委托代理模式是单向的，消息的发送方（委托方）需要知道接收方（代理方）是谁，反过来就没有必要了。对象之间耦合较松，发送方仅需知道它的代理方是否遵守相关 protocol 即可。
 
-本质上，委托模式只需要委托提供一些回调方法，就是说委托实现了一系列空返回值的方法。
+本质上，委托模式仅需要代理方提供一些回调方法，即代理方需要实现一系列空返回值的方法。
 
-不幸的是 Apple 的 API 并没有尊重这个原则，开发者也效仿 Apple 进入了歧途。一个典型的例子是 [UITableViewDelegate](https://developer.apple.com/library/ios/documentation/uikit/reference/UITableViewDelegate_Protocol/Reference/Reference.html) 协议。
+不幸的是 Apple 的 API 并没有遵守这个原则，开发者也效仿 Apple 进入了一个误区。典型的例子就是 [UITableViewDelegate](https://developer.apple.com/library/ios/documentation/uikit/reference/UITableViewDelegate_Protocol/Reference/Reference.html) 协议。
 
-一些有 void 返回类型的方法就像回调
+它的一些方法返回 void 类型，就像我们所说的回调：
 
 ```objective-c
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath;
 - (void)tableView:(UITableView *)tableView didHighlightRowAtIndexPath:(NSIndexPath *)indexPath;
 ```
 
-但是其他的不是
+但是其他的就不是那么回事：
 
 ```objective-c
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath;
 - (BOOL)tableView:(UITableView *)tableView canPerformAction:(SEL)action forRowAtIndexPath:(NSIndexPath *)indexPath withSender:(id)sender;
 ```
 
-当委托者询问委托对象一些信息的时候，这就暗示着信息是从委托对象流向委托者，而不会反过来。 这个概念就和委托模式有些不同，它是一个另外的模式：数据源。
+当委托者询问代理者一些信息的时候，这就暗示着信息是从代理者流向委托者而非相反的过程。 这(译者注：委托者 ==Data==> 代理者)是概念性的不同，须用另一个新的名字来描述这种模式：数据源模式。
 
-可能有人会说 Apple 有一个 [UITableViewDataSouce](https://developer.apple.com/library/ios/documentation/uikit/reference/UITableViewDataSource_Protocol/Reference/Reference.html)  protocol 来做这个（虽然使用委托模式的名字），但是实际上它的方法是用来提供真实的数据应该如何被展示的信息的。
+可能有人会说 Apple 有一个 [UITableViewDataSouce](https://developer.apple.com/library/ios/documentation/uikit/reference/UITableViewDataSource_Protocol/Reference/Reference.html)  protocol 来做这个（虽然使用委托代理模式的名字），但是实际上它的方法是用来提供真实的数据应该如何被展示的信息的。
 
 ```objective-c
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath;
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView;
 ```
 
-此外，以上两个方法 Apple 混合了展示层和数据层，这显的非常糟糕，但是很少的开发者感到糟糕。而且我们在这里把空返回值和非空返回值的方法都天真地叫做委托方法。
+此外，以上两个方法 Apple 混合了展示层和数据层，这显的非常糟糕，但是很少的开发者感到糟糕。而且我们在这里把空返回值和非空返回值的方法都天真地叫做代理方法。
 
 为了分离概念，我们应该这样做：
 
-* 委托模式：事件发生的时候，委托者需要通知委托
-* 数据源模式: 委托方需要从数据源对象拉取数据
-
+* 委托模式(delegate pattern)：事件发生的时候，委托者需要通知代理者。
+* 数据源模式(datasource pattern): 委托者需要从数据源对象拉取数据。
 
 这个是实际的例子：
 
@@ -2149,7 +2149,6 @@ myObj.myBlock =  ^{
 - (ZOCUserCredentials *)credentialsForSignUpViewController:(ZOCSignUpViewController *)controller;
 @end
 
-@protocol ZOCSignUpViewControllerDataSource <NSObject>
 
 @interface ZOCSignUpViewController : UIViewController
 
@@ -2161,26 +2160,26 @@ myObj.myBlock =  ^{
 ```
 
 
-在上面的例子里面，委托方法需要总是有一个调用方作为第一个参数，否则委托对象可能被不能区别不同的委托者的实例。此外，如果调用者没有被传递到委托对象，那么就没有办法让一个委托对象处理两个不同的委托者了。所以，下面这样的方法就是人神共愤的：
+代理方法必须以调用者(即委托者)作为第一个参数，就像上面的例子一样。否则代理者无法区分不同的委托者实例。换句话说，调用者(委托者)没有被传递给代理，那就没有方法让代理处理两个不同的委托者，所以下面这种写法人神共怒：
 
 
 ```objective-c
 - (void)calculatorDidCalculateValue:(CGFloat)value;
 ```
 
-默认情况下，委托对象需要实现 protocol 的方法。可以用`@required` 和  `@optional` 关键字来标记方法是否是必要的还是可选的。
+默认情况下，代理者需要实现 protocol 的方法。可以用`@required` 和  `@optional` 关键字来标记方法是否是必要的还是可选的(默认是 `@required`: 必需的)。
 
 
 ```objective-c
 @protocol ZOCSignUpViewControllerDelegate <NSObject>
 @required
-- (void)signUpViewController:(ZOCSignUpViewController *)controller didProvideSignUpInfo:(NSDictionary *);
+- (void)signUpViewController:(ZOCSignUpViewController *)controller didProvideSignUpInfo:(NSDictionary *)dict;
 @optional
 - (void)signUpViewControllerDidPressSignUpButton:(ZOCSignUpViewController *)controller;
 @end
 ```
 
-对于可选的方法，委托者必须在发送消息前检查委托是否确实实现了特定的方法（否则会 crash）：
+对于可选的方法，委托者必须在发送消息前检查代理是否确实实现了特定的方法（否则会 crash）：
 
 ```objective-c
 if ([self.delegate respondsToSelector:@selector(signUpViewControllerDidPressSignUpButton:)]) {
@@ -2191,15 +2190,13 @@ if ([self.delegate respondsToSelector:@selector(signUpViewControllerDidPressSign
 ###   继承
 
 
-有时候你可能需要重载委托方法。考虑有两个 UIViewController 子类的情况：UIViewControllerA 和 UIViewControllerB，有下面的类继承关系。
+有时候你可能需要重载代理方法。考虑有两个 UIViewController 子类的情况：UIViewControllerA 和 UIViewControllerB，有下面的类继承关系。
 
 `UIViewControllerB < UIViewControllerA < UIViewController`
 
-`UIViewControllerA` conforms to `UITableViewDelegate` and implements `- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath`.
-
 `UIViewControllerA` 遵从 `UITableViewDelegate` 并且实现了 `- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath`.
 
-你可能会想要提供一个和 `UIViewControllerB` 不同的实现。一个实现可能是这样子的：
+你可能会想要在 `UIViewControllerB` 中提供一个不同的实现，这个实现可能是这样子的：
 
 ```objective-c
 
@@ -2213,19 +2210,13 @@ if ([self.delegate respondsToSelector:@selector(signUpViewControllerDidPressSign
 
 ```
 
-但是如果超类(`UIViewControllerA`)没有实现这个方法呢？
-
-
-调用过程
-
-```objective-c
-[super respondsToSelector:@selector(tableView:heightForRowAtIndexPath:)]
-```
-
-会用 NSObject 的实现，寻找，在 `self` 的上下文中无疑有它的实现，但是 App 会在下一行 crash 并且报下面的错：
+但是如果超类(`UIViewControllerA`)没有实现这个方法呢？此时调用`[super respondsToSelector:@selector(tableView:heightForRowAtIndexPath:)]`方法，将使用 NSObject 的实现，在 `self` 上下文深入查找并且明确 `self` 实现了这个方法（因为 `UITableViewControllerA` 遵从 `UITableViewDelegate`），但是应用将在下一行发生崩溃，并提示如下错误信息：
 
 ```
 *** Terminating app due to uncaught exception 'NSInvalidArgumentException', reason: '-[UIViewControllerB tableView:heightForRowAtIndexPath:]: unrecognized selector sent to instance 0x8d82820'
+
+*** 由于未捕获异常 `NSInvalidArgumentException(无效的参数异常)`导致应用终止，理由是：向实例 ox8d82820 发送了无法识别的 selector `- [UIViewControllerB tableView:heightForRowAtIndexPath:]`
+
 ```
 
 这种情况下我们需要来询问特定的类实例是否可以响应对应的 selector。下面的代码提供了一个小技巧：
@@ -2242,7 +2233,7 @@ if ([self.delegate respondsToSelector:@selector(signUpViewControllerDidPressSign
 
 ```
 
-就像上面的丑陋的代码，一个委托方法也比重载方法好。
+就像上面丑陋的代码，通常它会是更好的设计架构的方式，因为这种方式代理方法不需要被重写。
 
 ###  多重委托
 
@@ -2250,21 +2241,21 @@ if ([self.delegate respondsToSelector:@selector(signUpViewControllerDidPressSign
 多重委托是一个非常基础的概念，但是，大多数开发者对此非常不熟悉而使用 NSNotifications。就像你可能注意到的，委托和数据源是对象之间的通讯模式，但是只涉及两个对象：委托者和委托。
 
 
-数据源模式强制一对一的关系，发送者来像一个并且只是一个对象来请求信息。但是委托模式不一样，它可以完美得有多个委托来等待回调操作。
+数据源模式强制一对一的关系，当发送者请求信息时有且只能有一个对象来响应。对于代理模式而言这会有些不同，我们有足够的理由要去实现很多代理者等待(唯一委托者的)回调的场景。
 
 
+一些情况下至少有两个对象对特定委托者的回调感兴趣，而后者(即委托者)需要知道他的所有代理。这种方法在分布式系统下更为适用并且广泛使用于大型软件的复杂信息流程中。
 
-至少两个对象需要接收来自特定委托者的回调，并且后一个需要知道所有的委托，这个方法更好的适用于分布式系统并且更加广泛用于大多数软件的复杂信息流传递。
+多重委托可以用很多方式实现，但读者更在乎找到适合自己的个人实现。Luca Bernardi 在他的 [LBDelegateMatrioska](https://github.com/lukabernardi/LBDelegateMatrioska)中提供了上述范式的一个非常简洁的实现。
 
-多重委托可以用很多方式实现，读者当然喜欢找到一个好的个人实现，一个非常灵巧的多重委托实现可以参考 Luca Bernardi  在他的 [LBDelegateMatrioska](https://github.com/lukabernardi/LBDelegateMatrioska) 的原理。
-
-
-一个基本的实现在下面给出。Cocoa 在数据结构中使用弱引用来避免引用循环，我们使用一个类来作为委托者持有委托对象的弱引用。
+这里给出一个基本的实现,方便你更好地理解这个概念。即使在Cocoa中也有一些在数据结构中保存 weak 引用来避免 引用循环的方法， 这里我们使用一个类来保留代理对象的 weak 引用(就像单一代理那样):
 
 ```objective-c
 @interface ZOCWeakObject : NSObject
 
-@property (nonatomic, weak, readonly) id object;
+@property (nonatomic, readonly, weak) id object; 
+//译者注：这里原文并没有很好地实践自己在本书之前章节所讨论的关于property属性修饰符的
+//人体工程学法则: 从左到右： 原子性 ===》 读写权限 (别名) ===》 内存管理权限符
 
 + (instancetype)weakObjectWithObject:(id)object;
 - (instancetype)initWithObject:(id)object;
@@ -2319,8 +2310,7 @@ if ([self.delegate respondsToSelector:@selector(signUpViewControllerDidPressSign
 ```
 
 
-一个简单的使用 weak 对象来完成多重引用的组成部分：
-
+使用 weak 对象来实现多重代理的简单组件：
 
 
 ```objective-c
@@ -2368,9 +2358,13 @@ if ([self.delegate respondsToSelector:@selector(signUpViewControllerDidPressSign
 @end
 ```
 
+<<<<<<< HEAD
 在 `registerDelegate:` 和 `deregisterDelegate:` 方法的帮助下，连接/解除组成部分很简单：如果委托对象不需要接收委托者的回调，仅仅需要'unsubscribe'。
+=======
+在 `registerDelegate:` 和 `deregisterDelegate:` 方法的帮助下，连接/解除组件之间的联系很简单：在某些时间点上，如果代理不需要接收委托者的回调，仅仅需要'unsubscribe'.
+>>>>>>> fbf72eb6ea063a019ff4f8fb1e88704df58500e9
 
-这在一些不同的 view 等待同一个回调来更新界面展示的时候很有用：如果 view 只是暂时隐藏（但是仍然存在），它可以仅仅需要取消对回调的订阅。
+当不同的 view 等待同一个回调来更新界面展示的时候，这很有用：如果 view 只是暂时隐藏（但是仍然存在），它仅仅需要取消对回调的订阅。
 
 
 # 面向切面编程
@@ -2380,10 +2374,10 @@ Aspect Oriented Programming (AOP，面向切面编程) 在 Objective-C 社区内
 
 引用 [Aspect Oriented Programming](http://en.wikipedia.org/wiki/Aspect-oriented_programming) 维基页面:
 
-> An aspect can alter the behavior of the base code (the non-aspect part of a program) by applying advice (additional behavior) at various join points (points in a program) specified in a quantification or query called a pointcut (that detects whether a given join point matches). (一个切面可以通过在多个 join points 中 实行 advice 改变基础代码的行为(程序的非切面的部分) )
+> An aspect can alter the behavior of the base code (the non-aspect part of a program) by applying advice (additional behavior) at various join points (points in a program) specified in a quantification or query called a pointcut (that detects whether a given join point matches). (一个切面可以通过在多个 join points 中附加的行为来改变基础代码的行为(程序的非切面的部分) )
 
 
-在 Objective-C 的世界里，这意味着使用运行时的特性来为 *切面* 增加适合的代码。通过切面增加的行为可以是：
+在 Objective-C 的世界里，这意味着使用运行时的特性来为指定的方法追加 *切面* 。切面所附加的行为可以是这样的：
 
 
 * 在类的特定方法调用前运行特定的代码
@@ -2413,6 +2407,7 @@ Aspect 的 API 有趣并且非常强大：
 比如，下面的代码会对于执行 `MyClass` 类的 `myMethod:`  (实例或者类的方法) 执行块参数。
 
 ```objective-c
+
 [MyClass aspect_hookSelector:@selector(myMethod:)
                  withOptions:AspectPositionAfter
                   usingBlock:^(id<AspectInfo> aspectInfo) {
@@ -2422,11 +2417,11 @@ Aspect 的 API 有趣并且非常强大：
 ```
 
 
-换一句话说：这个代码可以让在 `@selector` 参数对应的方法调用之后，在一个  `MyClass` 的对象上（或者在一个类本身，如果方法是一个类方法的话）执行 block 参数。
+换一句话说：任意的 `MyClass` 类型的对象(或者是类型本身当这个 @selector 方法为类方法时)的 `@selector` 方法执行完后，就会执行这个代码中块参数所提供的代码。
 
 我们为 `MyClass` 类的 `myMethod:` 方法增加了切面。
 
-通常 AOP 用来实现横向切面的完美的适用的地方是统计和日志。
+通常 AOP 被用来实现横向切面。统计与日志就是一个完美的例子。
 
 下面的例子里面，我们会用AOP用来进行统计。统计是iOS项目里面一个热门的特性，有很多选择比如 Google Analytics, Flurry, MixPanel, 等等.
 
@@ -2435,6 +2430,7 @@ Aspect 的 API 有趣并且非常强大：
 在 Ray Wenderlich 的博客里有 [文章](http://www.raywenderlich.com/53459/google-analytics-ios) 和一些示例代码，通过在你的 view controller 里面加入 [Google Analytics](https://developers.google.com/analytics/devguides/collection/ios/)  进行统计。
 
 ```objective-c
+
 - (void)logButtonPress:(UIButton *)button {
     id<GAITracker> tracker = [[GAI sharedInstance] defaultTracker];
     [tracker send:[[GAIDictionaryBuilder createEventWithCategory:@"UX"
@@ -2445,9 +2441,10 @@ Aspect 的 API 有趣并且非常强大：
 ```
 
 
-上面的代码在按钮点击的时候发送了特定的上下文事件。但是当你想追踪屏幕的时候会更糟糕。
+上面的代码在按钮点击的时候发送了特定的上下文事件。但是当你想追踪屏幕的时候会变得很糟。
 
 ```objective-c
+
 - (void)viewDidAppear:(BOOL)animated {
     [super viewDidAppear:animated];
 
@@ -2461,24 +2458,25 @@ Aspect 的 API 有趣并且非常强大：
 
 
 
-你可以用 AOP 来追踪屏幕视图来修改 `viewDidAppear:`  方法。同时，我们可以用同样的方法，来在其他感兴趣的方法里面加入事件追踪，比如任何用户点击按钮的时候（比如频繁地调用IBAction）
+我们可以在类的 `viewDidAppear:` 方法上使用 AOP 来追踪屏幕，并且我们可以使用同样的方法在其他我们感兴趣的方法上添加事件追踪。比如当用户点击某个按钮时(比如:一般调用对应的 IBAction).
 
 
-这个方法是干净并且非侵入性的：
+方法很简洁且不具侵入性：
 
-* 这个 view controller 不会被不属于它的代码污染
-* 为所有加入到我们代码的切面定义一个 SPOC 文件 (single point of customization)提供了可能
-* SPOC 应该在 App 刚开始启动的时候就加入切面
+* view controller 不会被不属于它的代码污染
+* 为所有加入到我们代码的切面指定一个 SPOC 文件 (single point of customization)提供了可能
+* SPOC 应该在 App 刚开始启动的时候用来添加切面
+* 如果SPOC文件异常,至少有一个 selector 或者 类 识别不出来，应用将会在启动时崩溃(对我们来说这很酷).
 * 公司负责统计的团队通常会提供统计文档，罗列出需要追踪的事件。这个文档可以很容易映射到一个 SPOC 文件。
 * 追踪逻辑抽象化之后，扩展到很多其他统计框架会很方便
-* 对于屏幕视图，对于需要定义 selector 的方法，只需要在 SPOC 文件修改相关的类（相关的切面会加入到 `viewDidAppear:` 方法）。如果要同时发送屏幕视图和时间，一个追踪的 label 和其他元信息来提供额外数据（取决于统计提供方）
-
+* 对于屏幕视图，对于需要定义 selector 的方法，只需要在 SPOC 文件修改相关的类（相关的切面会加入到 `viewDidAppear:` 方法）。如果要同时发送屏幕视图和事件，需要（依靠统计提供方）提供一个追踪的标示或者可能还需要提供其他的元信息。
 
 
 
 我们可能希望一个 SPOC 文件类似下面的（同样的一个 .plist 文件会适配）
 
 ```objective-c
+
 NSDictionary *analyticsConfiguration()
 {
     return @{
@@ -2515,10 +2513,10 @@ NSDictionary *analyticsConfiguration()
 ```
 
 
-
-这个提及的架构在 Github 的[EF Education First](https://github.com/ef-ctx/JohnnyEnglish/blob/master/CTXUserActivityTrackingManager.m) 中托管 
+提及的架构托管 在 Github 的[EF Education First](https://github.com/ef-ctx/JohnnyEnglish/blob/master/CTXUserActivityTrackingManager.m) 中.
 
 ```objective-c
+
 - (void)setupWithConfiguration:(NSDictionary *)configuration
 {
     // screen views tracking
@@ -2528,11 +2526,13 @@ NSDictionary *analyticsConfiguration()
         [clazz aspect_hookSelector:@selector(viewDidAppear:)
                        withOptions:AspectPositionAfter
                         usingBlock:^(id<AspectInfo> aspectInfo) {
-            dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-                NSString *viewName = trackedScreen[@"label"];
-                [tracker trackScreenHitWithName:viewName];
-            });
-        }];
+               dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), 
+                          ^{
+                          NSString *viewName = trackedScreen[@"label"];
+                        [tracker trackScreenHitWithName:viewName];
+                      });
+                  }
+                            error:nil];
 
     }
 
@@ -2544,11 +2544,15 @@ NSDictionary *analyticsConfiguration()
         [clazz aspect_hookSelector:selektor
                        withOptions:AspectPositionAfter
                         usingBlock:^(id<AspectInfo> aspectInfo) {
-            dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-                UserActivityButtonPressedEvent *buttonPressEvent = [UserActivityButtonPressedEvent eventWithLabel:trackedEvents[@"label"]];
-                [tracker trackEvent:buttonPressEvent];
-            });
-        }];
+               dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), 
+                      ^{
+                            UserActivityButtonPressedEvent *buttonPressEvent = \
+                                [UserActivityButtonPressedEvent \
+                                    eventWithLabel:trackedEvents[@"label"]];
+                            [tracker trackEvent:buttonPressEvent];
+                      });
+                }
+                       error:nil];
 
     }
 }
