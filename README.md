@@ -81,17 +81,13 @@
 我们在 2013 年 11 月份开始写这本书，最初的目标是提供一份如何编写干净漂亮的 Objective-C 代码的指南：现在虽然有很多指南，但是它们都是有一些问题的。我们不想介绍一些死板的规定，我们想提供一个在开发者们之间写更一致的代码的途径。随时间的推移，这本书开始转向介绍如何设计和构建优秀的代码。
 
 这本书的观点是代码不仅是可以编译的，同时应该是 “有效” 的。好的代码有一些特性：简明，自我解释，优秀的组织，良好的文档，良好的命名，优秀的设计以及可以被久经考验。
-
 本书的一个理念是是代码的清晰性优先于性能，同时阐述为什么应该这么做。
-
 虽然所有的代码都是 Objective-C 写的，但是一些主题是通用的，并且独立于编程语言。
 
 ## Swift
 
 在 2014 年 6 月 6 日，苹果发布了面向 iOS 和 Mac 开发的新语言： Swift。
-
 这个新语言与 Objective-C 截然不同。所以，我们改变了写这本书的计划。我们决定发布这本书当前的状态，而不是继续书写我们原来计划写下去的主题。
-
 Objective-C 没有消失，但是现在用一个慢慢失去关注的语言来继续写这本书并不是一个明智的选择。
 
 ## 贡献给社区
@@ -533,36 +529,23 @@ NSMutableArray *aMutableArray = [@[] mutableCopy];
 ```
 
 上面这种书写方式的效率和可读性的都存在问题。
-
 效率方面，一个不必要的不可变对象被创建后立马被废弃了；虽然这并不会让你的 App 变慢（除非这个方法被频繁调用），但是确实没必要为了少打几个字而这样做。
-
-可读性方面，存在两个问题：
-
-第一个问题是当你浏览代码并看见 `@[]` 的时候，你首先联想到的是 `NSArray` 实例，但是在这种情形下你需要停下来深思熟虑的检查；另一个问题是，一些新手以他的水平看到你的代码后可能会对这是一个可变对象还是一个不可变对象产生分歧。他/她可能不熟悉可变拷贝构造的含义（这并不是说这个知识不重要）。
-
-当然，不存在绝对的错误，我们只是讨论代码的可用性（包括可读性)。
+可读性方面，存在两个问题：第一个问题是当你浏览代码并看见 `@[]` 的时候，你首先联想到的是 `NSArray` 实例，但是在这种情形下你需要停下来深思熟虑的检查；另一个问题是，一些新手以他的水平看到你的代码后可能会对这是一个可变对象还是一个不可变对象产生分歧。他/她可能不熟悉可变拷贝构造的含义（这并不是说这个知识不重要）。当然，不存在绝对的错误，我们只是讨论代码的可用性（包括可读性)。
 
 #  类 
 
 ##  类名
 
-类名应该以**三**个大写字母作为前缀（双字母前缀为 Apple 的类预留）。尽管这个规范看起来有些古怪，但是这样做可以减少 Objective-C 没有命名空间所带来的问题。
-
+类名应该以**三**个大写字母作为前缀（双字母前缀为 Apple 的类预留）。尽管这个规范看起来有些古怪，但是这样做可以减少 Objective-c 没有命名空间所带来的问题。
 一些开发者在定义模型对象时并不遵循这个规范（对于 Core Data 对象，我们更应该遵循这个规范）。我们建议在定义 Core Data 对象时严格遵循这个约定，因为最终你可能需要把你的 Managed Object Model（托管对象模型）与其他（第三方库）的 MOMs（Managed Object Model）合并。
-
 你可能注意到了，这本书里类的前缀（不仅仅是类，也包括公开的常量、Protocol 等的前缀）是`ZOC`。
 
-另一个好的类的命名规范：当你创建一个子类的时候，你应该把说明性的部分放在前缀和父类名的在中间。
-
-举个例子：如果你有一个 `ZOCNetworkClient` 类，子类的名字会是`ZOCTwitterNetworkClient` (注意 "Twitter" 在 "ZOC" 和 "NetworkClient" 之间); 按照这个约定， 一个`UIViewController` 的子类会是 `ZOCTimelineViewController`.
+另一个好的类的命名规范：当你创建一个子类的时候，你应该把说明性的部分放在前缀和父类名的在中间。举个例子：如果你有一个 `ZOCNetworkClient` 类，子类的名字会是`ZOCTwitterNetworkClient` (注意 "Twitter" 在 "ZOC" 和 "NetworkClient" 之间); 按照这个约定， 一个`UIViewController` 的子类会是 `ZOCTimelineViewController`.
 
 
 ## Initializer 和 dealloc 
 
-推荐的代码组织方式是将 `dealloc` 方法放在实现文件的最前面（直接在  `@synthesize` 以及 `@dynamic` 之后），`init` 应该跟在 `dealloc` 方法后面。
-
-如果有多个初始化方法， 指定初始化方法 (designated initializer) 应该放在最前面，间接初始化方法 (secondary initializer) 跟在后面，这样更有逻辑性。
-
+推荐的代码组织方式是将 `dealloc` 方法放在实现文件的最前面（直接在  `@synthesize` 以及 `@dynamic` 之后），`init` 应该跟在 `dealloc` 方法后面。如果有多个初始化方法， 指定初始化方法 (designated initializer) 应该放在最前面，间接初始化方法 (secondary initializer) 跟在后面，这样更有逻辑性。
 如今有了 ARC，dealloc 方法几乎不需要实现，不过把 init 和 dealloc 放在一起可以从视觉上强调它们是一对的。通常，在 init 方法中做的事情需要在 dealloc 方法中撤销。
 
 `init` 方法应该是这样的结构：
@@ -582,16 +565,13 @@ NSMutableArray *aMutableArray = [@[] mutableCopy];
 为什么设置 `self` 为 `[super init]` 的返回值，以及中间发生了什么呢？这是一个十分有趣的话题。
 
 我们退一步讲：我们常常写 `[[NSObject alloc] init]` 这样的代码，从而淡化了 `alloc` 和 `init` 的区别。Objective-C 的这个特性叫做 *两步创建* 。 这意味着申请分配内存和初始化被分离成两步，`alloc` 和 `init`。
-
 - `alloc` 负责创建对象，这个过程包括分配足够的内存来保存对象，写入 `isa` 指针，初始化引用计数，以及重置所有实例变量。
 - `init` 负责初始化对象，这意味着使对象处于可用状态。这通常意味着为对象的实例变量赋予合理有用的值。
 
 `alloc` 方法将返回一个有效的未初始化的对象实例。每一个对这个实例发送的消息会被转换成一次 `objc_msgSend()` 函数的调用，形参 `self` 的实参是 `alloc` 返回的指针；这样 `self` 在所有方法的作用域内都能够被访问。
-
 按照惯例，为了完成两步创建，新创建的实例第一个被调用的方法将是 `init` 方法。注意，`NSObject` 在实现 `init` 时，只是简单的返回了 `self`。
 
 关于 `init` 的约定还有一个重要部分：这个方法可以（并且应该）通过返回 `nil` 来告诉调用者，初始化失败了；初始化可能会因为各种原因失败，比如一个输入的格式错误了，或者另一个需要的对象初始化失败了。
-
 这样我们就能理解为什么总是需要调用 `self = [super init]`。如果你的父类说初始化自己的时候失败了，那么你必须假定你正处于一个不稳定的状态，因此在你的实现里不要继续你自己的初始化并且也返回 `nil`。如果不这样做，你可能会操作一个不可用的对象，它的行为是不可预测的，最终可能会导致你的程序崩溃。
 
 `init` 方法在被调用的时候可以通过重新给 `self` 重新赋值来返回另一个实例，而非调用的那个实例。例如[类簇](#类簇)，还有一些 Cocoa 类为相等的（不可变的）对象返回同一个实例。
@@ -644,7 +624,6 @@ designated 初始化方法是提供所有的参数，secondary 初始化方法�
 
 
 在类继承中调用任何 designated 初始化方法都是合法的，而且应该保证 *所有的* designated initializer 在类继承中是是从祖先（通常是  `NSObject`）到你的类向下调用的。
-
 实际上这意味着第一个执行的初始化代码是最远的祖先，然后从顶向下的类继承，所有类都有机会执行他们特定的初始化代码。这样，你在你做你的特定的初始化工作前，所有你从超类继承的东西是不可用的状态。即使它的状态不明确，所有 Apple 的框架的 Framework 是保证遵守这个约定的，而且你的类也应该这样做。
 
 
@@ -655,11 +634,10 @@ designated 初始化方法是提供所有的参数，secondary 初始化方法�
 3. 定义一个新的 designated initializer
 
 
-第一个方案是最简单的：你不需要增加类的任何初始化逻辑，只需要依照父类的 designated initializer。
-
+第一个方案是最简单的：你不需要增加类的任何初始化逻辑，只需要依照父类的designated initializer。
 当你希望提供额外的初始化逻辑的时候，你可以重载 designated initializer。你只需要重载你的直接的超类的 designated initializer 并且确认你的实现调用了超类的方法。
-
-你一个典型的例子是你创造`UIViewController`子类的时候重载 `initWithNibName:bundle:` 方法。
+你一个典型的例子是你创造`UIViewController`子类的时候重载
+`initWithNibName:bundle:`方法。
 
 ```objective-c
 @implementation ZOCViewController
@@ -689,7 +667,6 @@ designated 初始化方法是提供所有的参数，secondary 初始化方法�
 
 
 很多开发者忽略了后两步，这不仅仅是一个粗心的问题，而且这样违反了框架的规则，而且可能导致不确定的行为和bug。
-
 让我们看看正确的实现的例子：
 
 ```objective-c
@@ -719,15 +696,11 @@ designated 初始化方法是提供所有的参数，secondary 初始化方法�
 如果你没重载 `initWithNibName:bundle:` ，而且调用者决定用这个方法初始化你的类(这是完全合法的)。 `initWithNews:` 永远不会被调用，所以导致了不正确的初始化流程，你的类特定的初始化逻辑没有被执行。
 
 
-即使可以推断那个方法是 designate initializer，也最好清晰地明确它（未来的你或者其他开发者在改代码的时候会感谢你的）。
 
-你应该考虑来用这两个策略（不是互斥的）：第一个是你在文档中明确哪一个初始化方法是 designated 的，你可以用编译器的指令 `__attribute__((objc_designated_initializer))`  来标记你的意图。
 
+即使可以推断那个方法是 designate initializer，也最好清晰地明确它（未来的你或者其他开发者在改代码的时候会感谢你的）。你应该考虑来用这两个策略（不是互斥的）：第一个是你在文档中明确哪一个初始化方法是 designated 的，你可以用编译器的指令 `__attribute__((objc_designated_initializer))`  来标记你的意图。
 用这个编译指令的时候，编译器会来帮你。如果你的新的 designate initializer 没有调用你超类的 designated initializer，那么编译器会发出警告。
-
-然而，当没有调用类的  designated initializer 的时候（并且依次提供必要的参数），并且调用其他父类中的 designated initialize 的时候，会变成一个不可用的状态。参考之前的例子，当实例化一个 `ZOCNewsViewController`  展示一个新闻而那条新闻没有展示的话，就会毫无意义。
-
-这个情况下你应该只需要让其他的 designated initializer 失效，来强制调用一个非常特别的 designated initializer。通过使用另外一个编译器指令  `__attribute__((unavailable("Invoke the designated initializer"))) ` 来修饰一个方法，通过这个属性，会让你在试图调用这个方法的时候产生一个编译错误。
+然而，当没有调用类的  designated initializer 的时候（并且依次提供必要的参数），并且调用其他父类中的 designated initialize 的时候，会变成一个不可用的状态。参考之前的例子，当实例化一个 `ZOCNewsViewController`  展示一个新闻而那条新闻没有展示的话，就会毫无意义。这个情况下你应该只需要让其他的 designated initializer 失效，来强制调用一个非常特别的 designated initializer。通过使用另外一个编译器指令  `__attribute__((unavailable("Invoke the designated initializer"))) ` 来修饰一个方法，通过这个属性，会让你在试图调用这个方法的时候产生一个编译错误。
 
 这是之前的例子相关的实现的头文件(这里使用宏来让代码没有那么啰嗦)
 
@@ -748,11 +721,8 @@ designated 初始化方法是提供所有的参数，secondary 初始化方法�
 
 
 不过一个例外是一个对象是否遵守 `NSCoding` 协议，并且它通过方法 `initWithCoder:` 初始化。
-
 我们应该看超类是否符合 `NSCoding` 协议来区别对待。
-
 如果符合，如果你只是调用 `[super initWithCoder:]` ，你会可能有一个共享的初始化代码在 designated initializer 里面，一个好的方法是把这些代码放在私有方法里面(比如  `p_commonInit` )。
-
 当你的超类不符合`NSCoding` 协议的时候，推荐把 `initWithCoder:` 作为 secondary initializer 来对待，并且调用 `self` 的 designated initializer。 注意这是违反 Apple 的 [Archives and Serializations Programming Guide](https://developer.apple.com/library/mac/documentation/cocoa/Conceptual/Archiving/Articles/codingobjects.html#//apple_ref/doc/uid/20000948-BCIHBJDE)  上面写的：
 
 
@@ -765,7 +735,6 @@ designated 初始化方法是提供所有的参数，secondary 初始化方法�
 
 
 正如之前的描述，secondary initializer 是一种提供默认值、行为到 designated initializer的方法。也就是说，在这样的方法里面你不应该有初始化实例变量的操作，并且你应该一直假设这个方法不会得到调用。我们保证的是唯一被调用的方法是 designated initializer。
-
 这意味着你的 secondary initializer 总是应该调用 Designated initializer  或者你自定义(上面的第三种情况：自定义Designated initializer)的 `self`的 designated initializer。有时候，因为错误，可能打成了  `super`，这样会导致不符合上面提及的初始化顺序（在这个特别的例子里面，是跳过当前类的初始化）
 
 #####  参考
@@ -780,9 +749,7 @@ designated 初始化方法是提供所有的参数，secondary 初始化方法�
 ### instancetype 
 
 
-我们经常忽略 Cocoa 充满了约定，并且这些约定可以帮助编译器变得更加聪明。无论编译器是否遭遇 `alloc` 或者 `init` 方法，他会知道，即使返回类型都是 `id` ，这些方法总是返回接受到的类类型的实例。因此，它允许编译器进行类型检查。（比如，检查方法返回的类型是否合法）。
-
-Clang的这个好处来自于 [related result type](http://clang.llvm.org/docs/LanguageExtensions.html#related-result-types)， 意味着：
+我们经常忽略 Cocoa 充满了约定，并且这些约定可以帮助编译器变得更加聪明。无论编译器是否遭遇 `alloc` 或者 `init` 方法，他会知道，即使返回类型都是 `id` ，这些方法总是返回接受到的类类型的实例。因此，它允许编译器进行类型检查。（比如，检查方法返回的类型是否合法）。Clang的这个好处来自于 [related result type](http://clang.llvm.org/docs/LanguageExtensions.html#related-result-types)， 意味着：
 
 
 > messages sent to one of alloc and init methods will have the same static type as the instance of the receiver class （发送到 alloc 或者 init 方法的消息会有同样的静态类型检查是否为接受类的实例。）
@@ -885,7 +852,6 @@ Class clusters 在 Apple 的Framework 中广泛使用：一些明显的例子比
 ####   单例
 
 如果可能，请尽量避免使用单例而是依赖注入。
-
 然而，如果一定要用，请使用一个线程安全的模式来创建共享的实例。对于 GCD，用 `dispatch_once()` 函数就可以咯。
 
 
@@ -923,11 +889,8 @@ Class clusters 在 Apple 的Framework 中广泛使用：一些明显的例子比
 
 
 经典的单例对象是：一个设备的GPS以及它的加速度传感器(也称动作感应器)。
-
 虽然单例对象可以子类化，但这种方式能够有用的情况非常少见。
-
 必须有证据表明，给定类的接口趋向于作为单例来使用。
-
 所以，单例通常公开一个`sharedInstance`的类方法就已经足够了，没有任何的可写属性需要被暴露出来。
 
 尝试着把单例作为一个对象的容器，在代码或者应用层面上共享，是一个糟糕和丑陋的设计。
@@ -952,7 +915,8 @@ NSString * text;
 ```
 
 
-（注意：这个习惯和常量不同，这是主要从常用和可读性考虑。 C++ 的开发者偏好从变量名中分离类型，作为类型它应该是 `NSString*` （对于从堆中分配的对象，对于C++是能从栈上分配的）格式。）
+（注意：这个习惯和常量不同，这是主要从常用和可读性考虑。 C++ 的开发者偏好从变量名中分离类型，作为类型它应该是
+`NSString*` （对于从堆中分配的对象，对于C++是能从栈上分配的）格式。）
 
 
 使用属性的自动同步 (synthesize) 而不是手动的  `@synthesize` 语句，除非你的属性是 protocol 的一部分而不是一个完整的类。如果 Xcode 可以自动同步这些变量，就让它来做吧。否则只会让你抛开 Xcode 的优点，维护更冗长的代码。
@@ -1262,9 +1226,9 @@ UIApplication.sharedApplication.delegate;
 
 #  Protocols
 
-在 Objective-C 的世界里面经常错过的一个东西是抽象接口。接口（interface）这个词通常指一个类的 `.h` 文件，但是它在 Java 程序员眼里有另外的含义： 一系列不依赖具体实现的方法的定义。(译者注：在 Objective-C 中，类的接口对应在.m文件中都会有具体的实现，但 Java 中接口更接近于 Objective-C 中的抽象接口, 或者说是协议(protocol))
+在 Objective-C 的世界里面经常错过的一个东西是抽象接口。接口（interface）这个词通常指一个类的 `.h` 文件，但是它在 Java 程序员眼里有另外的含义： 一系列不依赖具体实现的方法的定义。(译者注：在OC中，类的接口对应在.m文件中都会有具体的实现，但Java中接口更接近于OC中的抽象接口或者说协议(protocol))
 
-在 Objective-C 里是通过 protocol 来实现抽象接口的。因为历史原因，protocol （使用方法类似 Java 的接口）并没有大量地在 Objective-C的代码中使用也没有在社区中普及(指的是那种像 Java 程序员使用接口那样来使用 protocol 的方式)。一个主要原因是大多数的 Apple 开发的代码没有采用这种的方式，而几乎所有的开发者都是遵从 Apple 的模式以及指南。Apple 几乎只是在委托模式下使用 protocol。
+在 Objective-C 里是通过 protocol 来实现抽象接口的。因为历史原因，protocol （使用方法类似java的接口）并没有大量地在Objective-C的代码中使用也没有在社区中普及(指的是那种像Java程序员使用接口那样来使用protocol的方式)。一个主要原因是大多数的 Apple 开发的代码没有采用这种的方式，而几乎所有的开发者都是遵从 Apple 的模式以及指南。Apple 几乎只是在委托模式下使用 protocol。
 
 但是抽象接口的概念很强大，在计算机科学的历史中颇有渊源，没有理由不在 Objective-C 中使用。
 
@@ -1272,7 +1236,7 @@ UIApplication.sharedApplication.delegate;
 
 这个例子是在实现一个 RSS 阅读器（它可是经常在技术面试中作为一个测试题呢）。
 
-要求很简单：在 TableView 中展示一个远程的 RSS 订阅。
+要求很简单：在TableView中展示一个远程的RSS订阅。
 
 一个幼稚的方法是创建一个 `UITableViewController` 的子类，并且把所有的检索订阅数据，解析以及展示的逻辑放在一起，或者说是一个 MVC (Massive View Controller)。这可以跑起来，但是它的设计非常糟糕，不过它足够过一些要求不高的面试了。
 
@@ -1328,7 +1292,7 @@ UIApplication.sharedApplication.delegate;
 ```
 
 
-我要说，这是一个处理 RSS 业务的完全合理而恰当的 protocol。这个 view controller 在 public 接口中将遵循这个 protocol：
+我要说，这是一个处理RSS业务的完全合理而恰当的protocol。这个ViewController在Public接口中将遵循这个protocol：
 
 ```objective-c
 @interface ZOCTableViewController : UITableViewController <ZOCFeedParserDelegate>
@@ -1392,8 +1356,7 @@ view controller 的职责应该是“显示某些东西提供的内容”，但�
 
 
 因为 `ZOCFeedParser` 实现了 `ZOCFeedParserProtocol`，它需要实现所有的`required`方法。
-
-从这点来看 view controller 能接受任何遵循该协议的对象，只要确保所有的对象都会响应`start`和`stop`方法并通过`delegate`属性提供信息(译者注：因为 protocol 默认情况下所有的方法定义都是`required`的)。对指定的对象而言，这就是 view controller 所要知道的一切,且不需要知道其实现的细节。
+从这点来看 viewController能接受任何遵循该协议的对象，只要确保所有的对象都会响应`start`和`stop`方法并通过`delegate`属性提供信息(译者注：因为protocol默认情况下所有的方法定义都是`required`的)。对指定的对象而言，这就是viewController所要知道的一切,且不需要知道其实现的细节。
 
 
 ```objective-c
@@ -1642,9 +1605,7 @@ NSURL *url = ({
 
 ### 忽略没用使用变量的编译警告
 
-告诉你申明的变量它将不会被使用，这种做法很有用。大多数情况下，你希望移除这些引用来（稍微地）提高性能，但是有时候你希望保留它们。
-
-为什么？或许它们以后有用，或者有些特性只是暂时移除。无论如何，一个消除这些警告的好方法是用相关语句进行注解，使用 `#pragma unused()`:
+告诉你申明的变量它将不会被使用，这种做法很有用。大多数情况下，你希望移除这些引用来（稍微地）提高性能，但是有时候你希望保留它们。为什么？或许它们以后有用，或者有些特性只是暂时移除。无论如何，一个消除这些警告的好方法是用相关语句进行注解，使用 `#pragma unused()`:
 
 ```objective-c
 - (NSInteger)giveMeFive
@@ -1816,13 +1777,7 @@ Block 是 Objective-C 版本的 lambda 或者 closure（闭包）。
 * (如果在Block中修改Block块外的)栈上的变量和指针，那么这些变量和指针必须用`__block`关键字申明(译者注：否则就会跟上面的情况一样只是捕获他们的瞬时值)。
 
 
-如果 block 没有在其他地方被保持，那么它会随着栈生存并且当栈帧（stack frame）返回的时候消失。仅存在于栈上时，block对对象访问的内存管理和生命周期没有任何影响。
-
-如果 block 需要在栈帧返回的时候存在，它们需要明确地被复制到堆上，这样，block 会像其他 Cocoa 对象一样增加引用计数。当它们被复制的时候，它会带着它们的捕获作用域一起，retain 他们所有引用的对象。
-
-如果一个 block引用了一个栈变量或指针，那么这个block初始化的时候会拥有这个变量或指针的const副本，所以(被捕获之后再在栈中改变这个变量或指针的值)是不起作用的。(译者注：所以这时候我们在block中对这种变量进行赋值会编译报错:`Variable is not assignable(missing __block type specifier)`，因为他们是副本而且是const的.具体见下面的例程)。
-
-当一个 block 被复制后，`__block` 声明的栈变量的引用被复制到了堆里，复制完成之后，无论是栈上的block还是刚刚产生在堆上的block(栈上block的副本)都会引用该变量在堆上的副本。
+如果 block 没有在其他地方被保持，那么它会随着栈生存并且当栈帧（stack frame）返回的时候消失。仅存在于栈上时，block对对象访问的内存管理和生命周期没有任何影响。如果 block 需要在栈帧返回的时候存在，它们需要明确地被复制到堆上，这样，block 会像其他 Cocoa 对象一样增加引用计数。当它们被复制的时候，它会带着它们的捕获作用域一起，retain 他们所有引用的对象。如果一个 block引用了一个栈变量或指针，那么这个block初始化的时候会拥有这个变量或指针的const副本，所以(被捕获之后再在栈中改变这个变量或指针的值)是不起作用的。(译者注：所以这时候我们在block中对这种变量进行赋值会编译报错:`Variable is not assignable(missing __block type specifier)`，因为他们是副本而且是const的.具体见下面的例程)。当一个 block 被复制后，`__block` 声明的栈变量的引用被复制到了堆里，复制完成之后，无论是栈上的block还是刚刚产生在堆上的block(栈上block的副本)都会引用该变量在堆上的副本。
 
 译者加
 
@@ -1983,7 +1938,7 @@ MyViewController *myController = [[MyViewController alloc] init...];
 
 **方案 3. 在 block 外定义一个 `__weak` 的 引用到 self，并在在 block 内部通过这个弱引用定义一个 `__strong`  的引用**
 
-你可能会想，首先，这是避免 retain cycle  警告的一个技巧。这不是重点，这个 self 的强引用是在block 执行时 被创建的，但是否使用 self 在 block 定义时就已经定下来了， 因此self (在block执行时) 会被 retain。
+你可能会想，首先，这是避免 retain cycle  警告的一个技巧。这不是重点，这个 self 的强引用是在block 执行时 被创建的，但是否使用 self 在 block 定义时就已经定下来了， 因此self (在block执行时) 会被 retain.
 
 [Apple 文档][blocks_caveat1] 中表示 "为了 non-trivial cycles ，你应该这样" ：
 
@@ -2097,12 +2052,10 @@ myObj.myBlock =  ^{
 [blocks_caveat16]: https://twitter.com/mattjgalloway
 
 ## 委托和数据源
-(译者注： 这里是说两种模式：[委托模式](https://www.wikiwand.com/zh/%E5%A7%94%E6%89%98%E6%A8%A1%E5%BC%8F) 以及 [数据源]() 模式)
 
+[委托模式](https://www.wikiwand.com/zh/%E5%A7%94%E6%89%98%E6%A8%A1%E5%BC%8F) 是 Apple 的框架里面使用广泛的模式，同时它是四人帮的书“设计模式”中的重要模式之一。委托代理模式是单向的，消息的发送方（委托方）需要知道接收方（代理方）是谁，反过来就没有必要了。对象之间耦合较松，发送方仅需知道它的代理方是否遵守相关 protocol 即可。
 
-委托模式是 Apple 的框架里面使用广泛的模式，同时它是四人帮的书“设计模式”中的重要模式之一。委托代理模式是单向的，消息的发送方（委托方）需要知道接收方（代理方）是谁，反过来就没有必要了。对象之间耦合较松，发送方仅需知道它的代理方是否遵守相关 protocol 即可。
-
-本质上，委托模式仅需要代理方提供一些回调方法，即代理方需要实现一系列空返回值的方法。
+本质上，委托代理模式仅需要代理方提供一些回调方法，即代理方需要实现一系列空返回值的方法。
 
 不幸的是 Apple 的 API 并没有遵守这个原则，开发者也效仿 Apple 进入了一个误区。典型的例子就是 [UITableViewDelegate](https://developer.apple.com/library/ios/documentation/uikit/reference/UITableViewDelegate_Protocol/Reference/Reference.html) 协议。
 
@@ -2122,19 +2075,20 @@ myObj.myBlock =  ^{
 
 当委托者询问代理者一些信息的时候，这就暗示着信息是从代理者流向委托者而非相反的过程。 这(译者注：委托者 ==Data==> 代理者)是概念性的不同，须用另一个新的名字来描述这种模式：数据源模式。
 
-可能有人会说 Apple 有一个 [UITableViewDataSouce](https://developer.apple.com/library/ios/documentation/uikit/reference/UITableViewDataSource_Protocol/Reference/Reference.html)  protocol 来做这个（虽然使用委托代理模式的名字），但是实际上它的方法是用来提供真实的数据应该如何被展示的信息的。
+可能有人会说 Apple 有一个 [UITableViewDataSouce](https://developer.apple.com/library/ios/documentation/uikit/reference/UITableViewDataSource_Protocol/Reference/Reference.html)  protocol 来做这个（虽然使用委托模式的名字），但是实际上它的方法是用来提供真实的数据应该如何被展示的信息的。
 
 ```objective-c
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath;
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView;
 ```
 
-此外，以上两个方法 Apple 混合了展示层和数据层，这显的非常糟糕，但是很少的开发者感到糟糕。而且我们在这里把空返回值和非空返回值的方法都天真地叫做代理方法。
+此外，以上两个方法 Apple 混合了展示层和数据层，这显的非常糟糕，但是很少的开发者感到糟糕。而且我们在这里把空返回值和非空返回值的方法都天真地叫做委托方法。
 
 为了分离概念，我们应该这样做：
 
 * 委托模式(delegate pattern)：事件发生的时候，委托者需要通知代理者。
 * 数据源模式(datasource pattern): 委托者需要从数据源对象拉取数据。
+
 
 这个是实际的例子：
 
@@ -2358,11 +2312,7 @@ if ([self.delegate respondsToSelector:@selector(signUpViewControllerDidPressSign
 @end
 ```
 
-<<<<<<< HEAD
-在 `registerDelegate:` 和 `deregisterDelegate:` 方法的帮助下，连接/解除组成部分很简单：如果委托对象不需要接收委托者的回调，仅仅需要'unsubscribe'。
-=======
 在 `registerDelegate:` 和 `deregisterDelegate:` 方法的帮助下，连接/解除组件之间的联系很简单：在某些时间点上，如果代理不需要接收委托者的回调，仅仅需要'unsubscribe'.
->>>>>>> fbf72eb6ea063a019ff4f8fb1e88704df58500e9
 
 当不同的 view 等待同一个回调来更新界面展示的时候，这很有用：如果 view 只是暂时隐藏（但是仍然存在），它仅仅需要取消对回调的订阅。
 
@@ -2601,4 +2551,3 @@ NSDictionary *analyticsConfiguration()
 
 
   [1]: https://github.com/NYTimes/objective-c-style-guide/issues/6)
-
