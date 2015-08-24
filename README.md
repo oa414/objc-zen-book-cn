@@ -1401,7 +1401,7 @@ view controller 的职责应该是“显示某些东西提供的内容”，但�
 
 任何在未来可复用的设计，无形当中可以提高代码质量，这也应该一直是程序员的追求。是否这样设计代码，就是大师和菜鸟的区别。
 
-最后的代码可以在[这里](http://github.com/albertodebortoli/ADBFeedReader) 找到。
+最后的代码可以在[这里](https://github.com/KevinHM/ADBFeedReader) 找到。
 
 
 
