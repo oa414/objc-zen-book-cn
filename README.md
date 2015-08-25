@@ -1119,7 +1119,7 @@ UIApplication.sharedApplication.delegate;
 
 当你要实现相等性的时候记住这个约定：你需要同时实现`isEqual` 和 `hash`方法。如果两个对象是被`isEqual`认为相等的，它们的 `hash` 方法需要返回一样的值。但是如果  `hash` 返回一样的值，并不能确保他们相等。
 
-这个约定是因为当被存储在集合（如 `NSDictionary` 和 `NSSet` 在底层使用 hash 表数据的数据结构）的时候，如何查找这些对象。
+这个约定当对象被存储在集合中（如 `NSDictionary` 和 `NSSet` 在底层使用 hash 表数据的数据结构）的时候，用来查找这些对象的。
 
 ```objective-c
 @implementation ZOCPerson
@@ -1182,7 +1182,9 @@ UIApplication.sharedApplication.delegate;
   return haveEqualNames && haveEqualBirthdays;
 }
 ```
-
+> 译者注：像相等性的开篇已经提到的那样，这里应该复写`isEqual:`方法，因为NSObject的`isEqual:`方法显然不会考虑我们自定义类的类型判断及属性的相等性。当我们自定义的类的对象处在无序集合中被查找时，会自动调用`isEqual:`。同样的该类的`hash`方法，也会在集合查找对象的时候被使用，我们也可以通过复写`hash`方法以达到用自己的标准来判定对象是否`hash`等同。
+> 
+> 我们实现的`hash`方法应该建立在系统提供的各种对象的`hash`方法之上的（像开篇的例程那样）。不推荐自己去实现某种`hash`算法来替代系统提供的`hash`算法，这一般而言会大大影响性能或者准确性，系统提供的`hash`算法已经经过无数次修缮，足以满足你的要求。
 
 一个对象实例的 `hash` 计算结果应该是确定的。当它被加入到一个容器对象（比如 `NSArray`, `NSSet`, 或者 `NSDictionary`）的时候这是很重要的，否则行为会无法预测（所有的容器对象使用对象的 hash 来查找或者实施特别的行为，如确定唯一性）这也就是说，应该用不可变的属性来计算 hash 值，或者，最好保证对象是不可变的。
 
