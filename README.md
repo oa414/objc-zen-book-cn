@@ -631,7 +631,7 @@ designated 初始化方法是提供所有的参数，secondary 初始化方法�
 #### Designated Initializer 
 
 
-一个类应该又且只有一个 designated 初始化方法，其他的初始化方法应该调用这个 designated 的初始化方法（虽然这个情况有一个例外）
+一个类应该有且只有一个 designated 初始化方法，其他的初始化方法应该调用这个 designated 的初始化方法（虽然这个情况有一个例外）
 
 这个分歧没有要求那个初始化函数需要被调用。
 
