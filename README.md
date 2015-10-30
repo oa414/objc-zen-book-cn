@@ -1042,7 +1042,7 @@ UIApplication.sharedApplication.delegate;
 #### 私有属性
 
 
-私有属性应该定义在类的实现文件的类的扩展 (class extensions) 中。不允许在有名字的的 category(如 `ZOCPrivate`）中定义私有属性，除非你扩展其他类。
+私有属性应该定义在类的实现文件的类的扩展 (匿名的 category) 中。不允许在有名字的的 category(如 `ZOCPrivate`）中定义私有属性，除非你扩展其他类。
 
 **例子:**
 
