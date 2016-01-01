@@ -405,7 +405,7 @@ switch (menuType) {
 ### 枚举类型
 
 
-当使用 `enum` 的时候，建议使用新的固定的基础类型定义，因它有更强大的的类型检查和代码补全。 SDK 现在有一个 宏来鼓励和促进使用固定类型定义 - `NS_ENUM()`
+当使用 `enum` 的时候，建议使用新的固定的基础类型定义，因为它有更强大的类型检查和代码补全。 SDK 现在有一个 宏来鼓励和促进使用固定类型定义 - `NS_ENUM()`
 
 **例子:**
 
@@ -713,11 +713,11 @@ designated 初始化方法是提供所有的参数，secondary 初始化方法�
 
 
 
-即使可以推断那个方法是 designate initializer，也最好清晰地明确它（未来的你或者其他开发者在改代码的时候会感谢你的）。
+即使可以推断那个方法是 designated initializer，也最好清晰地明确它（未来的你或者其他开发者在改代码的时候会感谢你的）。
 
 你应该考虑来用这两个策略（不是互斥的）：第一个是你在文档中明确哪一个初始化方法是 designated 的，你可以用编译器的指令 `__attribute__((objc_designated_initializer))`  来标记你的意图。
 
-用这个编译指令的时候，编译器会来帮你。如果你的新的 designate initializer 没有调用超类的 designated initializer，那么编译器会发出警告。
+用这个编译指令的时候，编译器会来帮你。如果你的新的 designated initializer 没有调用超类的 designated initializer，那么编译器会发出警告。
 
 然而，当没有调用类的  designated initializer 的时候（并且依次提供必要的参数），并且调用其他父类中的 designated initialize 的时候，会变成一个不可用的状态。参考之前的例子，当实例化一个 `ZOCNewsViewController`  展示一个新闻而那条新闻没有展示的话，就会毫无意义。这个情况下你应该只需要让其他的 designated initializer 失效，来强制调用一个非常特别的 designated initializer。通过使用另外一个编译器指令  `__attribute__((unavailable("Invoke the designated initializer"))) ` 来修饰一个方法，通过这个属性，会让你在试图调用这个方法的时候产生一个编译错误。
 
@@ -1042,7 +1042,7 @@ UIApplication.sharedApplication.delegate;
 #### 私有属性
 
 
-私有属性应该定义在类的实现文件的类的扩展 (匿名的 category) 中。不允许在有名字的的 category(如 `ZOCPrivate`）中定义私有属性，除非你扩展其他类。
+私有属性应该定义在类的实现文件的类的扩展 (匿名的 category) 中。不允许在有名字的 category(如 `ZOCPrivate`）中定义私有属性，除非你扩展其他类。
 
 **例子:**
 
@@ -1055,7 +1055,7 @@ UIApplication.sharedApplication.delegate;
 ### 可变对象
 
 
-任何可以用来用一个可变的对象设置的（(比如 `NSString`,`NSArray`,`NSURLRequest`)）属性的的内存管理类型必须是 `copy` 的。
+任何可以用一个可变的对象设置的（(比如 `NSString`,`NSArray`,`NSURLRequest`)）属性的内存管理类型必须是 `copy` 的。
 
 这是为了确保防止在不明确的情况下修改被封装好的对象的值(译者注：比如执行 array(定义为 copy 的 NSArray 实例) = mutableArray，copy 属性会让 array 的 setter 方法为 array = [mutableArray copy], [mutableArray copy] 返回的是不可变的 NSArray 实例，就保证了正确性。用其他属性修饰符修饰，容易在直接赋值的时候，array 指向的是 NSMuatbleArray 的实例，在之后可以随意改变它的值，就容易出错)。
 
@@ -1108,7 +1108,7 @@ UIApplication.sharedApplication.delegate;
 ### 参数断言
 
 
-你的方法可能要求一些参数来满足特定的条件（比如不能为nil），在这种情况下啊最好使用 `NSParameterAssert()` 来断言条件是否成立或是抛出一个异常。
+你的方法可能要求一些参数来满足特定的条件（比如不能为nil），在这种情况下最好使用 `NSParameterAssert()` 来断言条件是否成立或是抛出一个异常。
 
 ###  私有方法
 
@@ -1400,7 +1400,7 @@ view controller 的职责应该是“显示某些东西提供的内容”，但�
 - `ZOCViewController` （UI逻辑部分）可以被复用
 - 测试更简单了，因为可以用 mock 对象来达到 protocol 预期的效果
 
-当实现一个 protocol 你总应该坚持 [里氏替换原则](http://en.wikipedia.org/wiki/Liskov_substitution_principle)。这个原则是：你应该可以取代任意接口（也就是Objective-C里的的"protocol"）实现，而不用改变客户端或者相关实现。
+当实现一个 protocol 你总应该坚持 [里氏替换原则](http://en.wikipedia.org/wiki/Liskov_substitution_principle)。这个原则是：你应该可以取代任意接口（也就是Objective-C里的"protocol"）实现，而不用改变客户端或者相关实现。
 
 此外，这也意味着`protocol`不该关心类的实现细节；设计protocol的抽象表述时应非常用心，并且要牢记它和它背后的实现是不相干的，真正重要的是协议（这个暴露给使用者的抽象表述）。
 
@@ -1812,9 +1812,9 @@ Block 是 Objective-C 版本的 lambda 或者 closure（闭包）。
 (下面代码是译者加的)
 
 ```objective-c
-   ...
-   CGFloat blockInt = 10;
-   void (^playblock)(void) = ^{
+    ...
+    CGFloat blockInt = 10;
+    void (^playblock)(void) = ^{
         NSLog(@"blockInt = %zd", blockInt);
     };
     blockInt ++;
