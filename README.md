@@ -134,7 +134,7 @@ Objective-C 没有消失，但是现在用一个慢慢失去关注的语言来�
 
 
 
-**部分译文表达可能存在不妥之处，非常欢迎各种修订建议和校队。 请直接 fork 本仓库，在 README.md 文件中修改，并申请 pull request 到 <https://github.com/oa414/objc-zen-book-cn/>。**
+**部分译文表达可能存在不妥之处，非常欢迎各种修订建议和校对。 请直接 fork 本仓库，在 README.md 文件中修改，并申请 pull request 到 <https://github.com/oa414/objc-zen-book-cn/>。**
 
 
 #  条件语句
@@ -328,7 +328,7 @@ result = object ? object : [self createObject];
 
 ## 错误处理
 
-有些方法通通过参数返回 error 的引用，使用这样的方法时应当检查方法的返回值，而非 error 的引用。
+有些方法通过参数返回 error 的引用，使用这样的方法时应当检查方法的返回值，而非 error 的引用。
 
 **推荐:**
 ```objective-c
@@ -541,7 +541,7 @@ NSMutableArray *aMutableArray = [@[] mutableCopy];
 
 ##  类名
 
-类名应该以**三**个大写字母作为前缀（双字母前缀为 Apple 的类预留）。尽管这个规范看起来有些古怪，但是这样做可以减少 Objective-c 没有命名空间所带来的问题。
+类名应该以**三**个大写字母作为前缀（双字母前缀为 Apple 的类预留）。尽管这个规范看起来有些古怪，但是这样做可以减少 Objective-C 没有命名空间所带来的问题。
 
 一些开发者在定义模型对象时并不遵循这个规范（对于 Core Data 对象，我们更应该遵循这个规范）。我们建议在定义 Core Data 对象时严格遵循这个约定，因为最终你可能需要把你的 Managed Object Model（托管对象模型）与其他（第三方库）的 MOMs（Managed Object Model）合并。
 
