@@ -201,7 +201,7 @@ fail:
 ## 尤达表达式
 
 
-不要使用尤达表达式。尤达表达式是指，拿一个常量去和变量比较而不是拿变量去和常量比较。它就像是在表达 “蓝色是不是天空的颜色” 或者 “高个是不是这个男人的属性” 而不是  “天空是不是蓝的” 或者 “这个男人是不是高个子的” 
+不要使用尤达表达式。尤达表达式是指，拿一个常量去和变量比较而不是拿变量去和常量比较。它就像是在表达 “蓝色是不是天空的颜色” 或者 “高个是不是这个男人的属性” 而不是  “天空是不是蓝的” 或者 “这个男人是不是高个子的”
 
 ![Yoda](./images/yoda.png)
 
@@ -283,7 +283,7 @@ if ([someObject boolValue] == NO) { ...
   }
 }
 ```
-## 复杂的表达式 
+## 复杂的表达式
 
 当你有一个复杂的 if 子句的时候，你应该把它们提取出来赋给一个 BOOL 变量，这样可以让逻辑更清楚，而且让每个子句的意义体现出来。
 
@@ -359,7 +359,7 @@ switch (condition) {
     case 3:
         // ...
         break;
-    default: 
+    default:
         // ...
         break;
 }
@@ -374,7 +374,7 @@ switch (condition) {
     case 2:
         // code executed for values 1 and 2
         break;
-    default: 
+    default:
         // ...
         break;
 }
@@ -537,7 +537,7 @@ NSMutableArray *aMutableArray = [@[] mutableCopy];
 
 可读性方面，存在两个问题：第一个问题是当你浏览代码并看见 `@[]` 的时候，你首先联想到的是 `NSArray` 实例，但是在这种情形下你需要停下来深思熟虑的检查；另一个问题是，一些新手以他的水平看到你的代码后可能会对这是一个可变对象还是一个不可变对象产生分歧。他/她可能不熟悉可变拷贝构造的含义（这并不是说这个知识不重要）。当然，不存在绝对的错误，我们只是讨论代码的可用性（包括可读性)。
 
-#  类 
+#  类
 
 ##  类名
 
@@ -552,7 +552,7 @@ NSMutableArray *aMutableArray = [@[] mutableCopy];
 举个例子：如果你有一个 `ZOCNetworkClient` 类，子类的名字会是`ZOCTwitterNetworkClient` (注意 "Twitter" 在 "ZOC" 和 "NetworkClient" 之间); 按照这个约定， 一个`UIViewController` 的子类会是 `ZOCTimelineViewController`.
 
 
-## Initializer 和 dealloc 
+## Initializer 和 dealloc
 
 推荐的代码组织方式是将 `dealloc` 方法放在实现文件的最前面（直接在  `@synthesize` 以及 `@dynamic` 之后），`init` 应该跟在 `dealloc` 方法后面。
 
@@ -574,7 +574,7 @@ NSMutableArray *aMutableArray = [@[] mutableCopy];
 
 为什么设置 `self` 为 `[super init]` 的返回值，以及中间发生了什么呢？这是一个十分有趣的话题。
 
-我们退一步讲：我们常常写 `[[NSObject alloc] init]` 这样的代码，从而淡化了 `alloc` 和 `init` 的区别。Objective-C 的这个特性叫做 *两步创建* 。 
+我们退一步讲：我们常常写 `[[NSObject alloc] init]` 这样的代码，从而淡化了 `alloc` 和 `init` 的区别。Objective-C 的这个特性叫做 *两步创建* 。
 
 这意味着申请分配内存和初始化被分离成两步，`alloc` 和 `init`。
 - `alloc` 负责创建对象，这个过程包括分配足够的内存来保存对象，写入 `isa` 指针，初始化引用计数，以及重置所有实例变量。
@@ -628,7 +628,7 @@ designated 初始化方法是提供所有的参数，secondary 初始化方法�
 
 `initWithTitle:date:location:` 就是 designated 初始化方法，另外的两个是 secondary 初始化方法。因为它们仅仅是调用类实现的 designated 初始化方法
 
-#### Designated Initializer 
+#### Designated Initializer
 
 
 一个类应该有且只有一个 designated 初始化方法，其他的初始化方法应该调用这个 designated 的初始化方法（虽然这个情况有一个例外）
@@ -750,7 +750,7 @@ designated 初始化方法是提供所有的参数，secondary 初始化方法�
 
 如果你的类不是  `NSObject` 的直接子类，这样做的话，会导致不可预测的行为。
 
-####  Secondary Initializer 
+####  Secondary Initializer
 
 
 正如之前的描述，secondary initializer 是一种提供默认值、行为到 designated initializer的方法。也就是说，在这样的方法里面你不应该有初始化实例变量的操作，并且你应该一直假设这个方法不会得到调用。我们保证的是唯一被调用的方法是 designated initializer。
@@ -765,7 +765,7 @@ designated 初始化方法是提供所有的参数，secondary 初始化方法�
 
 
 
-### instancetype 
+### instancetype
 
 
 我们经常忽略 Cocoa 充满了约定，并且这些约定可以帮助编译器变得更加聪明。无论编译器是否遭遇 `alloc` 或者 `init` 方法，他会知道，即使返回类型都是 `id` ，这些方法总是返回接受到的类类型的实例。因此，它允许编译器进行类型检查。（比如，检查方法返回的类型是否合法）。Clang的这个好处来自于 [related result type](http://clang.llvm.org/docs/LanguageExtensions.html#related-result-types)， 意味着：
@@ -774,7 +774,7 @@ designated 初始化方法是提供所有的参数，secondary 初始化方法�
 > messages sent to one of alloc and init methods will have the same static type as the instance of the receiver class （发送到 alloc 或者 init 方法的消息会有同样的静态类型检查是否为接受类的实例。）
 
 
-更多的关于这个自动定义相关返回类型的约定请查看 Clang Language Extensions guide 的[appropriate section]((http://clang.llvm.org/docs/LanguageExtensions.html#related-result-types)) 
+更多的关于这个自动定义相关返回类型的约定请查看 Clang Language Extensions guide 的[appropriate section]((http://clang.llvm.org/docs/LanguageExtensions.html#related-result-types))
 
 
 一个相关的返回类型可以明确地规定用 `instancetype` 关键字作为返回类型，并且它可以在一些工厂方法或者构造器方法的场景下很有用。它可以提示编译器正确地检查类型，并且更加重要的是，这同时适用于它的子类。
@@ -860,9 +860,9 @@ Class clusters 在 Apple 的Framework 中广泛使用：一些明显的例子比
 这个子例程展示了如何创建一个类簇。
 
    1. 使用`[self isMemberOfClass:ZOCKintsugiPhotoViewController.class]`防止子类中重载初始化方法，避免无限递归。当`[[ZOCKintsugiPhotoViewController alloc] initWithPhotos:photos]`被调用时，上面条件表达式的结果将会是True。
-   
+
    2. `self = nil`的目的是移除`ZOCKintsugiPhotoViewController`实例上的所有引用，实例(抽象类的实例)本身将会解除分配（ 当然ARC也好MRC也好dealloc都会发生在Main Runloop这一次的结束时）。
-   
+
    3. 接下来的逻辑就是判断哪一个私有子类将被初始化。我们假设在iPhone上运行这段代码并且`ZOCKintsugiPhotoViewController_iPhone`没有重载`initWithPhotos:`方法。这种情况下，当执行`self = [[ZOCKintsugiPhotoViewController_iPhone alloc] initWithPhotos:photos];`,`ZOCKintsugiPhotoViewController`将会被调用，第一次检查将会在这里发生，鉴于`ZOCKintsugiPhotoViewController_iPhone`不完全是`ZOCKintsugiPhotoViewController`，表达式`[self isMemberOfClass:ZOCKintsugiPhotoViewController.class]`将会是False,于是就会调用`[super initWithNibName:nil bundle:nil]`，于是就会进入`ZOCKintsugiPhotoViewController`的初始化过程，这时候因为调用者就是`ZOCKintsugiPhotoViewController`本身，这一次的检查必定为True,接下来就会进行正确的初始化过程。(NOTE：这里必须是完全遵循Designated initializer 以及Secondary initializer的设计规范的前提下才会其效果的!不明白这个规范的可以后退一步熟悉这种规范在回头来看这个说明)
 
 > NOTE: 这里的意思是，代码是在iPhone上调试的，程序员使用了`self = [[ZOCKintsugiPhotoViewController_iPhone alloc] initWithPhotos:photos];`来初始化某个view controller的对象，当代码运行在iPad上时，这个初始化过程也是正确的，因为无论程序员的代码中使用`self = [[ZOCKintsugiPhotoViewController_iPhone alloc] initWithPhotos:photos];`来初始化viewController(iPhone上编写运行在iPad上)，还是使用`self = [[ZOCKintsugiPhotoViewController_iPad alloc] initWithPhotos:photos];`来初始化viewController(iPad上编写，运行在iPhone上)，都会因为ZOCKintsugiPhotoViewController的`initWithPhotos:`方法的存在而变得通用起来。
@@ -967,7 +967,7 @@ NSString * text;
 
 * [Advanced Memory Management Programming Guide](https://developer.apple.com/library/mac/documentation/Cocoa/Conceptual/MemoryMgmt/Articles/mmPractical.html#//apple_ref/doc/uid/TP40004447-SW6) under the self-explanatory section "Don't Use Accessor Methods in Initializer Methods and dealloc";
 * [Migrating to Modern Objective-C](http://adcdownload.apple.com//wwdc_2012/wwdc_2012_session_pdfs/session_413__migrating_to_modern_objectivec.pdf) at WWDC 2012 at slide 27;
-* in a [pull request](https://github.com/NYTimes/objective-c-style-guide/issues/6) form Dave DeLong's. 
+* in a [pull request](https://github.com/NYTimes/objective-c-style-guide/issues/6) form Dave DeLong's.
 
 
 此外，在 init 中使用 setter 不会很好执行  `UIAppearence`  代理（参见  [UIAppearance for Custom Views](http://petersteinberger.com/blog/2013/uiappearance-for-custom-views/) 看更多相关信息)。
@@ -1011,7 +1011,7 @@ UIApplication.sharedApplication.delegate;
 属性可以存储一个代码块。为了让它存活到定义的块的结束，必须使用 `copy` （block 最早在栈里面创建，使用 `copy`让 block 拷贝到堆里面去）
 
 
-为了完成一个共有的 getter 和一个私有的 setter，你应该声明公开的属性为 `readonly`  并且在类扩展总重新定义通用的属性为 `readwrite` 的。
+为了完成一个共有的 getter 和一个私有的 setter，你应该声明公开的属性为 `readonly`  并且在类扩展中重新定义通用的属性为 `readwrite` 的。
 
 ```objective-c
 //.h文件中
@@ -1184,9 +1184,9 @@ UIApplication.sharedApplication.delegate;
 ```
 > 译者注：
 > 一般而言我们会直接调用自定义的`isEqualTo__ClassName__:`方法，对类的实例判等。
-> 
+>
 > 像相等性的开篇已经提到的那样，这里应该复写`isEqual:`方法，因为NSObject的`isEqual:`方法显然不会考虑我们自定义类的类型判断及属性的相等性。当我们自定义的类的对象处在无序集合中被查找时，会自动调用`isEqual:`。同样的该类的`hash`方法，也会在集合查找对象的时候被使用，我们也可以通过复写`hash`方法以达到用自己的标准来判定对象是否`hash`等同。
-> 
+>
 > 我们实现的`hash`方法应该建立在系统提供的各种对象的`hash`方法之上（像开篇的例程那样）。不推荐自己去实现某种`hash`算法来替代系统提供的`hash`算法，这一般而言会大大影响性能或者准确性，系统提供的`hash`算法已经经过无数次修缮，足以满足你的要求。
 
 一个对象实例的 `hash` 计算结果应该是确定的。当它被加入到一个容器对象（比如 `NSArray`, `NSSet`, 或者 `NSDictionary`）的时候这是很重要的，否则行为会无法预测（所有的容器对象使用对象的 hash 来查找或者实施特别的行为，如确定唯一性）这也就是说，应该用不可变的属性来计算 hash 值，或者，最好保证对象是不可变的。
@@ -1222,11 +1222,11 @@ UIApplication.sharedApplication.delegate;
 
 分类可以用来在头文件中定义一组功能相似的方法。这是在 Apple的 Framework 也很常见的一个实践（下面例子的取自`NSDate` 头文件）。我们也强烈建议在自己的代码中这样使用。
 
-我们的经验是，创建一组分类对以后的重构十分有帮助。一个类的接口增加的时候，可能意味着你的类做了太多事情，违背了类的单一功能原则。 
+我们的经验是，创建一组分类对以后的重构十分有帮助。一个类的接口增加的时候，可能意味着你的类做了太多事情，违背了类的单一功能原则。
 
 之前创造的方法分组可以用来更好地进行不同功能的表示，并且把类打破在更多自我包含的组成部分里。
 
- 
+
 ```objective-c
 
 @interface NSDate : NSObject <NSCopying, NSSecureCoding>
@@ -1414,9 +1414,9 @@ view controller 的职责应该是“显示某些东西提供的内容”，但�
 
 当你定义你自己的 `NSNotification` 的时候你应该把你的通知的名字定义为一个字符串常量，就像你暴露给其他类的其他字符串常量一样。你应该在公开的接口文件中将其声明为 `extern` 的， 并且在对应的实现文件里面定义。
 
-因为你在头文件中暴露了符号，所以你应该按照统一的命名空间前缀法则，用类名前缀作为这个通知名字的前缀。 
+因为你在头文件中暴露了符号，所以你应该按照统一的命名空间前缀法则，用类名前缀作为这个通知名字的前缀。
 
-同时，用一个 Did/Will 这样的动词以及用 "Notifications" 后缀来命名这个通知也是一个好的实践。 
+同时，用一个 Did/Will 这样的动词以及用 "Notifications" 后缀来命名这个通知也是一个好的实践。
 
 ```objective-c
 // Foo.h
@@ -1459,7 +1459,7 @@ if (user.isHappy)
 
 
 * 方法之间应该要有一个空行来帮助代码看起来清晰且有组织。 方法内的空格应该用来分离功能，但是通常不同的功能应该用新的方法来定义。
-* 优先使用 auto-synthesis。但是如果必要的话， `@synthesize` and `@dynamic` 
+* 优先使用 auto-synthesis。但是如果必要的话， `@synthesize` and `@dynamic`
 * 在实现文件中的声明应该新起一行。
 * 应该总是让冒号对齐。有一些方法签名可能超过三个冒号，用冒号对齐可以让代码更具有可读性。即使有代码块存在，也应该用冒号对齐方法。
 
@@ -1482,7 +1482,7 @@ if (user.isHappy)
 
 ```objective-c
 [UIView animateWithDuration:1.0 animations:^{
-    // something 
+    // something
 } completion:^(BOOL finished) {
     // something
 }];
@@ -1503,7 +1503,7 @@ self.productsRequest = [[SKProductsRequest alloc] initWithProductIdentifiers:pro
 一个像上面的长行的代码在第二行以一个间隔（2个空格）延续
 
 ```objective-c
-self.productsRequest = [[SKProductsRequest alloc] 
+self.productsRequest = [[SKProductsRequest alloc]
   initWithProductIdentifiers:productIdentifiers];
 ```
 
@@ -1545,14 +1545,14 @@ NSURL *url = ({
 
 
 
-## Pragma 
+## Pragma
 
 ### Pragma Mark
 
 
 `#pragma mark -`  是一个在类内部组织代码并且帮助你分组方法实现的好办法。 我们建议使用  `#pragma mark -` 来分离:
 
-- 不同功能组的方法 
+- 不同功能组的方法
 - protocols 的实现
 - 对父类方法的重写
 
@@ -1576,7 +1576,7 @@ NSURL *url = ({
 
 - (IBAction)submitData:(id)sender { /* ... */ }
 
-#pragma mark - Public 
+#pragma mark - Public
 
 - (void)publicMethod { /* ... */ }
 
@@ -1747,7 +1747,7 @@ NSURL *url = ({
 
 对象之间需要通信，这也是所有软件的基础。再非凡的软件也需要通过对象通信来完成复杂的目标。本章将深入讨论一些设计概念，以及如何依据这些概念来设计出良好的架构。
 
-## Block 
+## Block
 
 Block 是 Objective-C 版本的 lambda 或者 closure（闭包）。
 
@@ -1795,7 +1795,7 @@ Block 是 Objective-C 版本的 lambda 或者 closure（闭包）。
 
 一些关键点：
 
-* block 是在栈上创建的 
+* block 是在栈上创建的
 * block 可以复制到堆上
 * Block会捕获栈上的变量(或指针)，将其复制为自己私有的const(变量)。
 * (如果在Block中修改Block块外的)栈上的变量和指针，那么这些变量和指针必须用`__block`关键字申明(译者注：否则就会跟上面的情况一样只是捕获他们的瞬时值)。
@@ -1820,7 +1820,7 @@ Block 是 Objective-C 版本的 lambda 或者 closure（闭包）。
     blockInt ++;
     playblock();
     ...
-    
+
     //结果为:blockInt = 10
 ```
 
@@ -1937,7 +1937,7 @@ MyViewController *myController = [[MyViewController alloc] init...];
 
 这就是有名的 retain cycle, 并且我们通常应该避免它。这种情况下我们收到 CLANG 的警告：
 
-```objective-c 
+```objective-c
 Capturing 'self' strongly in this block is likely to lead to a retain cycle （在 block 里面发现了 `self` 的强引用，可能会导致循环引用）
 ```
 所以 `__weak` 就有用武之地了。
@@ -1994,7 +1994,7 @@ myController.completionHandler =  ^(NSInteger result) {
 
 首先，我觉得这个例子看起来是错误的。如果 block 本身在 completionHandler 属性中被 retain 了，那么 self 如何被 delloc 和在 block 之外赋值为 nil 呢? completionHandler 属性可以被声明为  `assign` 或者 `unsafe_unretained` 的，来允许对象在 block 被传递之后被销毁。
 
-我不能理解这样做的理由，如果其他对象需要这个对象（self），block 被传递的时候应该 retain 对象，所以 block 应该不被作为属性存储。这种情况下不应该用 `__weak`/`__strong` 
+我不能理解这样做的理由，如果其他对象需要这个对象（self），block 被传递的时候应该 retain 对象，所以 block 应该不被作为属性存储。这种情况下不应该用 `__weak`/`__strong`
 
 总之，其他情况下，希望 weakSelf 变成 nil 的话，就像第二种情况解释那么写（在 block 之外定义一个弱应用并且在 block 里面使用）。
 
@@ -2043,7 +2043,7 @@ myObj.myBlock =  ^{
     }
 };
 ```
- 
+
 在ARC条件中，如果尝试用 `->` 符号访问一个实例变量，编译器会给出非常清晰的错误信息：
 
 ```objective-c
@@ -2239,7 +2239,7 @@ if ([self.delegate respondsToSelector:@selector(signUpViewControllerDidPressSign
 ```objective-c
 @interface ZOCWeakObject : NSObject
 
-@property (nonatomic, readonly, weak) id object; 
+@property (nonatomic, readonly, weak) id object;
 //译者注：这里原文并没有很好地实践自己在本书之前章节所讨论的关于property属性修饰符的
 //人体工程学法则: 从左到右： 原子性 ===》 读写权限 (别名) ===》 内存管理权限符
 
@@ -2508,7 +2508,7 @@ NSDictionary *analyticsConfiguration()
         [clazz aspect_hookSelector:@selector(viewDidAppear:)
                        withOptions:AspectPositionAfter
                         usingBlock:^(id<AspectInfo> aspectInfo) {
-               dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), 
+               dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0),
                           ^{
                           NSString *viewName = trackedScreen[@"label"];
                         [tracker trackScreenHitWithName:viewName];
@@ -2526,7 +2526,7 @@ NSDictionary *analyticsConfiguration()
         [clazz aspect_hookSelector:selektor
                        withOptions:AspectPositionAfter
                         usingBlock:^(id<AspectInfo> aspectInfo) {
-               dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), 
+               dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0),
                       ^{
                             UserActivityButtonPressedEvent *buttonPressEvent = \
                                 [UserActivityButtonPressedEvent \
