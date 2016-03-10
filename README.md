@@ -105,7 +105,7 @@ Objective-C 没有消失，但是现在用一个慢慢失去关注的语言来�
 
 - http://lucabernardi.com
 - @luka_bernardi
-- http://github.com/lukabernardi
+- https://github.com/lukabernardi
 
 **Alberto De Bortoli**
 
@@ -118,9 +118,9 @@ Objective-C 没有消失，但是现在用一个慢慢失去关注的语言来�
 译者
 
 **林翔宇**
-- http://linxiangyu.org
+- http://www.linxiangyu.org/
 - linxiangyu@nupter.org
-- http://github.com/oa414
+- https://github.com/oa414
 
 **庞博**
 - bopang@sohu-inc.com
@@ -805,7 +805,7 @@ designated 初始化方法是提供所有的参数，secondary 初始化方法�
 
 > an architecture that groups a number of private, concrete subclasses under a public, abstract superclass. （一个在共有的抽象超类下设置一组私有子类的架构）
 
-如果这个描述听起来很熟悉，说明你的直觉是对的。 Class cluster 是 Apple 对[抽象工厂](http://en.wikipedia.org/wiki/Abstract_factory_pattern)设计模式的称呼。
+如果这个描述听起来很熟悉，说明你的直觉是对的。 Class cluster 是 Apple 对[抽象工厂](https://en.wikipedia.org/wiki/Abstract_factory_pattern)设计模式的称呼。
 
 
 
@@ -956,7 +956,7 @@ NSString * text;
 - 更简单的debug（比如，允许拿出一个断点在 getter 方法里面，并且看谁访问了特别的 getter
 - 它让意图更加清晰和明确：通过访问 ivar `_anIvar` 你可以明确的访问 `self->_anIvar`.这可能导致问题。在 block 里面访问 ivar （你捕捉并且 retain 了 self，即使你没有明确的看到 self 关键词）。
 - 它自动产生KVO 通知。
-- 在消息发送的时候增加的开销是微不足道的。更多关于性能问题的介绍你可以看 [Should I Use a Property or an Instance Variable?](http://blog.bignerdranch.com/4005-should-i-use-a-property-or-an-instance-variable/)。
+- 在消息发送的时候增加的开销是微不足道的。更多关于性能问题的介绍你可以看 [Should I Use a Property or an Instance Variable?](https://www.bignerdranch.com/blog/should-i-use-a-property-or-an-instance-variable/)。
 
 #### Init 和 Dealloc
 
@@ -1326,7 +1326,7 @@ UIApplication.sharedApplication.delegate;
 最后创建的代码是这样子的：
 
 ```objective-c
-NSURL *feedURL = [NSURL URLWithString:@"http://bbc.co.uk/feed.rss"];
+NSURL *feedURL = [NSURL URLWithString:@"http://www.bbc.co.uk/feed.rss"];
 
 ZOCFeedParser *feedParser = [[ZOCFeedParser alloc] initWithURL:feedURL];
 
@@ -1400,7 +1400,7 @@ view controller 的职责应该是“显示某些东西提供的内容”，但�
 - `ZOCViewController` （UI逻辑部分）可以被复用
 - 测试更简单了，因为可以用 mock 对象来达到 protocol 预期的效果
 
-当实现一个 protocol 你总应该坚持 [里氏替换原则](http://en.wikipedia.org/wiki/Liskov_substitution_principle)。这个原则是：你应该可以取代任意接口（也就是Objective-C里的"protocol"）实现，而不用改变客户端或者相关实现。
+当实现一个 protocol 你总应该坚持 [里氏替换原则](https://en.wikipedia.org/wiki/Liskov_substitution_principle)。这个原则是：你应该可以取代任意接口（也就是Objective-C里的"protocol"）实现，而不用改变客户端或者相关实现。
 
 此外，这也意味着`protocol`不该关心类的实现细节；设计protocol的抽象表述时应非常用心，并且要牢记它和它背后的实现是不相干的，真正重要的是协议（这个暴露给使用者的抽象表述）。
 
@@ -1604,7 +1604,7 @@ NSURL *url = ({
 
 ### 关于 pragma
 
-在 http://raptureinvenice.com/pragmas-arent-just-for-marks 有很好的关于 pragma 的讨论了，在这边我们再做部分说明。
+在 http://raptureinvenice.com/pragmas-arent-just-for-marks/ 有很好的关于 pragma 的讨论了，在这边我们再做部分说明。
 
 大多数 iOS 开发者平时并没有和很多编译器选项打交道。一些选项是对控制严格检查（或者不检查）你的代码或者错误的。有时候，你想要用 pragma 直接产生一个异常，临时打断编译器的行为。
 
@@ -1840,8 +1840,8 @@ block 在 Objective-C 的 runtime(运行时) 里面被当作一等公民对待�
 
 如果在定义之后但是 block 没有被调用前，对象被释放了，那么 block 的执行会导致 crash。 `__block`  变量不会在 block 中被持有，最后... 指针、引用、解引用以及引用计数变得一团糟。
 
-[blocks_uth1]:  http://developer.apple.com/library/ios/#documentation/cocoa/Conceptual/Blocks/Articles/00_Introduction.html
-[blocks_uth2]: http://ios-blog.co.uk/tutorials/programming-with-blocks-an-overview/
+[blocks_uth1]:  https://developer.apple.com/library/ios/#documentation/cocoa/Conceptual/Blocks/Articles/00_Introduction.html
+[blocks_uth2]: http://www.ios-blog.co.uk/tutorials/programming-with-blocks-an-overview/
 
 
 ###  self 的循环引用
@@ -2068,8 +2068,8 @@ myObj.myBlock =  ^{
 
 * **方案 3**: 和并发执行有关。当涉及异步的服务的时候，block 可以在之后被执行，并且不会发生关于 self 是否存在的问题。
 
-[blocks_caveat1]: http://developer.apple.com/library/mac/#releasenotes/ObjectiveC/RN-TransitioningToARC/Introduction/Introduction.html
-[blocks_caveat2]: http://dhoerl.wordpress.com/2013/04/23/i-finally-figured-out-weakself-and-strongself/
+[blocks_caveat1]: https://developer.apple.com/library/mac/#releasenotes/ObjectiveC/RN-TransitioningToARC/Introduction/Introduction.html
+[blocks_caveat2]: https://dhoerl.wordpress.com/2013/04/23/i-finally-figured-out-weakself-and-strongself/
 [blocks_caveat3]: http://blog.random-ideas.net/?p=160
 [blocks_caveat4]: http://stackoverflow.com/questions/7904568/disappearing-reference-to-self-in-a-block-under-arc
 
@@ -2354,7 +2354,7 @@ if ([self.delegate respondsToSelector:@selector(signUpViewControllerDidPressSign
 Aspect Oriented Programming (AOP，面向切面编程) 在 Objective-C 社区内没有那么有名，但是 AOP 在运行时可以有巨大威力。 但是因为没有事实上的标准，Apple 也没有开箱即用的提供，也显得不重要，开发者都不怎么考虑它。
 
 
-引用 [Aspect Oriented Programming](http://en.wikipedia.org/wiki/Aspect-oriented_programming) 维基页面:
+引用 [Aspect Oriented Programming](https://en.wikipedia.org/wiki/Aspect-oriented_programming) 维基页面:
 
 > An aspect can alter the behavior of the base code (the non-aspect part of a program) by applying advice (additional behavior) at various join points (points in a program) specified in a quantification or query called a pointcut (that detects whether a given join point matches). (一个切面可以通过在多个 join points 中附加的行为来改变基础代码的行为(程序的非切面的部分) )
 
@@ -2409,7 +2409,7 @@ Aspect 的 API 有趣并且非常强大：
 
 大部分统计框架都有教程来指导如何追踪特定的界面和事件，包括在每一个类里写几行代码。
 
-在 Ray Wenderlich 的博客里有 [文章](http://www.raywenderlich.com/53459/google-analytics-ios) 和一些示例代码，通过在你的 view controller 里面加入 [Google Analytics](https://developers.google.com/analytics/devguides/collection/ios/)  进行统计。
+在 Ray Wenderlich 的博客里有 [文章](https://www.raywenderlich.com/53459/google-analytics-ios) 和一些示例代码，通过在你的 view controller 里面加入 [Google Analytics](https://developers.google.com/analytics/devguides/collection/ios/)  进行统计。
 
 ```objective-c
 
@@ -2545,10 +2545,10 @@ NSDictionary *analyticsConfiguration()
 
 这里有一些和风格指南有关的苹果的文档：
 
-* [The Objective-C Programming Language](http://developer.apple.com/library/mac/#documentation/Cocoa/Conceptual/ObjectiveC/Introduction/introObjectiveC.html)
+* [The Objective-C Programming Language](https://developer.apple.com/library/mac/#documentation/Cocoa/Conceptual/ObjectiveC/Introduction/introObjectiveC.html)
 * [Cocoa Fundamentals Guide](https://developer.apple.com/library/mac/#documentation/Cocoa/Conceptual/CocoaFundamentals/Introduction/Introduction.html)
 * [Coding Guidelines for Cocoa](https://developer.apple.com/library/mac/#documentation/Cocoa/Conceptual/CodingGuidelines/CodingGuidelines.html)
-* [iOS App Programming Guide](http://developer.apple.com/library/ios/#documentation/iphone/conceptual/iphoneosprogrammingguide/Introduction/Introduction.html)
+* [iOS App Programming Guide](https://developer.apple.com/library/ios/#documentation/iphone/conceptual/iphoneosprogrammingguide/Introduction/Introduction.html)
 * [Apple Objective-C conventions](https://developer.apple.com/library/ios/documentation/cocoa/conceptual/ProgrammingWithObjectiveC/Conventions/Conventions.html): 来自苹果的代码约定
 
 其他：
@@ -2571,9 +2571,9 @@ NSDictionary *analyticsConfiguration()
 
 来自社区的：
 
-* [NYTimes Objective-C Style Guide](https://github.com/NYTimes/objetive-c-style-guide)
+* [NYTimes Objective-C Style Guide](https://github.com/NYTimes/objective-c-style-guide)
 * [Google](http://google-styleguide.googlecode.com/svn/trunk/objcguide.xml)
-* [GitHub](https://github.com/github/objective-c-conventions)
+* [GitHub](https://github.com/github/objective-c-style-guide)
 * [Adium](https://trac.adium.im/wiki/CodingStyle)
 * [Sam Soffes](https://gist.github.com/soffes/812796)
 * [CocoaDevCentral](http://cocoadevcentral.com/articles/000082.php)
