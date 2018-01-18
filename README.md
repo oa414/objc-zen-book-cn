@@ -867,12 +867,12 @@ Class clusters 在 Apple 的Framework 中广泛使用：一些明显的例子比
 
 ```objective-c
 + (instancetype)sharedInstance {
-   static id sharedInstance = nil;
-   static dispatch_once_t onceToken = 0;
-   dispatch_once(&onceToken, ^{
-      sharedInstance = [[self alloc] init];
-   });
-   return sharedInstance;
+    static id sharedInstance = nil;
+    static dispatch_once_t onceToken = 0;
+    dispatch_once(&onceToken, ^{
+        sharedInstance = [[self alloc] init];
+    });
+    return sharedInstance;
 }
 ```
 
@@ -1056,7 +1056,7 @@ UIApplication.sharedApplication.delegate;
 
 /* .m */
 - (NSArray *)elements {
-  return [self.mutableElements copy];
+    return [self.mutableElements copy];
 }
 ```
 
@@ -1068,13 +1068,13 @@ UIApplication.sharedApplication.delegate;
 ```objective-c
 
 - (NSDateFormatter *)dateFormatter {
-  if (!_dateFormatter) {
-    _dateFormatter = [[NSDateFormatter alloc] init];
+    if (!_dateFormatter) {
+        _dateFormatter = [[NSDateFormatter alloc] init];
         NSLocale *enUSPOSIXLocale = [[NSLocale alloc] initWithLocaleIdentifier:@"en_US_POSIX"];
         [_dateFormatter setLocale:enUSPOSIXLocale];
         [_dateFormatter setDateFormat:@"yyyy-MM-dd'T'HH:mm:ss.SSS"]; // 毫秒是SSS，而非SSSSS
-  }
-  return _dateFormatter;
+    }
+    return _dateFormatter;
 }
 
 ```
@@ -1148,11 +1148,11 @@ UIApplication.sharedApplication.delegate;
 
 - (BOOL)isEqual:(id)object {
     if (self == object) {
-      return YES;
+        return YES;
     }
 
     if (![object isKindOfClass:[ZOCPerson class]]) {
-      return NO;
+        return NO;
     }
 
     return [self isEqualToPerson:(ZOCPerson *)object];
@@ -1168,7 +1168,7 @@ UIApplication.sharedApplication.delegate;
     BOOL birthdaysMatch = (!self.birthday && !person.birthday) ||
                            [self.birthday isEqualToDate:person.birthday];
 
-  return haveEqualNames && haveEqualBirthdays;
+    return haveEqualNames && haveEqualBirthdays;
 }
 ```
 > 译者注：
@@ -1798,16 +1798,16 @@ Block 是 Objective-C 版本的 lambda 或者 closure（闭包）。
 (下面代码是译者加的)
 
 ```objective-c
-   ...
-   CGFloat blockInt = 10;
-   void (^playblock)(void) = ^{
-        NSLog(@"blockInt = %zd", blockInt);
-    };
-    blockInt ++;
-    playblock();
-    ...
-    
-    // 结果为:blockInt = 10
+...
+CGFloat blockInt = 10;
+void (^playblock)(void) = ^{
+    NSLog(@"blockInt = %zd", blockInt);
+};
+blockInt++;
+playblock();
+...
+
+// 结果为:blockInt = 10
 ```
 
 用 LLDB 来展示 block 是这样子的：
@@ -2362,13 +2362,13 @@ Aspect 的 API 有趣并且非常强大：
 
 ```objective-c
 + (id<AspectToken>)aspect_hookSelector:(SEL)selector
-                      withOptions:(AspectOptions)options
-                       usingBlock:(id)block
-                            error:(NSError **)error;
+                           withOptions:(AspectOptions)options
+                            usingBlock:(id)block
+                                 error:(NSError **)error;
 - (id<AspectToken>)aspect_hookSelector:(SEL)selector
-                      withOptions:(AspectOptions)options
-                       usingBlock:(id)block
-                            error:(NSError **)error;
+                           withOptions:(AspectOptions)options
+                            usingBlock:(id)block
+                                 error:(NSError **)error;
 ```
 
 
@@ -2498,7 +2498,7 @@ NSDictionary *analyticsConfiguration() {
                         [tracker trackScreenHitWithName:viewName];
                       });
                   }
-                            error:nil];
+                             error:nil];
 
     }
 
@@ -2518,7 +2518,7 @@ NSDictionary *analyticsConfiguration() {
                             [tracker trackEvent:buttonPressEvent];
                       });
                 }
-                       error:nil];
+                             error:nil];
 
     }
 }
