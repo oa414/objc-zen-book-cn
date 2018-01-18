@@ -172,8 +172,7 @@ if (!error) return success;
 ```objective-c
 static OSStatus
 SSLVerifySignedServerKeyExchange(SSLContext *ctx, bool isRsa, SSLBuffer signedParams,
-                                 uint8_t *signature, UInt16 signatureLen)
-{
+                                 uint8_t *signature, UInt16 signatureLen) {
   OSStatus        err;
   ...
 
@@ -561,8 +560,7 @@ NSMutableArray *aMutableArray = [@[] mutableCopy];
 `init` 方法应该是这样的结构：
 
 ```objective-c
-- (instancetype)init
-{
+- (instancetype)init {
     self = [super init]; // call the designated initializer
     if (self) {
         // Custom initialization
@@ -599,8 +597,7 @@ designated 初始化方法是提供所有的参数，secondary 初始化方法�
 
 - (instancetype)initWithTitle:(NSString *)title
                          date:(NSDate *)date
-                     location:(CLLocation *)location
-{
+                     location:(CLLocation *)location {
     self = [super init];
     if (self) {
         _title    = title;
@@ -611,13 +608,11 @@ designated 初始化方法是提供所有的参数，secondary 初始化方法�
 }
 
 - (instancetype)initWithTitle:(NSString *)title
-                         date:(NSDate *)date
-{
+                         date:(NSDate *)date {
     return [self initWithTitle:title date:date location:nil];
 }
 
-- (instancetype)initWithTitle:(NSString *)title
-{
+- (instancetype)initWithTitle:(NSString *)title {
     return [self initWithTitle:title date:[NSDate date] location:nil];
 }
 
@@ -657,8 +652,7 @@ designated 初始化方法是提供所有的参数，secondary 初始化方法�
 ```objective-c
 @implementation ZOCViewController
 
-- (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
-{
+- (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil {
     // call to the superclass designated initializer
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     if (self) {
@@ -687,8 +681,7 @@ designated 初始化方法是提供所有的参数，secondary 初始化方法�
 ```objective-c
 @implementation ZOCNewsViewController
 
-- (id)initWithNews:(ZOCNews *)news
-{
+- (id)initWithNews:(ZOCNews *)news {
     // call to the immediate superclass's designated initializer （调用直接超类的 designated initializer）
     self = [super initWithNibName:nil bundle:nil];
     if (self) {
@@ -698,8 +691,7 @@ designated 初始化方法是提供所有的参数，secondary 初始化方法�
 }
 
 // Override the immediate superclass's designated initializer （重载直接父类的  designated initializer）
-- (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
-{
+- (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil {
     // call the new designated initializer
     return [self initWithNews:nil];
 }
@@ -837,8 +829,7 @@ Class clusters 在 Apple 的Framework 中广泛使用：一些明显的例子比
 ```objective-c
 @implementation ZOCKintsugiPhotoViewController
 
-- (id)initWithPhotos:(NSArray *)photos
-{
+- (id)initWithPhotos:(NSArray *)photos {
     if ([self isMemberOfClass:ZOCKintsugiPhotoViewController.class]) {
         self = nil;
 
@@ -875,8 +866,7 @@ Class clusters 在 Apple 的Framework 中广泛使用：一些明显的例子比
 
 
 ```objective-c
-+ (instancetype)sharedInstance
-{
++ (instancetype)sharedInstance {
    static id sharedInstance = nil;
    static dispatch_once_t onceToken = 0;
    dispatch_once(&onceToken, ^{
@@ -891,8 +881,7 @@ Class clusters 在 Apple 的Framework 中广泛使用：一些明显的例子比
 
 
 ```objective-c
-+ (instancetype)sharedInstance
-{
++ (instancetype)sharedInstance {
     static id sharedInstance;
     @synchronized(self) {
         if (sharedInstance == nil) {
@@ -1632,8 +1621,7 @@ NSURL *url = ({
 告诉你申明的变量它将不会被使用，这种做法很有用。大多数情况下，你希望移除这些引用来（稍微地）提高性能，但是有时候你希望保留它们。为什么？或许它们以后有用，或者有些特性只是暂时移除。无论如何，一个消除这些警告的好方法是用相关语句进行注解，使用 `#pragma unused()`:
 
 ```objective-c
-- (NSInteger)giveMeFive
-{
+- (NSInteger)giveMeFive {
     NSString *foo;
     #pragma unused (foo)
 
@@ -1650,8 +1638,7 @@ NSURL *url = ({
 
 
 ```objective-c
-- (NSInteger)divide:(NSInteger)dividend by:(NSInteger)divisor
-{
+- (NSInteger)divide:(NSInteger)dividend by:(NSInteger)divisor {
     #error Whoa, buddy, you need to check for zero here!
     return (dividend / divisor);
 }
@@ -1662,8 +1649,7 @@ NSURL *url = ({
 
 
 ```objective-c
-- (float)divide:(float)dividend by:(float)divisor
-{
+- (float)divide:(float)dividend by:(float)divisor {
     #warning Dude, don't compare floating point numbers like this!
     if (divisor != 0.0) {
         return (dividend / divisor);
@@ -2459,8 +2445,7 @@ Aspect 的 API 有趣并且非常强大：
 
 ```objective-c
 
-NSDictionary *analyticsConfiguration()
-{
+NSDictionary *analyticsConfiguration() {
     return @{
         @"trackedScreens" : @[
             @{
@@ -2499,8 +2484,7 @@ NSDictionary *analyticsConfiguration()
 
 ```objective-c
 
-- (void)setupWithConfiguration:(NSDictionary *)configuration
-{
+- (void)setupWithConfiguration:(NSDictionary *)configuration {
     // screen views tracking
     for (NSDictionary *trackedScreen in configuration[@"trackedScreens"]) {
         Class clazz = NSClassFromString(trackedScreen[@"class"]);
