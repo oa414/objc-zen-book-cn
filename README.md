@@ -265,11 +265,11 @@ if ([someObject boolValue] == NO) { ...
 
 ```objective-c
 - (void)someMethod {
-  if (![someOther boolValue]) {
-      return;
-  }
+    if (![someOther boolValue]) {
+        return;
+    }
 
-  //Do something important
+    // Do something important
 }
 ```
 
@@ -277,9 +277,9 @@ if ([someObject boolValue] == NO) { ...
 
 ```objective-c
 - (void)someMethod {
-  if ([someOther boolValue]) {
-    //Do something important
-  }
+    if ([someOther boolValue]) {
+        // Do something important
+    }
 }
 ```
 ## 复杂的表达式 
@@ -1003,17 +1003,17 @@ UIApplication.sharedApplication.delegate;
 为了完成一个共有的 getter 和一个私有的 setter，你应该声明公开的属性为 `readonly`  并且在类扩展总重新定义通用的属性为 `readwrite` 的。
 
 ```objective-c
-//.h文件中
+// .h文件中
 @interface MyClass : NSObject
 @property (nonatomic, readonly, strong) NSObject *object;
 @end
-//.m文件中
+// .m文件中
 @interface MyClass ()
 @property (nonatomic, readwrite, strong) NSObject *object;
 @end
 
 @implementation MyClass
-//Do Something cool
+// Do Something cool
 @end
 
 ```
@@ -1072,7 +1072,7 @@ UIApplication.sharedApplication.delegate;
     _dateFormatter = [[NSDateFormatter alloc] init];
         NSLocale *enUSPOSIXLocale = [[NSLocale alloc] initWithLocaleIdentifier:@"en_US_POSIX"];
         [_dateFormatter setLocale:enUSPOSIXLocale];
-        [_dateFormatter setDateFormat:@"yyyy-MM-dd'T'HH:mm:ss.SSS"];//毫秒是SSS，而非SSSSS
+        [_dateFormatter setDateFormat:@"yyyy-MM-dd'T'HH:mm:ss.SSS"]; // 毫秒是SSS，而非SSSSS
   }
   return _dateFormatter;
 }
@@ -1427,10 +1427,10 @@ NSString * const ZOCFooDidBecomeBarNotification = @"ZOCFooDidBecomeBarNotificati
 
 ```objective-c
 if (user.isHappy) {
-    //Do something
+    // Do something
 }
 else {
-    //Do something else
+    // Do something else
 }
 ```
 
@@ -1439,9 +1439,9 @@ else {
 ```objective-c
 if (user.isHappy)
 {
-  //Do something
+  // Do something
 } else {
-  //Do something else
+  // Do something else
 }
 ```
 
@@ -1807,7 +1807,7 @@ Block 是 Objective-C 版本的 lambda 或者 closure（闭包）。
     playblock();
     ...
     
-    //结果为:blockInt = 10
+    // 结果为:blockInt = 10
 ```
 
 用 LLDB 来展示 block 是这样子的：
@@ -1964,7 +1964,7 @@ MyViewController *myController = [[MyViewController alloc] init...];
 MyViewController *myController = [[MyViewController alloc] init...];
 // ...
 MyViewController * __weak weakMyController = myController;
-myController.completionHandler =  ^(NSInteger result) {
+myController.completionHandler = ^(NSInteger result) {
     MyViewController *strongMyController = weakMyController;
     if (strongMyController) {
         // ...
@@ -2003,7 +2003,7 @@ block 的执行可以抢占，而且对 weakSelf 指针的调用时序不同可�
 
 ```objective-c
 __weak typeof(self) weakSelf = self;
-dispatch_block_t block =  ^{
+dispatch_block_t block = ^{
     [weakSelf doSomething]; // weakSelf != nil
     // preemption, weakSelf turned nil
     [weakSelf doSomethingElse]; // weakSelf == nil
@@ -2016,7 +2016,7 @@ dispatch_block_t block =  ^{
 
 ```objective-c
 __weak typeof(self) weakSelf = self;
-myObj.myBlock =  ^{
+myObj.myBlock = ^{
     __strong typeof(self) strongSelf = weakSelf;
     if (strongSelf) {
       [strongSelf doSomething]; // strongSelf != nil
@@ -2040,7 +2040,7 @@ Dereferencing a __weak pointer is not allowed due to possible null value caused 
 
 ```objective-c
 __weak typeof(self) weakSelf = self;
-myObj.myBlock =  ^{
+myObj.myBlock = ^{
     id localVal = weakSelf->someIVar;
 };
 ```
@@ -2226,8 +2226,8 @@ if ([self.delegate respondsToSelector:@selector(signUpViewControllerDidPressSign
 @interface ZOCWeakObject : NSObject
 
 @property (nonatomic, readonly, weak) id object; 
-//译者注：这里原文并没有很好地实践自己在本书之前章节所讨论的关于property属性修饰符的
-//人体工程学法则: 从左到右： 原子性 ===》 读写权限 (别名) ===》 内存管理权限符
+// 译者注：这里原文并没有很好地实践自己在本书之前章节所讨论的关于property属性修饰符的
+// 人体工程学法则: 从左到右： 原子性 ===》 读写权限 (别名) ===》 内存管理权限符
 
 + (instancetype)weakObjectWithObject:(id)object;
 - (instancetype)initWithObject:(id)object;
