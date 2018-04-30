@@ -146,8 +146,7 @@ The code extract:
 ```objective-c
 static OSStatus
 SSLVerifySignedServerKeyExchange(SSLContext *ctx, bool isRsa, SSLBuffer signedParams,
-                                 uint8_t *signature, UInt16 signatureLen)
-{
+                                 uint8_t *signature, UInt16 signatureLen) {
   OSStatus        err;
   ...
 
@@ -236,11 +235,11 @@ When coding with conditionals, the left hand margin of the code should be the "g
 
 ```objective-c
 - (void)someMethod {
-  if (![someOther boolValue]) {
-      return;
-  }
+    if (![someOther boolValue]) {
+        return;
+    }
 
-  //Do something important
+    // Do something important
 }
 ```
 
@@ -248,9 +247,9 @@ When coding with conditionals, the left hand margin of the code should be the "g
 
 ```objective-c
 - (void)someMethod {
-  if ([someOther boolValue]) {
-    //Do something important
-  }
+    if ([someOther boolValue]) {
+        // Do something important
+    }
 }
 ```
 ## Complex Conditions
@@ -320,7 +319,7 @@ switch (condition) {
         break;
     case 2: {
         // ...
-        // Multi-line example using braces (case 里面有多行代码的时候，需要用括号)
+        // Multi-line example using braces
         break;
        }
     case 3:
@@ -516,8 +515,7 @@ In these days with ARC, it is less likely that you will need to implement the de
 `init` methods should be structured like this:
 
 ```objective-c
-- (instancetype)init
-{
+- (instancetype)init {
     self = [super init]; // call the designated initializer
     if (self) {
         // Custom initialization
@@ -550,8 +548,7 @@ The designated initializer is the initializer that takes the full complement of 
 
 - (instancetype)initWithTitle:(NSString *)title
                          date:(NSDate *)date
-                     location:(CLLocation *)location
-{
+                     location:(CLLocation *)location {
     self = [super init];
     if (self) {
         _title    = title;
@@ -562,13 +559,11 @@ The designated initializer is the initializer that takes the full complement of 
 }
 
 - (instancetype)initWithTitle:(NSString *)title
-                         date:(NSDate *)date
-{
+                         date:(NSDate *)date {
     return [self initWithTitle:title date:date location:nil];
 }
 
-- (instancetype)initWithTitle:(NSString *)title
-{
+- (instancetype)initWithTitle:(NSString *)title {
     return [self initWithTitle:title date:[NSDate date] location:nil];
 }
 
@@ -579,7 +574,7 @@ Given the above example `initWithTitle:date:location:` is the designated initial
 
 #### Designated Initializer
 
-A class should always have one and only one designated initializer, all other init methods should call the designated one (even though there are an exception to this case).
+A class should always have one and only one designated initializer, all other init methods should call the designated one (even though there is an exception to this case).
 This dichotomy does not dictate any requirement about which initializer should be called.
 It should rather be valid to call any designated initializer in the class hierarchy, and it should be guaranteed that *all* the designated initializer in the class hierarchy are called starting from the furthest ancestor (typically `NSObject`) down to your class. 
 Practically speaking this means that the first initialization code executed is the furthest ancestor, and then going down to the class hierarchy; giving to all the classes in the hierarchy the chance to do their specific part of initialization. This totally make sense: you want that everything you inherit from your superclass is in an usable state before doing your actual work.
@@ -598,8 +593,7 @@ A typical example is whether you create a `UIViewController` subclass overriding
 ```objective-c
 @implementation ZOCViewController
 
-- (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
-{
+- (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil {
     // call to the superclass designated initializer
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     if (self) {
@@ -625,8 +619,7 @@ Let's see an example of the correct way to implement this:
 ```objective-c
 @implementation ZOCNewsViewController
 
-- (id)initWithNews:(ZOCNews *)news
-{
+- (id)initWithNews:(ZOCNews *)news {
     // call to the immediate superclass's designated initializer
     self = [super initWithNibName:nil bundle:nil];
     if (self) {
@@ -636,8 +629,7 @@ Let's see an example of the correct way to implement this:
 }
 
 // Override the immediate superclass's designated initializer
-- (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
-{
+- (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil {
     // call the new designated initializer
     return [self initWithNews:nil];
 }
@@ -648,7 +640,7 @@ Let's see an example of the correct way to implement this:
 In case you don't override `initWithNibName:bundle:` and the caller decides to initialize you class with this method (that would be a perfectly valid option) the method `initWithNews:` will never get called and this will bring to an incorrect initialization sequence where the specific initialization logic of your class is not executed.
 
 Even though it should be possible to infer what method is the designate initializer, it is always good to be clear and explicit (the future you or other developers that will work on your code will thank you). There are two strategies (non mutually exclusive) that you can decide to use: the first one you is to clearly state in the documentation which initializer is the designated one, but better yet you can be nice with your compiler and by using the compiler directive `__attribute__((objc_designated_initializer))` you can signal your intent.
-Using that directive will also helps the compiler helping you and in fact the compiler will issue a warning if in your new designate initializer you don't call your superclass's designated initializer.
+Using that directive will also help the compiler helping you and in fact the compiler will issue a warning if in your new designate initializer you don't call your superclass's designated initializer.
 There are, though, cases in which not calling the class designated initializer (and in turn providing the required parameters) and calling another designated initializer in the class hierarchy will bring the class in an useless state. Referring to the previous example, there is no point in instantiating a `ZOCNewsViewController` that should present a news, without the news itself. In this case you can enforce even more the need to call a very specific designated initializer by simply making all the other designated initializers not available. It is possible to do that by using another compiler directive `__attribute__((unavailable("Invoke the designated initializer"))) `, decorating a method with this attribute will make the compiler issuing an error if you try to call this method.
 
 Here the header relative to the implementation of the previous example (note the use of macros to don't repeat the code and being less verbose).
@@ -680,7 +672,7 @@ following this will actually lead to a non-deterministic behavior that will chan
 
 As stated in the previous paragraph, a secondary initializer is a sort of convenience method to provide default values / behaviors to the designated initializer.
 That said, it seems clear that you should not do any mandatory initialization in such method and you should never assume that this method will gets called. Again, the only methods that we are guaranteed to get called are the designated initializer.
-This imply that in your designated initializer you should always call another secondary initializer or your `self` designated initializer.  Sometimes, by mistake, one can type `super`; doing this will cause not to respect the aforementioned sequence of initialization (in this specific case by skipping the initialization of the current class).
+This imply that in your secondary designated initializer you should always call another secondary initializer or your `self` designated initializer.  Sometimes, by mistake, one can type `super`; doing this will cause not to respect the aforementioned sequence of initialization (in this specific case by skipping the initialization of the current class).
 
 ##### References
 
@@ -725,7 +717,7 @@ Class cluster as described in the Apple's documentation is
 
 If this description sounds familiar probably your instinct is correct. Class cluster is the Apple lingo for the [Abstract Factory](http://en.wikipedia.org/wiki/Abstract_factory_pattern) design pattern.
 The idea with class cluster is very simple: you typically have an abstract class that during the initialization process uses information, generally provided as parameters of the initializer method or available in the environment, to apply a logic and instantiate a concrete subclass. This "public facing" class should internally have a good knowledge of its subclass to be able to return the private subclass that best suited the task.
-This pattern is very useful because it removes the complexity of this initialization logic from the caller that only knows about the interface to comunicate with the object, without actually caring about the underlying  implementation.
+This pattern is very useful because it removes the complexity of this initialization logic from the caller that only knows about the interface to communicate with the object, without actually caring about the underlying  implementation.
 Class clusters are widely used in the Apple's frameworks; some of the most notably examples are `NSNumber` that can return an appropriate subclass depending of the type of number provided (Integer, Float, etc...) or `NSArray` that will return a concrete subclass with the best storage policy.
 The beauty of this pattern is that the caller can be completely unaware of the concrete subclass; in fact it can be used when designing a library to be able to swap the underlaying returned class without leaking any implementation detail as long as is respectful of the contract established in the abstract class.
 
@@ -739,8 +731,7 @@ The generic view controller will check the current device idiom and depending on
 ```objective-c
 @implementation ZOCKintsugiPhotoViewController
 
-- (id)initWithPhotos:(NSArray *)photos
-{
+- (id)initWithPhotos:(NSArray *)photos {
     if ([self isMemberOfClass:ZOCKintsugiPhotoViewController.class]) {
         self = nil;
 
@@ -768,22 +759,20 @@ Generally avoid using them if possible, use dependency injection instead.
 Nevertheless, unavoidable singleton objects should use a thread-safe pattern for creating their shared instance. As of GCD, it is possible to use the `dispatch_once()` function to
 
 ```objective-c
-+ (instancetype)sharedInstance
-{
-   static id sharedInstance = nil;
-   static dispatch_once_t onceToken = 0;
-   dispatch_once(&onceToken, ^{
-      sharedInstance = [[self alloc] init];
-   });
-   return sharedInstance;
++ (instancetype)sharedInstance {
+    static id sharedInstance = nil;
+    static dispatch_once_t onceToken = 0;
+    dispatch_once(&onceToken, ^{
+        sharedInstance = [[self alloc] init];
+    });
+    return sharedInstance;
 }
 ```
 
 The use of dispatch_once(), which is synchronous, replaces the following, yet obsolete, idiom:
 
 ```objective-c
-+ (instancetype)sharedInstance
-{
++ (instancetype)sharedInstance {
     static id sharedInstance;
     @synchronized(self) {
         if (sharedInstance == nil) {
@@ -925,7 +914,7 @@ You should also avoid to expose mutable object in the public interface, because 
 
 /* .m */
 - (NSArray *)elements {
-  return [self.mutableElements copy];
+    return [self.mutableElements copy];
 }
 ```
 
@@ -937,13 +926,13 @@ In this case, instead of allocating the object in the init method one could opt 
 
 ```objective-c
 - (NSDateFormatter *)dateFormatter {
-  if (!_dateFormatter) {
-    _dateFormatter = [[NSDateFormatter alloc] init];
+    if (!_dateFormatter) {
+        _dateFormatter = [[NSDateFormatter alloc] init];
         NSLocale *enUSPOSIXLocale = [[NSLocale alloc] initWithLocaleIdentifier:@"en_US_POSIX"];
         [dateFormatter setLocale:enUSPOSIXLocale];
         [dateFormatter setDateFormat:@"yyyy-MM-dd'T'HH:mm:ss.SSSSS"];
-  }
-  return _dateFormatter;
+    }
+    return _dateFormatter;
 }
 ```
 
@@ -962,7 +951,7 @@ Your method may require some parameter to satisfy certain condition (i.e. not to
 
 ### Private methods
 
-Never prefix your private method with a single underscore `_`, this prefix is reserved by Apple, doing otherwise expose you to the risk of overriding an existing Apple's private method.
+Never prefix your private method with a single underscore `_`, this prefix is reserved by Apple, doing otherwise expose you to the risk of overriding an existing Apple's private method. A recommended approach is to use the `p_` prefix (e.g. `p_privateMethod`).
 
 ## Equality
 
@@ -1004,11 +993,11 @@ A complete pattern for the isEqual* method should be as so:
 ```objective-c
 - (BOOL)isEqual:(id)object {
     if (self == object) {
-      return YES;
+        return YES;
     }
 
     if (![object isKindOfClass:[ZOCPerson class]]) {
-      return NO;
+        return NO;
     }
 
     return [self isEqualToPerson:(ZOCPerson *)object];
@@ -1024,7 +1013,7 @@ A complete pattern for the isEqual* method should be as so:
     BOOL birthdaysMatch = (!self.birthday && !person.birthday) ||
                            [self.birthday isEqualToDate:person.birthday];
 
-  return haveEqualNames && haveEqualBirthdays;
+    return haveEqualNames && haveEqualBirthdays;
 }
 ```
 
@@ -1254,10 +1243,10 @@ NSString * const ZOCFooDidBecomeBarNotification = @"ZOCFooDidBecomeBarNotificati
 **Preferred:**
 ```objective-c
 if (user.isHappy) {
-    //Do something
+    // Do something
 }
 else {
-    //Do something else
+    // Do something else
 }
 ```
 
@@ -1265,9 +1254,9 @@ else {
 ```objective-c
 if (user.isHappy)
 {
-  //Do something
+    // Do something
 } else {
-  //Do something else
+    // Do something else
 }
 ```
 
@@ -1437,8 +1426,7 @@ Suppressing warnings for unused variables
 It's useful to be told that a variable you've defined is going unused. In most cases, you want to remove these references to improve performance (however slightly), but sometimes you want to keep them. Why? Perhaps they have a future usage or the functionality is only temporarily removed. Either way, a smarter way to suppress the warning without brutally commenting out the relevant lines, is to use the `#pragma unused()`:
 
 ```objective-c
-- (void)giveMeFive
-{
+- (NSUInteger)giveMeFive {
     NSString *foo;
     #pragma unused (foo)
 
@@ -1453,8 +1441,7 @@ Now you can keep your code in place without the compiler complaining about it. A
 The compiler is a robot: it will mark what's wrong with your code using a set of rules that've been defined by Clang. But, every so often you're smarter than it. Often, you might find some offending code that you know will lead to problems but, for whatever reason, can't fix yourself at the moment. You can explicitly signal errors like this:
 
 ```objective-c
-- (NSInteger)divide:(NSInteger)dividend by:(NSInteger)divisor
-{
+- (NSInteger)divide:(NSInteger)dividend by:(NSInteger)divisor {
     #error Whoa, buddy, you need to check for zero here!
     return (dividend / divisor);
 }
@@ -1463,8 +1450,7 @@ The compiler is a robot: it will mark what's wrong with your code using a set of
 You can signal warnings similarly:
 
 ```objective-c
-- (float)divide:(float)dividend by:(float)divisor
-{
+- (float)divide:(float)dividend by:(float)divisor {
     #warning Dude, don't compare floating point numbers like this!
     if (divisor != 0.0) {
         return (dividend / divisor);
@@ -1737,7 +1723,7 @@ You may think, at first, this is a trick to use self inside the block avoiding t
 MyViewController *myController = [[MyViewController alloc] init...];
 // ...
 MyViewController * __weak weakMyController = myController;
-myController.completionHandler =  ^(NSInteger result) {
+myController.completionHandler = ^(NSInteger result) {
     MyViewController *strongMyController = weakMyController;
     if (strongMyController) {
         // ...
@@ -1772,7 +1758,7 @@ The execution of the block can be preempted and different subsequent evaluations
 
 ```objective-c
 __weak typeof(self) weakSelf = self;
-dispatch_block_t block =  ^{
+dispatch_block_t block = ^{
     [weakSelf doSomething]; // weakSelf != nil
     // preemption, weakSelf turned nil
     [weakSelf doSomethingElse]; // weakSelf == nil
@@ -1785,12 +1771,12 @@ There is no retain cycle and, again, no matter if the block is retained or not b
 
 ```objective-c
 __weak typeof(self) weakSelf = self;
-myObj.myBlock =  ^{
+myObj.myBlock = ^{
     __strong typeof(self) strongSelf = weakSelf;
     if (strongSelf) {
-      [strongSelf doSomething]; // strongSelf != nil
-      // preemption, strongSelf still not nil
-      [strongSelf doSomethingElse]; // strongSelf != nil
+        [strongSelf doSomething]; // strongSelf != nil
+        // preemption, strongSelf still not nil
+        [strongSelf doSomethingElse]; // strongSelf != nil
     }
     else {
         // Probably nothing...
@@ -1809,7 +1795,7 @@ It can be shown with the following code:
 
 ```objective-c
 __weak typeof(self) weakSelf = self;
-myObj.myBlock =  ^{
+myObj.myBlock = ^{
     id localVal = weakSelf->someIVar;
 };
 ```
@@ -2077,7 +2063,7 @@ A simple component using weak objects to achieve multiple delegation:
     }
 }
 
-- (void)_notifyDelegates {
+- (void)p_notifyDelegates {
     ...
     for (ZOCWeakObject *object in self.delegates) {
         if (object.object) {
@@ -2117,13 +2103,13 @@ The API of Aspect are interesting and powerful:
 
 ```objective-c
 + (id<AspectToken>)aspect_hookSelector:(SEL)selector
-                      withOptions:(AspectOptions)options
-                       usingBlock:(id)block
-                            error:(NSError **)error;
+                           withOptions:(AspectOptions)options
+                            usingBlock:(id)block
+                                 error:(NSError **)error;
 - (id<AspectToken>)aspect_hookSelector:(SEL)selector
-                      withOptions:(AspectOptions)options
-                       usingBlock:(id)block
-                            error:(NSError **)error;
+                           withOptions:(AspectOptions)options
+                            usingBlock:(id)block
+                                 error:(NSError **)error;
 ```
 
 For instance, the following code will perform the block parameter after the execution of the method `myMethod:` (instance or class method that be) on the class `MyClass`.
@@ -2187,8 +2173,7 @@ This approach is clean and unobtrusive:
 We may want a SPOC file similar to the following (also a .plist file would perfectly fit as well):
 
 ```objective-c
-NSDictionary *analyticsConfiguration()
-{
+NSDictionary *analyticsConfiguration() {
     return @{
         @"trackedScreens" : @[
             @{
@@ -2225,8 +2210,7 @@ NSDictionary *analyticsConfiguration()
 The architecture proposed is hosted on GitHub on the [EF Education First](https://github.com/ef-ctx/JohnnyEnglish/blob/master/CTXUserActivityTrackingManager.m) profile.
 
 ```objective-c
-- (void)setupWithConfiguration:(NSDictionary *)configuration
-{
+- (void)setupWithConfiguration:(NSDictionary *)configuration {
     // screen views tracking
     for (NSDictionary *trackedScreen in configuration[@"trackedScreens"]) {
         Class clazz = NSClassFromString(trackedScreen[@"class"]);
@@ -2274,7 +2258,7 @@ Here are some of the documents from Apple that informed the style guide:
 
 Others:
 
-* [Objcetive-Clean](http://objclean.com): an attempt to write a standard for writing Objective-C code with Xcode integration;
+* [Objective-Clean](http://objclean.com): an attempt to write a standard for writing Objective-C code with Xcode integration;
 * [Uncrustify](http://uncrustify.sourceforge.net/): source code beautifier.
 
 ### Other Objective-C Style Guides

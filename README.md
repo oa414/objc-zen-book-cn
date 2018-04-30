@@ -172,8 +172,7 @@ if (!error) return success;
 ```objective-c
 static OSStatus
 SSLVerifySignedServerKeyExchange(SSLContext *ctx, bool isRsa, SSLBuffer signedParams,
-                                 uint8_t *signature, UInt16 signatureLen)
-{
+                                 uint8_t *signature, UInt16 signatureLen) {
   OSStatus        err;
   ...
 
@@ -266,11 +265,11 @@ if ([someObject boolValue] == NO) { ...
 
 ```objective-c
 - (void)someMethod {
-  if (![someOther boolValue]) {
-      return;
-  }
+    if (![someOther boolValue]) {
+        return;
+    }
 
-  //Do something important
+    // Do something important
 }
 ```
 
@@ -278,9 +277,9 @@ if ([someObject boolValue] == NO) { ...
 
 ```objective-c
 - (void)someMethod {
-  if ([someOther boolValue]) {
-    //Do something important
-  }
+    if ([someOther boolValue]) {
+        // Do something important
+    }
 }
 ```
 ## 复杂的表达式 
@@ -561,8 +560,7 @@ NSMutableArray *aMutableArray = [@[] mutableCopy];
 `init` 方法应该是这样的结构：
 
 ```objective-c
-- (instancetype)init
-{
+- (instancetype)init {
     self = [super init]; // call the designated initializer
     if (self) {
         // Custom initialization
@@ -599,8 +597,7 @@ designated 初始化方法是提供所有的参数，secondary 初始化方法�
 
 - (instancetype)initWithTitle:(NSString *)title
                          date:(NSDate *)date
-                     location:(CLLocation *)location
-{
+                     location:(CLLocation *)location {
     self = [super init];
     if (self) {
         _title    = title;
@@ -611,13 +608,11 @@ designated 初始化方法是提供所有的参数，secondary 初始化方法�
 }
 
 - (instancetype)initWithTitle:(NSString *)title
-                         date:(NSDate *)date
-{
+                         date:(NSDate *)date {
     return [self initWithTitle:title date:date location:nil];
 }
 
-- (instancetype)initWithTitle:(NSString *)title
-{
+- (instancetype)initWithTitle:(NSString *)title {
     return [self initWithTitle:title date:[NSDate date] location:nil];
 }
 
@@ -657,8 +652,7 @@ designated 初始化方法是提供所有的参数，secondary 初始化方法�
 ```objective-c
 @implementation ZOCViewController
 
-- (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
-{
+- (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil {
     // call to the superclass designated initializer
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     if (self) {
@@ -687,8 +681,7 @@ designated 初始化方法是提供所有的参数，secondary 初始化方法�
 ```objective-c
 @implementation ZOCNewsViewController
 
-- (id)initWithNews:(ZOCNews *)news
-{
+- (id)initWithNews:(ZOCNews *)news {
     // call to the immediate superclass's designated initializer （调用直接超类的 designated initializer）
     self = [super initWithNibName:nil bundle:nil];
     if (self) {
@@ -698,8 +691,7 @@ designated 初始化方法是提供所有的参数，secondary 初始化方法�
 }
 
 // Override the immediate superclass's designated initializer （重载直接父类的  designated initializer）
-- (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
-{
+- (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil {
     // call the new designated initializer
     return [self initWithNews:nil];
 }
@@ -837,8 +829,7 @@ Class clusters 在 Apple 的Framework 中广泛使用：一些明显的例子比
 ```objective-c
 @implementation ZOCKintsugiPhotoViewController
 
-- (id)initWithPhotos:(NSArray *)photos
-{
+- (id)initWithPhotos:(NSArray *)photos {
     if ([self isMemberOfClass:ZOCKintsugiPhotoViewController.class]) {
         self = nil;
 
@@ -875,14 +866,13 @@ Class clusters 在 Apple 的Framework 中广泛使用：一些明显的例子比
 
 
 ```objective-c
-+ (instancetype)sharedInstance
-{
-   static id sharedInstance = nil;
-   static dispatch_once_t onceToken = 0;
-   dispatch_once(&onceToken, ^{
-      sharedInstance = [[self alloc] init];
-   });
-   return sharedInstance;
++ (instancetype)sharedInstance {
+    static id sharedInstance = nil;
+    static dispatch_once_t onceToken = 0;
+    dispatch_once(&onceToken, ^{
+        sharedInstance = [[self alloc] init];
+    });
+    return sharedInstance;
 }
 ```
 
@@ -891,8 +881,7 @@ Class clusters 在 Apple 的Framework 中广泛使用：一些明显的例子比
 
 
 ```objective-c
-+ (instancetype)sharedInstance
-{
++ (instancetype)sharedInstance {
     static id sharedInstance;
     @synchronized(self) {
         if (sharedInstance == nil) {
@@ -1014,17 +1003,17 @@ UIApplication.sharedApplication.delegate;
 为了完成一个共有的 getter 和一个私有的 setter，你应该声明公开的属性为 `readonly`  并且在类扩展总重新定义通用的属性为 `readwrite` 的。
 
 ```objective-c
-//.h文件中
+// .h文件中
 @interface MyClass : NSObject
 @property (nonatomic, readonly, strong) NSObject *object;
 @end
-//.m文件中
+// .m文件中
 @interface MyClass ()
 @property (nonatomic, readwrite, strong) NSObject *object;
 @end
 
 @implementation MyClass
-//Do Something cool
+// Do Something cool
 @end
 
 ```
@@ -1067,7 +1056,7 @@ UIApplication.sharedApplication.delegate;
 
 /* .m */
 - (NSArray *)elements {
-  return [self.mutableElements copy];
+    return [self.mutableElements copy];
 }
 ```
 
@@ -1079,13 +1068,13 @@ UIApplication.sharedApplication.delegate;
 ```objective-c
 
 - (NSDateFormatter *)dateFormatter {
-  if (!_dateFormatter) {
-    _dateFormatter = [[NSDateFormatter alloc] init];
+    if (!_dateFormatter) {
+        _dateFormatter = [[NSDateFormatter alloc] init];
         NSLocale *enUSPOSIXLocale = [[NSLocale alloc] initWithLocaleIdentifier:@"en_US_POSIX"];
         [_dateFormatter setLocale:enUSPOSIXLocale];
-        [_dateFormatter setDateFormat:@"yyyy-MM-dd'T'HH:mm:ss.SSS"];//毫秒是SSS，而非SSSSS
-  }
-  return _dateFormatter;
+        [_dateFormatter setDateFormat:@"yyyy-MM-dd'T'HH:mm:ss.SSS"]; // 毫秒是SSS，而非SSSSS
+    }
+    return _dateFormatter;
 }
 
 ```
@@ -1159,11 +1148,11 @@ UIApplication.sharedApplication.delegate;
 
 - (BOOL)isEqual:(id)object {
     if (self == object) {
-      return YES;
+        return YES;
     }
 
     if (![object isKindOfClass:[ZOCPerson class]]) {
-      return NO;
+        return NO;
     }
 
     return [self isEqualToPerson:(ZOCPerson *)object];
@@ -1179,7 +1168,7 @@ UIApplication.sharedApplication.delegate;
     BOOL birthdaysMatch = (!self.birthday && !person.birthday) ||
                            [self.birthday isEqualToDate:person.birthday];
 
-  return haveEqualNames && haveEqualBirthdays;
+    return haveEqualNames && haveEqualBirthdays;
 }
 ```
 > 译者注：
@@ -1438,10 +1427,10 @@ NSString * const ZOCFooDidBecomeBarNotification = @"ZOCFooDidBecomeBarNotificati
 
 ```objective-c
 if (user.isHappy) {
-    //Do something
+    // Do something
 }
 else {
-    //Do something else
+    // Do something else
 }
 ```
 
@@ -1450,9 +1439,9 @@ else {
 ```objective-c
 if (user.isHappy)
 {
-  //Do something
+  // Do something
 } else {
-  //Do something else
+  // Do something else
 }
 ```
 
@@ -1632,8 +1621,7 @@ NSURL *url = ({
 告诉你申明的变量它将不会被使用，这种做法很有用。大多数情况下，你希望移除这些引用来（稍微地）提高性能，但是有时候你希望保留它们。为什么？或许它们以后有用，或者有些特性只是暂时移除。无论如何，一个消除这些警告的好方法是用相关语句进行注解，使用 `#pragma unused()`:
 
 ```objective-c
-- (NSInteger)giveMeFive
-{
+- (NSInteger)giveMeFive {
     NSString *foo;
     #pragma unused (foo)
 
@@ -1650,8 +1638,7 @@ NSURL *url = ({
 
 
 ```objective-c
-- (NSInteger)divide:(NSInteger)dividend by:(NSInteger)divisor
-{
+- (NSInteger)divide:(NSInteger)dividend by:(NSInteger)divisor {
     #error Whoa, buddy, you need to check for zero here!
     return (dividend / divisor);
 }
@@ -1662,8 +1649,7 @@ NSURL *url = ({
 
 
 ```objective-c
-- (float)divide:(float)dividend by:(float)divisor
-{
+- (float)divide:(float)dividend by:(float)divisor {
     #warning Dude, don't compare floating point numbers like this!
     if (divisor != 0.0) {
         return (dividend / divisor);
@@ -1812,16 +1798,16 @@ Block 是 Objective-C 版本的 lambda 或者 closure（闭包）。
 (下面代码是译者加的)
 
 ```objective-c
-   ...
-   CGFloat blockInt = 10;
-   void (^playblock)(void) = ^{
-        NSLog(@"blockInt = %zd", blockInt);
-    };
-    blockInt ++;
-    playblock();
-    ...
-    
-    //结果为:blockInt = 10
+...
+CGFloat blockInt = 10;
+void (^playblock)(void) = ^{
+    NSLog(@"blockInt = %zd", blockInt);
+};
+blockInt++;
+playblock();
+...
+
+// 结果为:blockInt = 10
 ```
 
 用 LLDB 来展示 block 是这样子的：
@@ -1978,7 +1964,7 @@ MyViewController *myController = [[MyViewController alloc] init...];
 MyViewController *myController = [[MyViewController alloc] init...];
 // ...
 MyViewController * __weak weakMyController = myController;
-myController.completionHandler =  ^(NSInteger result) {
+myController.completionHandler = ^(NSInteger result) {
     MyViewController *strongMyController = weakMyController;
     if (strongMyController) {
         // ...
@@ -2017,7 +2003,7 @@ block 的执行可以抢占，而且对 weakSelf 指针的调用时序不同可�
 
 ```objective-c
 __weak typeof(self) weakSelf = self;
-dispatch_block_t block =  ^{
+dispatch_block_t block = ^{
     [weakSelf doSomething]; // weakSelf != nil
     // preemption, weakSelf turned nil
     [weakSelf doSomethingElse]; // weakSelf == nil
@@ -2030,7 +2016,7 @@ dispatch_block_t block =  ^{
 
 ```objective-c
 __weak typeof(self) weakSelf = self;
-myObj.myBlock =  ^{
+myObj.myBlock = ^{
     __strong typeof(self) strongSelf = weakSelf;
     if (strongSelf) {
       [strongSelf doSomething]; // strongSelf != nil
@@ -2054,7 +2040,7 @@ Dereferencing a __weak pointer is not allowed due to possible null value caused 
 
 ```objective-c
 __weak typeof(self) weakSelf = self;
-myObj.myBlock =  ^{
+myObj.myBlock = ^{
     id localVal = weakSelf->someIVar;
 };
 ```
@@ -2240,8 +2226,8 @@ if ([self.delegate respondsToSelector:@selector(signUpViewControllerDidPressSign
 @interface ZOCWeakObject : NSObject
 
 @property (nonatomic, readonly, weak) id object; 
-//译者注：这里原文并没有很好地实践自己在本书之前章节所讨论的关于property属性修饰符的
-//人体工程学法则: 从左到右： 原子性 ===》 读写权限 (别名) ===》 内存管理权限符
+// 译者注：这里原文并没有很好地实践自己在本书之前章节所讨论的关于property属性修饰符的
+// 人体工程学法则: 从左到右： 原子性 ===》 读写权限 (别名) ===》 内存管理权限符
 
 + (instancetype)weakObjectWithObject:(id)object;
 - (instancetype)initWithObject:(id)object;
@@ -2376,13 +2362,13 @@ Aspect 的 API 有趣并且非常强大：
 
 ```objective-c
 + (id<AspectToken>)aspect_hookSelector:(SEL)selector
-                      withOptions:(AspectOptions)options
-                       usingBlock:(id)block
-                            error:(NSError **)error;
+                           withOptions:(AspectOptions)options
+                            usingBlock:(id)block
+                                 error:(NSError **)error;
 - (id<AspectToken>)aspect_hookSelector:(SEL)selector
-                      withOptions:(AspectOptions)options
-                       usingBlock:(id)block
-                            error:(NSError **)error;
+                           withOptions:(AspectOptions)options
+                            usingBlock:(id)block
+                                 error:(NSError **)error;
 ```
 
 
@@ -2459,8 +2445,7 @@ Aspect 的 API 有趣并且非常强大：
 
 ```objective-c
 
-NSDictionary *analyticsConfiguration()
-{
+NSDictionary *analyticsConfiguration() {
     return @{
         @"trackedScreens" : @[
             @{
@@ -2499,8 +2484,7 @@ NSDictionary *analyticsConfiguration()
 
 ```objective-c
 
-- (void)setupWithConfiguration:(NSDictionary *)configuration
-{
+- (void)setupWithConfiguration:(NSDictionary *)configuration {
     // screen views tracking
     for (NSDictionary *trackedScreen in configuration[@"trackedScreens"]) {
         Class clazz = NSClassFromString(trackedScreen[@"class"]);
@@ -2514,7 +2498,7 @@ NSDictionary *analyticsConfiguration()
                         [tracker trackScreenHitWithName:viewName];
                       });
                   }
-                            error:nil];
+                             error:nil];
 
     }
 
@@ -2534,7 +2518,7 @@ NSDictionary *analyticsConfiguration()
                             [tracker trackEvent:buttonPressEvent];
                       });
                 }
-                       error:nil];
+                             error:nil];
 
     }
 }
