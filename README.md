@@ -638,16 +638,16 @@ designated 初始化方法是提供所有的参数，secondary 初始化方法�
 
 当定义一个新类的时候有三个不同的方式：
 
-1. 不需要重载任何初始化函数
-2. 重载 designated initializer
+1. 不需要重写任何初始化函数
+2. 重写 designated initializer
 3. 定义一个新的 designated initializer
 
 
 第一个方案是最简单的：你不需要增加类的任何初始化逻辑，只需要依照父类的designated initializer。
 
-当你希望提供额外的初始化逻辑的时候，你可以重载 designated initializer。你只需要重载直接超类的 designated initializer 并且确认你的实现调用了超类的方法。
+当你希望提供额外的初始化逻辑的时候，你可以重写 designated initializer。你只需要重写直接超类的 designated initializer 并且确认你的实现调用了超类的方法。
 
-一个典型的例子是你创造`UIViewController`子类的时候重载`initWithNibName:bundle:`方法。
+一个典型的例子是你创造`UIViewController`子类的时候重写`initWithNibName:bundle:`方法。
 
 ```objective-c
 @implementation ZOCViewController
@@ -664,14 +664,14 @@ designated 初始化方法是提供所有的参数，secondary 初始化方法�
 @end
 ```
 
-在 `UIViewController`  子类的例子里面如果重载  `init` 会是一个错误，这个情况下调用者会尝试调用 `initWithNib:bundle` 初始化你的类，你的类实现不会被调用。这同样违背了它应该是合法调用任何 designated initializer 的规则。
+在 `UIViewController`  子类的例子里面如果重写  `init` 会是一个错误，这个情况下调用者会尝试调用 `initWithNib:bundle` 初始化你的类，你的类实现不会被调用。这同样违背了它应该是合法调用任何 designated initializer 的规则。
 
 
 在你希望提供你自己的初始化函数的时候，你应该遵守这三个步骤来保证获得正确的行为：
 
 
 1. 定义你的 designated initializer，确保调用了直接超类的 designated initializer。
-2. 重载直接超类的 designated initializer。调用你的新的  designated initializer。
+2. 重写直接超类的 designated initializer。调用你的新的  designated initializer。
 3. 为新的 designated initializer 写文档。
 
 
@@ -690,7 +690,7 @@ designated 初始化方法是提供所有的参数，secondary 初始化方法�
     return self;
 }
 
-// Override the immediate superclass's designated initializer （重载直接父类的  designated initializer）
+// Override the immediate superclass's designated initializer （重写直接父类的  designated initializer）
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil {
     // call the new designated initializer
     return [self initWithNews:nil];
@@ -700,7 +700,7 @@ designated 初始化方法是提供所有的参数，secondary 初始化方法�
 ```
 
 
-如果你没重载 `initWithNibName:bundle:` ，而且调用者决定用这个方法初始化你的类(这是完全合法的)。 `initWithNews:` 永远不会被调用，所以导致了不正确的初始化流程，你的类的特定初始化逻辑没有被执行。
+如果你没重写 `initWithNibName:bundle:` ，而且调用者决定用这个方法初始化你的类(这是完全合法的)。 `initWithNews:` 永远不会被调用，所以导致了不正确的初始化流程，你的类的特定初始化逻辑没有被执行。
 
 
 
@@ -850,11 +850,11 @@ Class clusters 在 Apple 的Framework 中广泛使用：一些明显的例子比
 
 这个子例程展示了如何创建一个类簇。
 
-   1. 使用`[self isMemberOfClass:ZOCKintsugiPhotoViewController.class]`防止子类中重载初始化方法，避免无限递归。当`[[ZOCKintsugiPhotoViewController alloc] initWithPhotos:photos]`被调用时，上面条件表达式的结果将会是True。
+   1. 使用`[self isMemberOfClass:ZOCKintsugiPhotoViewController.class]`防止子类中重写初始化方法，避免无限递归。当`[[ZOCKintsugiPhotoViewController alloc] initWithPhotos:photos]`被调用时，上面条件表达式的结果将会是True。
 
    2. `self = nil`的目的是移除`ZOCKintsugiPhotoViewController`实例上的所有引用，实例(抽象类的实例)本身将会解除分配（ 当然ARC也好MRC也好dealloc都会发生在Main Runloop这一次的结束时）。
 
-   3. 接下来的逻辑就是判断哪一个私有子类将被初始化。我们假设在iPhone上运行这段代码并且`ZOCKintsugiPhotoViewController_iPhone`没有重载`initWithPhotos:`方法。这种情况下，当执行`self = [[ZOCKintsugiPhotoViewController_iPhone alloc] initWithPhotos:photos];`,`ZOCKintsugiPhotoViewController`将会被调用，第一次检查将会在这里发生，鉴于`ZOCKintsugiPhotoViewController_iPhone`不完全是`ZOCKintsugiPhotoViewController`，表达式`[self isMemberOfClass:ZOCKintsugiPhotoViewController.class]`将会是False,于是就会调用`[super initWithNibName:nil bundle:nil]`，于是就会进入`ZOCKintsugiPhotoViewController`的初始化过程，这时候因为调用者就是`ZOCKintsugiPhotoViewController`本身，这一次的检查必定为True,接下来就会进行正确的初始化过程。(NOTE：这里必须是完全遵循Designated initializer 以及Secondary initializer的设计规范的前提下才会其效果的!不明白这个规范的可以后退一步熟悉这种规范在回头来看这个说明)
+   3. 接下来的逻辑就是判断哪一个私有子类将被初始化。我们假设在iPhone上运行这段代码并且`ZOCKintsugiPhotoViewController_iPhone`没有重写`initWithPhotos:`方法。这种情况下，当执行`self = [[ZOCKintsugiPhotoViewController_iPhone alloc] initWithPhotos:photos];`,`ZOCKintsugiPhotoViewController`将会被调用，第一次检查将会在这里发生，鉴于`ZOCKintsugiPhotoViewController_iPhone`不完全是`ZOCKintsugiPhotoViewController`，表达式`[self isMemberOfClass:ZOCKintsugiPhotoViewController.class]`将会是False,于是就会调用`[super initWithNibName:nil bundle:nil]`，于是就会进入`ZOCKintsugiPhotoViewController`的初始化过程，这时候因为调用者就是`ZOCKintsugiPhotoViewController`本身，这一次的检查必定为True,接下来就会进行正确的初始化过程。(NOTE：这里必须是完全遵循Designated initializer 以及Secondary initializer的设计规范的前提下才会其效果的!不明白这个规范的可以后退一步熟悉这种规范在回头来看这个说明)
 
 > NOTE: 这里的意思是，代码是在iPhone上调试的，程序员使用了`self = [[ZOCKintsugiPhotoViewController_iPhone alloc] initWithPhotos:photos];`来初始化某个view controller的对象，当代码运行在iPad上时，这个初始化过程也是正确的，因为无论程序员的代码中使用`self = [[ZOCKintsugiPhotoViewController_iPhone alloc] initWithPhotos:photos];`来初始化viewController(iPhone上编写运行在iPad上)，还是使用`self = [[ZOCKintsugiPhotoViewController_iPad alloc] initWithPhotos:photos];`来初始化viewController(iPad上编写，运行在iPhone上)，都会因为ZOCKintsugiPhotoViewController的`initWithPhotos:`方法的存在而变得通用起来。
 
@@ -950,7 +950,7 @@ NSString * text;
 #### Init 和 Dealloc
 
 
-有一个例外：永远不要在 init 方法（以及其他初始化方法）里面用 getter 和 setter 方法，你应当直接访问实例变量。这样做是为了防止有子类时，出现这样的情况：它的子类最终重载了其 setter 或者 getter 方法，因此导致该子类去调用其他的方法、访问那些处于不稳定状态，或者称为没有初始化完成的属性或者 ivar 。记住一个对象仅仅在 init 返回的时候，才会被认为是达到了初始化完成的状态。
+有一个例外：永远不要在 init 方法（以及其他初始化方法）里面用 getter 和 setter 方法，你应当直接访问实例变量。这样做是为了防止有子类时，出现这样的情况：它的子类最终重写了其 setter 或者 getter 方法，因此导致该子类去调用其他的方法、访问那些处于不稳定状态，或者称为没有初始化完成的属性或者 ivar 。记住一个对象仅仅在 init 返回的时候，才会被认为是达到了初始化完成的状态。
 
 同样在 dealloc 方法中（在 dealloc 方法中，一个对象可以在一个 不确定的状态中）这是同样需要被注意的。
 
@@ -1102,7 +1102,7 @@ UIApplication.sharedApplication.delegate;
 ###  私有方法
 
 
-永远不要在你的私有方法前加上 `_` 前缀。这个前缀是 Apple 保留的。不要冒重载苹果的私有方法的险。
+永远不要在你的私有方法前加上 `_` 前缀。这个前缀是 Apple 保留的。不要冒重写苹果的私有方法的险。
 
 ##  相等性
 
@@ -1188,7 +1188,7 @@ UIApplication.sharedApplication.delegate;
 这是非常必要的。因为如果在扩展的 category 或者其他 category 里面已经使用了同样的方法名，会导致不可预计的后果。实际上，实际被调用的是最后被加载的那个 category 中方法的实现(译者注：如果导入的多个 category 中有一些同名的方法导入到类里时，最终调用哪个是由编译时的加载顺序来决定的，最后一个加载进来的方法会覆盖之前的方法)。
 
 
-如果想要确认你的分类方法没有覆盖其他实现的话，可以把环境变量 OBJC_PRINT_REPLACED_METHODS 设置为 YES，这样那些被取代的方法名字会打印到 Console 中。现在 LLVM 5.1  不会为此发出任何警告和错误提示，所以自己小心不要在分类中重载方法。
+如果想要确认你的分类方法没有覆盖其他实现的话，可以把环境变量 OBJC_PRINT_REPLACED_METHODS 设置为 YES，这样那些被取代的方法名字会打印到 Console 中。现在 LLVM 5.1  不会为此发出任何警告和错误提示，所以自己小心不要在分类中重写方法。
 
 一个好的实践是在 category 名中使用前缀。
 
@@ -1579,7 +1579,7 @@ NSURL *url = ({
 
 #pragma mark - ZOCSuperclass
 
-// ... 重载来自 ZOCSuperclass 的方法
+// ... 重写来自 ZOCSuperclass 的方法
 
 #pragma mark - NSObject
 
@@ -2162,7 +2162,7 @@ if ([self.delegate respondsToSelector:@selector(signUpViewControllerDidPressSign
 ###   继承
 
 
-有时候你可能需要重载代理方法。考虑有两个 UIViewController 子类的情况：UIViewControllerA 和 UIViewControllerB，有下面的类继承关系。
+有时候你可能需要重写代理方法。考虑有两个 UIViewController 子类的情况：UIViewControllerA 和 UIViewControllerB，有下面的类继承关系。
 
 `UIViewControllerB < UIViewControllerA < UIViewController`
 
